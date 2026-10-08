@@ -194,53 +194,48 @@
   /* =======================================================
      5. Hero de Inicio: máscara orgánica + parallax de planos
      ======================================================= */
-  // Dos formas con la misma estructura de comandos (objectBoundingBox 0..1)
-  const MASK_A = [[.18,.02],[.52,-.02],[.86,.04],[.98,.30],[1.02,.62],[.94,.94],[.62,1.0],[.30,.98],[.04,.90],[.0,.56],[.02,.22]];
-  const MASK_B = [[.08,.10],[.48,.02],[.92,.0],[1.0,.26],[.96,.58],[1.0,.92],[.70,.98],[.36,.92],[.10,.98],[.06,.64],[-.02,.30]];
-  function blobPath(pts, sx = 400, sy = 500) {
-    pts = pts.map(([x, y]) => [x * sx, y * sy]);
-    const n = pts.length; let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+  // Dos formas con la misma estructura (objectBoundingBox 0..1): borde izquierdo en "S"
+  const MASK_A = [[.30,-.04],[.62,-.06],[1.06,-.04],[1.08,.50],[1.06,1.08],[.62,1.06],[.30,.96],[.10,.80],[.22,.56],[.06,.34],[.16,.10]];
+  const MASK_B = [[.22,-.04],[.60,-.06],[1.06,-.04],[1.08,.50],[1.06,1.08],[.66,1.06],[.38,.98],[.18,.76],[.30,.52],[.14,.30],[.24,.08]];
+  function blobPath(pts) {
+    const f = (v) => v.toFixed(4);
+    const n = pts.length; let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
     for (let i = 0; i < n; i++) {
       const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
-      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
-      const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
-      d += `C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+      d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)} ${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)} ${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])} ${f(p2[1])}`;
     }
     return d + "Z";
   }
   function initHero() {
     const hero = $(".hero");
     if (!hero) return;
-    const clip = $("#hero-clip-path"), echo = $(".hero__echo"), photo = $(".hero__photo"), mark = $(".hero__mark"), blob = $(".hero__blob");
-    const t0 = blobPath(MASK_A);
-    if (clip) clip.setAttribute("d", t0);
-    if (echo) echo.setAttribute("d", t0);
+    const clip = $("#hero-clip-path"), photo = $(".hero__photo"), mark = $(".hero__mark"), follow = $(".hero__mark-follow");
+    if (clip) clip.setAttribute("d", blobPath(MASK_A));
     if (reduce()) return;
     Scroll.add(hero, (p) => {
       const k = ease(clamp(p * 1.6));
-      const d = blobPath(MASK_A.map((a, i) => [lerp(a[0], MASK_B[i][0], k), lerp(a[1], MASK_B[i][1], k)]));
-      if (clip) clip.setAttribute("d", d);
-      if (echo) echo.setAttribute("d", d);
+      if (clip) clip.setAttribute("d", blobPath(MASK_A.map((a, i) => [lerp(a[0], MASK_B[i][0], k), lerp(a[1], MASK_B[i][1], k)])));
       const amp = mqDesktop.matches ? 1 : 0.4;
-      if (photo) photo.style.transform = `translate3d(0, ${p * 70 * amp}px, 0) scale(${1.08 - p * 0.06})`;
-      if (mark) mark.style.transform = `translate3d(0, ${-p * 110 * amp}px, 0) scale(${1 + p * 0.12})`;
+      if (photo) photo.style.transform = `translate3d(0, ${p * 60 * amp}px, 0) scale(${1.06 - p * 0.05})`;
+      if (mark) mark.style.transform = `translate3d(0, ${-p * 90 * amp}px, 0) scale(${1 + p * 0.1})`;
     }, "top");
 
-    // Sobre azul no hay rastro: una forma decorativa se desplaza levemente
-    if (blob) {
+    // Sobre azul no hay rastro: el isotipo responde con un desplazamiento leve (solo posición)
+    if (follow) {
       let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, running = false;
       const loop = () => {
-        cx = lerp(cx, tx, 0.06); cy = lerp(cy, ty, 0.06);
-        blob.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+        cx = lerp(cx, tx, 0.07); cy = lerp(cy, ty, 0.07);
+        follow.style.transform = `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0)`;
         if (Math.abs(cx - tx) > 0.1 || Math.abs(cy - ty) > 0.1) raf = requestAnimationFrame(loop); else running = false;
       };
       on(hero, "pointermove", (e) => {
         if (!fine()) return;
         const r = hero.getBoundingClientRect();
-        tx = ((e.clientX - r.left) / r.width - 0.5) * 36;
-        ty = ((e.clientY - r.top) / r.height - 0.5) * 28;
+        tx = ((e.clientX - r.left) / r.width - 0.5) * 24;
+        ty = ((e.clientY - r.top) / r.height - 0.5) * 18;
         if (!running) { running = true; raf = requestAnimationFrame(loop); }
       }, { passive: true });
+      on(hero, "pointerleave", () => { tx = 0; ty = 0; if (!running) { running = true; raf = requestAnimationFrame(loop); } });
       cleanups.push(() => cancelAnimationFrame(raf));
     }
   }
@@ -265,6 +260,11 @@
     $$("[data-drift]").forEach((el) => {
       const amt = parseFloat(el.dataset.drift) || 60;
       Scroll.add(el.parentElement, (p) => { el.style.transform = `translate3d(0, ${(p - 0.5) * amt}px, 0) rotate(${(p - 0.5) * 20}deg)`; });
+    });
+    // Desplazamiento vertical suave, sin rotación (apto para el isotipo)
+    $$("[data-float]").forEach((el) => {
+      const amt = parseFloat(el.dataset.float) || 50;
+      Scroll.add(el.parentElement, (p) => { el.style.transform = `translate3d(0, ${(p * amt).toFixed(1)}px, 0)`; }, "top");
     });
   }
 
@@ -574,29 +574,37 @@
       }
       btn.setAttribute("aria-busy", "true"); btn.disabled = true;
       $(".btn__label", btn).textContent = "Enviando…";
-      const data = Object.fromEntries(new FormData(form).entries());
-      const endpoint = form.dataset.endpoint || form.action;
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const servicioTxt = form.servicio.options[form.servicio.selectedIndex]?.text || fd.servicio;
+      const payload = {
+        Nombre: fd.nombre, Contacto: fd.contacto, Servicio: servicioTxt, Mensaje: fd.mensaje,
+        _subject: `Nueva consulta web — ${servicioTxt} — ${fd.nombre}`,
+        _template: "table", _captcha: "false", _honey: fd._honey || "",
+      };
+      if (/@/.test(fd.contacto)) payload._replyto = fd.contacto;
+      const endpoint = form.dataset.endpoint;
       try {
         const ctrl = new AbortController();
         const to = setTimeout(() => ctrl.abort(), 15000);
         const res = await fetch(endpoint, {
           method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(data), signal: ctrl.signal,
+          body: JSON.stringify(payload), signal: ctrl.signal,
         });
         clearTimeout(to);
         let body = {};
         try { body = await res.json(); } catch (err) {}
-        if (res.ok && body.ok) {
+        // Solo se muestra éxito si el servicio confirma el envío
+        if (res.ok && String(body.success) === "true") {
           form.reset(); form.hidden = true; show(okBox);
-        } else if (res.status === 503 || body.code === "not_configured") {
-          errText.textContent = "El formulario todavía no está conectado a una casilla de correo, así que tu mensaje no se envió. Probá de nuevo más adelante.";
+        } else if (/activ/i.test(body.message || "")) {
+          errText.textContent = "El formulario todavía está pendiente de activación, así que tu mensaje no se envió. Mientras tanto, escribinos directamente por email o Instagram.";
           show(errBox);
         } else {
-          errText.textContent = body.error || "No pudimos enviar tu mensaje. Revisá tu conexión e intentá de nuevo.";
+          errText.textContent = "No pudimos enviar tu mensaje. Intentá de nuevo en unos minutos o escribinos directamente por email.";
           show(errBox);
         }
       } catch (err) {
-        errText.textContent = "No pudimos enviar tu mensaje. Revisá tu conexión e intentá de nuevo.";
+        errText.textContent = "No pudimos enviar tu mensaje. Revisá tu conexión e intentá de nuevo, o escribinos directamente por email.";
         show(errBox);
       } finally {
         btn.removeAttribute("aria-busy"); btn.disabled = false;

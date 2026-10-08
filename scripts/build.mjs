@@ -15,11 +15,11 @@ const arrowIcon = (cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hi
 const iso = (cls = "", label = "") =>
   `<svg class="${cls}" viewBox="${ISO_VB}" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'}><use href="#iso"/></svg>`;
 
-function blob(pts) {
+function blob(pts, prec = 1) {
   const n = pts.length; let d = `M${pts[0][0]} ${pts[0][1]}`;
   for (let i = 0; i < n; i++) {
     const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
-    const c = (v) => v.toFixed(1);
+    const c = (v) => v.toFixed(prec);
     d += `C${c(p1[0] + (p2[0] - p0[0]) / 6)} ${c(p1[1] + (p2[1] - p0[1]) / 6)} ${c(p2[0] - (p3[0] - p1[0]) / 6)} ${c(p2[1] - (p3[1] - p1[1]) / 6)} ${c(p2[0])} ${c(p2[1])}`;
   }
   return d + "Z";
@@ -37,23 +37,21 @@ const band = (fromColor, toTheme, rev = false) => `
 </div>`;
 
 /* ---------------- datos ---------------- */
-const SERVICES = [
-  { slug: "webs", n: "01", name: "Webs", short: "Sitios claros, rápidos y fáciles de actualizar, pensados para que te encuentren y te contacten." },
-  { slug: "automatizaciones", n: "02", name: "Automatizaciones", short: "Tareas repetitivas que se resuelven solas, con menos errores y más tiempo para lo importante." },
-  { slug: "integraciones", n: "03", name: "Integraciones", short: "Tus herramientas conectadas para que la información no se cargue dos veces." },
-  { slug: "identidad-digital", n: "04", name: "Identidad digital", short: "Identidad visual y piezas para redes y otros puntos de contacto, con un sistema coherente." },
-];
+const EMAIL = "somoskroma@gmail.com";
+const IG = "@_kromalabs";
+const IG_URL = "https://www.instagram.com/_kromalabs/";
+const FORM_ENDPOINT = `https://formsubmit.co/ajax/${EMAIL}`;
 
-const PREVIEWS = {
-  webs: `<svg viewBox="0 0 240 180" aria-hidden="true"><rect width="240" height="180" fill="#f2eee4"/><rect x="18" y="20" width="176" height="128" rx="10" fill="#fff" stroke="#0b0b0c" stroke-opacity=".15"/><rect x="18" y="20" width="176" height="16" rx="8" fill="#e6e0d1"/><rect x="30" y="46" width="150" height="46" rx="6" fill="#0b0b0c"/><rect x="30" y="100" width="96" height="9" rx="4" fill="#0b0b0c"/><rect x="30" y="116" width="120" height="6" rx="3" fill="#0b0b0c" fill-opacity=".25"/><rect x="30" y="128" width="60" height="12" rx="6" fill="#2340f5"/><rect x="160" y="70" width="62" height="98" rx="12" fill="#2340f5"/><rect x="168" y="84" width="46" height="30" rx="5" fill="#f2eee4"/><rect x="168" y="122" width="36" height="6" rx="3" fill="#f2eee4" fill-opacity=".7"/></svg>`,
-  automatizaciones: `<svg viewBox="0 0 240 180" aria-hidden="true"><rect width="240" height="180" fill="#0b0b0c"/><path d="M30 92H210" stroke="#f2eee4" stroke-opacity=".25" stroke-width="2"/><path d="M30 92H150" stroke="#5b78ff" stroke-width="3"/><circle cx="30" cy="92" r="9" fill="#5b78ff"/><circle cx="90" cy="92" r="9" fill="#5b78ff"/><circle cx="150" cy="92" r="9" fill="#5b78ff"/><circle cx="210" cy="92" r="9" fill="none" stroke="#f2eee4" stroke-width="2"/><rect x="118" y="44" width="64" height="26" rx="13" fill="#2340f5"/><circle cx="131" cy="57" r="7" fill="#f2eee4"/><rect x="143" y="54" width="30" height="6" rx="3" fill="#f2eee4"/><rect x="18" y="118" width="40" height="5" rx="2.5" fill="#f2eee4" fill-opacity=".5"/><rect x="78" y="118" width="40" height="5" rx="2.5" fill="#f2eee4" fill-opacity=".5"/><rect x="138" y="118" width="40" height="5" rx="2.5" fill="#f2eee4" fill-opacity=".5"/><rect x="190" y="118" width="40" height="5" rx="2.5" fill="#f2eee4" fill-opacity=".25"/></svg>`,
-  integraciones: `<svg viewBox="0 0 240 180" aria-hidden="true"><rect width="240" height="180" fill="#f2eee4"/><path d="M62 46C100 46 92 90 120 90M62 134C100 134 92 90 120 90M120 90C150 90 150 46 180 46M120 90C150 90 150 134 180 134" fill="none" stroke="#2340f5" stroke-width="2.5"/><rect x="92" y="72" width="56" height="36" rx="12" fill="#0b0b0c"/><rect x="22" y="32" width="44" height="28" rx="9" fill="#fff" stroke="#0b0b0c" stroke-opacity=".2"/><rect x="22" y="120" width="44" height="28" rx="9" fill="#fff" stroke="#0b0b0c" stroke-opacity=".2"/><rect x="174" y="32" width="44" height="28" rx="9" fill="#fff" stroke="#0b0b0c" stroke-opacity=".2"/><rect x="174" y="120" width="44" height="28" rx="9" fill="#fff" stroke="#0b0b0c" stroke-opacity=".2"/><circle cx="160" cy="62" r="5" fill="#2340f5"/></svg>`,
-  "identidad-digital": `<svg viewBox="0 0 240 180" aria-hidden="true"><rect width="240" height="180" fill="#f2eee4"/><rect x="16" y="16" width="100" height="148" rx="12" fill="#1e3a2c"/><circle cx="66" cy="78" r="22" fill="#e2572b"/><rect x="40" y="114" width="52" height="8" rx="4" fill="#f4ecdc"/><rect x="124" y="16" width="100" height="70" rx="12" fill="#e2572b"/><rect x="136" y="30" width="60" height="10" rx="5" fill="#f4ecdc"/><rect x="136" y="46" width="44" height="10" rx="5" fill="#f4ecdc"/><rect x="124" y="94" width="48" height="70" rx="12" fill="#fff" stroke="#1e3a2c" stroke-opacity=".2"/><text x="134" y="140" font-family="Archivo, sans-serif" font-weight="800" font-size="28" fill="#1e3a2c">Aa</text><rect x="178" y="94" width="46" height="70" rx="12" fill="#1e3a2c"/></svg>`,
-};
+const SERVICES = [
+  { slug: "webs", n: "01", name: "Webs", img: "arq-esquina", short: "Sitios a medida, rápidos y pensados para convertir." },
+  { slug: "automatizaciones", n: "02", name: "Automatizaciones", img: "arq-escalera", short: "Menos trabajo manual. Más tiempo para lo importante." },
+  { slug: "integraciones", n: "03", name: "Integraciones", img: "arq-voladizo", short: "Conectamos tus herramientas para que todo fluya." },
+  { slug: "identidad-digital", n: "04", name: "Identidad digital", img: "arq-curva", short: "Una presencia digital sólida y coherente con tu negocio." },
+];
 
 const PROJECTS = [
   {
-    slug: "web-estudio-profesional", service: "webs", serviceName: "Webs", img: "arq-reticula",
+    slug: "web-estudio-profesional", service: "webs", serviceName: "Webs", img: "arq-esquina",
     title: "Web para un estudio profesional",
     context: "Un estudio contable con una cartera estable de clientes. Su web actual fue armada hace años y casi no se actualiza.",
     need: "Las consultas llegan por teléfono y suelen repetirse: horarios, documentación necesaria, servicios. El estudio quiere que la web responda lo básico y que los contactos nuevos lleguen con la información ordenada.",
@@ -61,7 +59,7 @@ const PROJECTS = [
     deliverables: ["Arquitectura de contenidos", "Diseño responsive de cinco páginas", "Formulario con campos según el tipo de consulta", "Guía breve para actualizar textos"],
   },
   {
-    slug: "automatizacion-pedidos", service: "automatizaciones", serviceName: "Automatizaciones", img: "arq-volados",
+    slug: "automatizacion-pedidos", service: "automatizaciones", serviceName: "Automatizaciones", img: "arq-escalera",
     title: "Automatización de pedidos para una distribuidora",
     context: "Una distribuidora que recibe pedidos de comercios por email y WhatsApp, y los carga a mano en una planilla.",
     need: "Reducir el tiempo de carga y los errores de transcripción, y avisarle al cliente cuando su pedido quedó registrado.",
@@ -69,7 +67,7 @@ const PROJECTS = [
     deliverables: ["Mapa del proceso actual y del propuesto", "Formulario de pedido", "Flujo automatizado con avisos", "Documentación y alerta ante errores"],
   },
   {
-    slug: "integracion-tienda-stock", service: "integraciones", serviceName: "Integraciones", img: "arq-boveda",
+    slug: "integracion-tienda-stock", service: "integraciones", serviceName: "Integraciones", img: "arq-voladizo",
     title: "Integración entre tienda online y stock",
     context: "Un comercio con local físico y tienda online, que maneja el stock en su sistema de gestión.",
     need: "Evitar ventas de productos sin stock y dejar de actualizar cantidades a mano en dos lugares.",
@@ -77,7 +75,7 @@ const PROJECTS = [
     deliverables: ["Diagnóstico de ambos sistemas", "Reglas de sincronización", "Integración implementada y probada", "Reporte diario de control"],
   },
   {
-    slug: "identidad-cafeteria", service: "identidad-digital", serviceName: "Identidad digital", img: "arq-fachada",
+    slug: "identidad-cafeteria", service: "identidad-digital", serviceName: "Identidad digital", img: "arq-curva",
     title: "Identidad digital para una cafetería de barrio",
     context: "Una cafetería que abre su segundo local y comunica en redes con piezas armadas de forma improvisada.",
     need: "Tener una imagen reconocible y poder publicar con frecuencia sin depender de un diseñador para cada pieza.",
@@ -96,13 +94,13 @@ function head({ title, desc, path: p }) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${full}</title>
 <meta name="description" content="${desc}">
-<meta name="theme-color" content="#2340f5">
+<meta name="theme-color" content="#0053fd">
 <meta property="og:type" content="website">
 <meta property="og:title" content="${full}">
 <meta property="og:description" content="${desc}">
 <meta property="og:locale" content="es_UY">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="/assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/main.css">
 <script>(function(d){var h=d.documentElement;h.classList.add("js");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("js","is-entering")},3000)})(document);</script>
 <script src="/assets/js/main.js" defer></script>
@@ -119,7 +117,7 @@ function header(active, tone) {
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
 <header class="site-header" data-on="${tone}">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="KROMA — Inicio">${iso("brand__mark")}<span class="brand__word" aria-hidden="true">KROMA</span></a>
+    <a class="brand" href="/" aria-label="KROMA — Inicio"><span class="brand__word" aria-hidden="true">kroma</span></a>
     <nav class="nav" aria-label="Principal">
       <ul class="nav__list">
         <li><a class="nav__link" href="/"${cur("inicio")}>Inicio</a></li>
@@ -152,7 +150,7 @@ function header(active, tone) {
       <li><a href="/contacto"${cur("contacto")}>Hablemos</a></li>
     </ul>
   </nav>
-  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas.</p></div>
+  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas.</p><p style="margin-top:10px"><a href="mailto:${EMAIL}">${EMAIL}</a> · <a href="${IG_URL}" target="_blank" rel="noopener">${IG}</a></p></div>
 </div>`;
 }
 
@@ -161,7 +159,7 @@ const footer = `
   <div class="wrap">
     <div class="footer__top">
       <div class="footer__brand">
-        <a class="brand" href="/" aria-label="KROMA — Inicio">${iso("brand__mark")}<span class="brand__word" aria-hidden="true">KROMA</span></a>
+        <a class="brand" href="/" aria-label="KROMA — Inicio">${iso("brand__mark")}<span class="brand__word" aria-hidden="true">kroma</span></a>
         <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
       </div>
       <div class="footer__col">
@@ -174,8 +172,7 @@ const footer = `
       </div>
       <div class="footer__col">
         <h2>Contacto</h2>
-        <!-- PENDIENTE: agregar email, teléfono y redes reales de KROMA cuando estén disponibles. -->
-        <ul><li><a href="/contacto">Escribinos</a></li></ul>
+        <ul><li><a href="mailto:${EMAIL}">${EMAIL}</a></li><li><a href="${IG_URL}" target="_blank" rel="noopener">Instagram ${IG}</a></li><li><a href="/contacto">Formulario</a></li></ul>
       </div>
     </div>
     <div class="footer__bottom">
@@ -213,10 +210,9 @@ function svcRows() {
   ${SERVICES.map((s) => `<li class="svc-row">
     <a class="svc-row__link" href="/servicios/${s.slug}">
       <span class="svc-row__num">${s.n}</span>
-      <span class="svc-row__title">${s.name}</span>
-      <span class="svc-row__desc">${s.short}</span>
-      ${arrowIcon("svc-row__arrow")}
-      <span class="svc-row__preview" aria-hidden="true">${PREVIEWS[s.slug]}</span>
+      <span class="svc-row__body"><span class="svc-row__title">${s.name}</span><span class="svc-row__desc">${s.short}</span></span>
+      <span class="svc-row__thumb" aria-hidden="true"><picture><source srcset="/assets/img/${s.img}-sm.webp" type="image/webp"><img src="/assets/img/${s.img}-sm.jpg" alt="" width="640" height="427" loading="lazy" decoding="async"></picture></span>
+      <span class="circle-arrow" aria-hidden="true">${arrowIcon()}</span>
     </a>
   </li>`).join("\n  ")}
 </ul>`;
@@ -240,7 +236,7 @@ function projCard(pr, variant, i = 0) {
 }
 
 function closing({ theme = "black", title, text, trail = false, cta = "Hablemos", href = "/contacto", size = "display" }) {
-  const btn = theme === "blue" ? "btn--ivory" : theme === "ivory" ? "btn--blue" : "btn--blue";
+  const btn = theme === "blue" ? "" : theme === "ivory" ? "" : "btn--ivory";
   return `<section class="section closing theme-${theme}${trail ? " trail-zone" : ""}" data-theme="${theme}"${trail ? " data-trail" : ""} aria-labelledby="cierre-titulo">
   <div class="wrap closing__inner">
     ${lines(title, "h2", size + " closing__title").replace("<h2 ", '<h2 id="cierre-titulo" ')}
@@ -255,48 +251,45 @@ function closing({ theme = "black", title, text, trail = false, cta = "Hablemos"
 /* =========================================================
    INICIO
    ========================================================= */
+const HERO_CLIP = blob([[.30,-.04],[.62,-.06],[1.06,-.04],[1.08,.50],[1.06,1.08],[.62,1.06],[.30,.96],[.10,.80],[.22,.56],[.06,.34],[.16,.10]], 4);
+
 write("/", page({
   path: "/", title: "Inicio", active: "inicio", tone: "blue",
   desc: "KROMA es una consultora tecnológica para empresas uruguayas: webs, automatizaciones, integraciones e identidad digital, elegidas e implementadas con criterio.",
   body: `
 <section class="hero theme-blue" data-theme="blue" aria-labelledby="hero-titulo">
-  <div class="hero__blob" aria-hidden="true">${decoBlob(BLOB_2)}</div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><clipPath id="hero-clip" clipPathUnits="objectBoundingBox"><path id="hero-clip-path" d="${HERO_CLIP}"/></clipPath></svg>
+  <div class="hero__visual hero__media" role="img" aria-label="Escalera curva de hormigón, fotografía en blanco y negro">
+    <div class="hero__frame">
+      <picture><source srcset="/assets/img/arq-escalera-curva.webp" type="image/webp"><img class="hero__photo" src="/assets/img/arq-escalera-curva.jpg" alt="" width="1536" height="1024" fetchpriority="high" decoding="async"></picture>
+    </div>
+  </div>
+  <div class="hero__wave" aria-hidden="true">
+    <svg viewBox="0 0 1000 220" preserveAspectRatio="none"><path fill="var(--ivory)" d="M0 70C140 30 300 40 420 92C540 144 600 214 700 220H0Z"/></svg>
+  </div>
+  <div class="hero__mark" aria-hidden="true"><div class="hero__mark-follow"><div class="hero__mark-in">${iso()}</div></div></div>
   <div class="wrap">
     <div class="hero__grid">
-      <div class="hero__visual">
-      <div class="hero__media" role="img" aria-label="Fotografía arquitectónica en blanco y negro de una fachada curva">
-        <svg viewBox="0 0 400 500" aria-hidden="true">
-          <defs><clipPath id="hero-clip"><path id="hero-clip-path" d="${blob([[72,10],[208,-10],[344,20],[392,150],[408,310],[376,470],[248,500],[120,490],[16,450],[0,280],[8,110]])}"/></clipPath></defs>
-          <path class="hero__echo" d=""/>
-          <g clip-path="url(#hero-clip)">
-            <image class="hero__photo" href="/assets/img/arq-fachada.webp" x="-10" y="-30" width="420" height="560" preserveAspectRatio="xMidYMid slice"/>
-          </g>
-        </svg>
-      </div>
-      <div class="hero__mark"><div class="hero__mark-in">${iso("", "")}</div></div>
-      </div>
       <div class="hero__text">
         ${lines(["Tu negocio.", "Su próxima", "versión."], "h1", "display hero__title", 80).replace("<h1 ", '<h1 id="hero-titulo" ')}
         <div class="hero__meta" data-reveal="fade" style="--delay:520ms">
-          <p>Consultoría tecnológica para empresas.</p>
-          <a class="btn btn--ivory" href="/contacto">Hablemos ${ARROW}</a>
+          <p>Consultoría tecnológica<br>para empresas.</p>
+          <a class="btn" href="/contacto">Hablemos ${ARROW}</a>
         </div>
       </div>
     </div>
   </div>
-  <span class="hero__scroll" aria-hidden="true">Scroll</span>
 </section>
-${band("var(--blue)", "black")}
-<section class="section statement theme-black trail-zone" data-theme="black" data-trail aria-labelledby="criterio-titulo">
+<section class="section statement theme-ivory" data-theme="ivory" aria-labelledby="criterio-titulo">
   <div class="wrap grid12">
     <div class="statement__title">
-      <p class="eyebrow" data-reveal="fade">Qué hacemos</p>
-      ${lines(["Tecnología", "con criterio."], "h2", "h1").replace("<h2 ", '<h2 id="criterio-titulo" style="margin-top:24px" ')}
+      ${lines(["Tecnología", "con criterio."], "h2", "h1").replace("<h2 ", '<h2 id="criterio-titulo" ')}
     </div>
     <div class="statement__body" data-reveal="rise" style="--delay:160ms">
-      <p class="lead">Hoy existe una herramienta para casi todo. El desafío ya no es encontrarla: es saber cuál conviene, cómo implementarla y lograr que tu equipo la use.</p>
-      <p class="muted">En KROMA te ayudamos a elegir y poner en marcha la tecnología que tu empresa necesita, sin sumar complejidad donde no hace falta.</p>
+      <p class="lead">Estrategia, desarrollo e integración para que tu negocio avance con sentido.</p>
+      <p class="muted">Hoy existe una herramienta para casi todo. El desafío ya no es encontrarla: es saber cuál conviene, cómo implementarla y lograr que tu equipo la use.</p>
     </div>
+    <span class="statement__rule" data-reveal="draw" aria-hidden="true"></span>
     <ul class="values">
       <li data-reveal="rise"><span class="num accent">01</span><h3>Primero entendemos tu operación</h3><p class="muted">Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
       <li data-reveal="rise" style="--delay:120ms"><span class="num accent">02</span><h3>Elegimos lo que tiene sentido</h3><p class="muted">Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
@@ -304,20 +297,18 @@ ${band("var(--blue)", "black")}
     </ul>
   </div>
 </section>
-${band("var(--black)", "ivory", true)}
-<section class="section theme-ivory" data-theme="ivory" aria-labelledby="servicios-titulo" style="padding-top:clamp(40px,6vw,90px)">
+${band("var(--ivory)", "black")}
+<section class="section theme-black trail-zone" data-theme="black" data-trail aria-labelledby="servicios-titulo" style="padding-block:clamp(32px,5vw,72px)">
   <div class="wrap">
     <div class="sec-head">
-      <div>
-        <p class="eyebrow" data-reveal="fade">Servicios</p>
-        ${lines(["Cuatro formas de", "dar el próximo paso."], "h2", "h2").replace("<h2 ", '<h2 id="servicios-titulo" style="margin-top:20px" ')}
-      </div>
+      ${lines(["Herramientas que", "mueven tu negocio."], "h2", "h2").replace("<h2 ", '<h2 id="servicios-titulo" ')}
       <a class="link-arrow" href="/servicios">Ver todos los servicios ${arrowIcon()}</a>
     </div>
     ${svcRows()}
   </div>
 </section>
-<section class="section theme-ivory" data-theme="ivory" aria-labelledby="proyectos-titulo" style="padding-top:0">
+${band("var(--black)", "ivory", true)}
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="proyectos-titulo" style="padding-top:clamp(32px,5vw,72px)">
   <div class="wrap">
     <div class="sec-head">
       <div>
@@ -341,26 +332,39 @@ ${closing({ theme: "black", trail: true, title: ["¿Por dónde", "empezamos?"], 
    NOSOTROS
    ========================================================= */
 const PROCESS = [
-  ["Entendemos", "Conversamos con vos y con tu equipo para ver cómo funciona hoy la operación, qué herramientas usan y dónde se traba el trabajo."],
-  ["Priorizamos", "Ordenamos las oportunidades según impacto, costo y esfuerzo. Definimos por dónde empezar y qué puede esperar."],
-  ["Desarrollamos", "Implementamos la solución por etapas, con pruebas y revisiones para que no haya sorpresas al final."],
-  ["Acompañamos", "Explicamos cómo usar lo que hicimos, dejamos documentación y seguimos cerca para ajustar lo necesario."],
+  ["Entendemos", "Nos sumergimos en tu negocio, tus desafíos y tus oportunidades."],
+  ["Priorizamos", "Definimos el camino con criterio y foco en lo que genera valor."],
+  ["Desarrollamos", "Creamos soluciones robustas, escalables y a medida."],
+  ["Acompañamos", "Estamos en cada etapa para que tu negocio siga creciendo."],
 ];
 write("/nosotros", page({
   path: "/nosotros", title: "Nosotros", active: "nosotros", tone: "ivory",
   desc: "KROMA nace para democratizar la digitalización de las empresas uruguayas: elegir bien las herramientas e implementarlas con criterio.",
   body: `
 <section class="page-hero about-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
-  <div class="deco-blob" data-drift="80">${decoBlob(BLOB_1)}</div>
+  <div class="about-hero__mark" data-float="60" aria-hidden="true">${iso()}</div>
   <div class="wrap page-hero__grid">
-    <p class="eyebrow page-hero__eyebrow" data-reveal="fade">Nosotros</p>
-    ${lines(["Digitalizar", "también es", '<span class="accent">elegir bien.</span>'], "h1", "display about-hero__title").replace("<h1 ", '<h1 id="t" ')}
-    <p class="lead page-hero__aside" data-reveal="rise" style="--delay:400ms">KROMA es una consultora tecnológica para empresas uruguayas. Nuestro propósito es democratizar la digitalización.</p>
+    ${lines(["Digitalizar también", "es elegir bien."], "h1", "display about-hero__title").replace("<h1 ", '<h1 id="t" ')}
+    <p class="lead about-hero__sub" data-reveal="rise" style="--delay:400ms">Democratizamos la digitalización<br>de las empresas uruguayas.</p>
   </div>
 </section>
-<div class="band about-band theme-black" data-band aria-hidden="true">
-  <svg viewBox="0 0 1300 140" preserveAspectRatio="none"><path fill="var(--ivory)" d="M0 0H1300V40C1150 110 990 10 820 60C650 110 520 140 350 84C220 42 110 60 0 96Z"/><path fill="var(--blue)" d="M0 96C110 60 220 42 350 84C520 140 650 110 820 60C990 10 1150 110 1300 40V78C1150 140 990 46 820 96C650 140 520 140 350 118C220 84 110 96 0 130Z"/></svg>
+<div class="about-band" data-band aria-hidden="true">
+  <svg viewBox="0 0 1300 320" preserveAspectRatio="none">
+    <path fill="var(--black)" d="M0 150C180 120 330 40 520 70C700 98 760 230 930 240C1080 250 1180 140 1300 120V320H0Z"/>
+    <path fill="var(--blue)" d="M0 320V270C110 180 200 130 330 140C460 150 520 280 690 320Z"/>
+  </svg>
 </div>
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="proceso" style="padding-top:clamp(56px,7vw,100px)">
+  <div class="wrap">
+    <div class="sec-head">
+      ${lines(["Cómo trabajamos."], "h2", "h2").replace("<h2 ", '<h2 id="proceso" ')}
+      <p class="muted" style="max-width:30ch" data-reveal="fade">Un proceso claro, colaborativo y enfocado en resultados reales.</p>
+    </div>
+    <ol class="process">
+      ${PROCESS.map(([t, d], i) => `<li class="process__step"><span class="process__num">0${i + 1}</span><h3 class="process__title">${t}</h3><p class="process__desc">${d}</p><span class="circle-arrow" aria-hidden="true">${arrowIcon()}</span></li>`).join("\n      ")}
+    </ol>
+  </div>
+</section>
 <section class="section theme-black" data-theme="black" aria-labelledby="proposito">
   <div class="wrap purpose">
     <h2 id="proposito" class="sr-only">Nuestro propósito</h2>
@@ -370,31 +374,12 @@ write("/nosotros", page({
       <p class="muted">Democratizar la digitalización es eso: que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala.</p>
     </div>
     <figure class="purpose__figure" data-reveal="wipe">
-      <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/arq-boveda.webp" type="image/webp"><img src="/assets/img/arq-boveda.jpg" alt="Bóvedas de hormigón en blanco y negro" width="1800" height="1200" loading="lazy" decoding="async"></picture></div></div>
+      <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/arq-escalera.webp" type="image/webp"><img src="/assets/img/arq-escalera.jpg" alt="Escalera recta entre volúmenes de hormigón, en blanco y negro" width="1536" height="1024" loading="lazy" decoding="async"></picture></div></div>
     </figure>
     <p class="purpose__quote" data-reveal="rise" style="--delay:200ms">Tecnología que se entiende, se usa y se puede mantener. <span class="accent">Ese es nuestro criterio.</span></p>
   </div>
 </section>
-<section class="section theme-ivory" data-theme="ivory" aria-labelledby="proceso">
-  <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <p class="eyebrow" data-reveal="fade">Proceso</p>
-        ${lines(["Cómo", "trabajamos."], "h2", "h2").replace("<h2 ", '<h2 id="proceso" style="margin-top:20px" ')}
-      </div>
-    </div>
-    <div class="process">
-      <div class="process__aside" aria-hidden="true">
-        <div class="process__bignum">${PROCESS.map((_, i) => `<span>0${i + 1}</span>`).join("")}</div>
-        <div><p class="num" style="margin-bottom:14px">Etapa del proceso</p><div class="process__bar"><i></i></div></div>
-      </div>
-      <ol class="process__steps">
-        ${PROCESS.map(([t, d], i) => `<li class="process__step"><span class="num">0${i + 1}</span><h3>${t}.</h3><p class="lead muted">${d}</p></li>`).join("\n        ")}
-      </ol>
-    </div>
-  </div>
-</section>
-<section class="section section--tight theme-ivory" data-theme="ivory" aria-labelledby="principios" style="padding-top:0">
+<section class="section section--tight theme-ivory" data-theme="ivory" aria-labelledby="principios">
   <div class="wrap">
     <h2 id="principios" class="h3" style="margin-bottom:32px" data-reveal="fade">Lo que nos guía</h2>
     <ul class="steps-inline steps-inline--3">
@@ -412,30 +397,33 @@ ${closing({ theme: "blue", title: ["Empecemos por", "entender."], text: "Una pri
    SERVICIOS (índice)
    ========================================================= */
 write("/servicios", page({
-  path: "/servicios", title: "Servicios", active: "servicios", tone: "ivory",
+  path: "/servicios", title: "Servicios", active: "servicios", tone: "black",
   desc: "Webs, automatizaciones, integraciones e identidad digital para empresas uruguayas.",
   body: `
-<section class="page-hero svc-index-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
-  <div class="deco-blob" data-drift="60">${decoBlob(BLOB_2)}</div>
+<section class="page-hero svc-index-hero theme-black" data-theme="black" aria-labelledby="t">
+  <div class="svc-index-hero__shape" data-float="40" aria-hidden="true">
+    <svg viewBox="0 0 600 700" preserveAspectRatio="none"><path fill="var(--blue)" d="M600 0H300C260 90 330 170 300 260C270 350 120 380 110 500C100 610 220 690 330 700H600Z"/></svg>
+  </div>
   <div class="wrap page-hero__grid">
-    <p class="eyebrow page-hero__eyebrow" data-reveal="fade">Servicios</p>
-    ${lines(["Cuatro frentes,", "un mismo criterio."], "h1", "h1 svc-index-hero__title").replace("<h1 ", '<h1 id="t" ')}
-    <p class="lead page-hero__aside" data-reveal="rise" style="--delay:300ms;grid-column:7 / span 6">Cada servicio puede contratarse por separado, pero todos parten de lo mismo: entender tu operación antes de proponer.</p>
+    <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/">Inicio</a></li><li aria-current="page">Servicios</li></ol></nav>
+    ${lines(["Herramientas que", "mueven tu negocio."], "h1", "display svc-index-hero__title").replace("<h1 ", '<h1 id="t" ')}
+    <p class="lead svc-index-hero__sub" data-reveal="rise" style="--delay:350ms">Soluciones tecnológicas a medida<br>para empresas que quieren más.</p>
   </div>
 </section>
-<section class="section theme-ivory" data-theme="ivory" aria-label="Lista de servicios" style="padding-top:0">
+<section class="section theme-black trail-zone" data-theme="black" data-trail aria-label="Lista de servicios" style="padding-top:0;padding-bottom:clamp(32px,5vw,72px)">
   <div class="wrap">${svcRows()}</div>
 </section>
-<section class="section theme-black" data-theme="black" aria-labelledby="dudas">
+${band("var(--black)", "ivory")}
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="eleccion" style="padding-top:clamp(24px,4vw,56px)">
   <div class="wrap split">
-    <div class="split__head">
-      <p class="eyebrow" data-reveal="fade">¿No sabés por dónde empezar?</p>
-      ${lines(["Es lo más", "común."], "h2", "h2").replace("<h2 ", '<h2 id="dudas" style="margin-top:20px" ')}
+    <div class="split__head" style="grid-column:1 / span 6">
+      ${lines(["Elegimos lo que", "necesitás."], "h2", "h2").replace("<h2 ", '<h2 id="eleccion" ')}
+      <p class="lead" style="margin-top:18px" data-reveal="fade">Tecnología útil. Sin ruido. Con impacto real.</p>
     </div>
-    <div class="split__body" data-reveal="rise">
-      <p class="lead" style="margin-bottom:24px">Muchas veces la necesidad no encaja en un solo servicio: una web que debería cargar pedidos, una planilla que debería hablar con la facturación, una marca que necesita piezas nuevas.</p>
-      <p class="muted" style="margin-bottom:36px">En la primera conversación ordenamos el problema y te decimos qué combinación tiene sentido, o si conviene esperar.</p>
-      <a class="btn btn--blue" href="/contacto?servicio=no-se">Contanos tu caso ${ARROW}</a>
+    <div class="split__body" data-reveal="rise" style="grid-column:8 / span 5">
+      <p style="margin-bottom:18px">Muchas veces la necesidad no encaja en un solo servicio: una web que debería cargar pedidos, una planilla que debería hablar con la facturación, una marca que necesita piezas nuevas.</p>
+      <p class="muted" style="margin-bottom:32px">En la primera conversación ordenamos el problema y te decimos qué combinación tiene sentido, o si conviene esperar.</p>
+      <a class="btn" href="/contacto?servicio=no-se">Contanos tu caso ${ARROW}</a>
     </div>
   </div>
 </section>
@@ -647,9 +635,9 @@ function websHeroStage() {
     </div>
   </div>`;
   return `<div class="webs-stage" role="img" aria-label="Previews ilustrativas de un sitio web en computadora y celular">
-  ${frame("webs-layer--1", 0.6, "inicio", "arq-boveda")}
-  ${frame("webs-layer--2", 1, "servicios", "arq-reticula")}
-  ${frame("webs-layer--3", 1.6, "", "arq-fachada", true)}
+  ${frame("webs-layer--1", 0.6, "inicio", "arq-voladizo")}
+  ${frame("webs-layer--2", 1, "servicios", "arq-esquina")}
+  ${frame("webs-layer--3", 1.6, "", "arq-escalera-curva", true)}
 </div>`;
 }
 
@@ -657,7 +645,7 @@ for (const s of SERVICES) {
   const d = SVC_PAGES[s.slug];
   const idx = SERVICES.indexOf(s);
   const next = SERVICES[(idx + 1) % SERVICES.length];
-  const heroBtn = d.heroTheme === "blue" ? "btn--ivory" : d.heroTheme === "black" ? "btn--blue" : "btn";
+  const heroBtn = d.heroTheme === "black" ? "btn--ivory" : "";
   const isWebs = s.slug === "webs";
   const problemTheme = d.heroTheme === "ivory" ? "blue" : "ivory";
   const body = `
@@ -780,7 +768,7 @@ PROJECTS.forEach((pr, i) => {
 <section class="section section--tight theme-black" data-theme="black" aria-label="Siguiente proyecto">
   <div class="wrap case-next">
     <div><p class="eyebrow">Siguiente concepto</p><p class="h3" style="margin-top:14px;font-weight:800;max-width:22ch">${next.title}</p></div>
-    <a class="btn btn--blue" href="/proyectos/${next.slug}">Ver caso ${ARROW}</a>
+    <a class="btn btn--ivory" href="/proyectos/${next.slug}">Ver caso ${ARROW}</a>
   </div>
 </section>
 ${closing({ theme: "blue", title: ["¿Algo", "parecido?"], text: "Si tu empresa tiene una necesidad similar, contanos y lo vemos.", href: `/contacto?servicio=${pr.service}` })}
@@ -809,10 +797,14 @@ write("/contacto", page({
           <li>Qué te gustaría mejorar primero.</li>
         </ul>
       </div>
-      <!-- PENDIENTE: agregar email, teléfono o WhatsApp reales de KROMA como canales alternativos. -->
+      <div class="contact__channels" data-reveal="rise" style="--delay:500ms">
+        <p class="num">También podés escribirnos</p>
+        <a class="link-arrow" href="mailto:${EMAIL}">${EMAIL} ${arrowIcon()}</a>
+        <a class="link-arrow" href="${IG_URL}" target="_blank" rel="noopener">Instagram ${IG} ${arrowIcon()}</a>
+      </div>
     </div>
     <div class="contact__form-wrap" data-reveal="rise" style="--delay:200ms">
-      <form class="form" id="contact-form" action="/api/contact" method="post" data-endpoint="/api/contact" novalidate aria-describedby="form-note">
+      <form class="form" id="contact-form" action="${FORM_ENDPOINT.replace("/ajax", "")}" method="post" data-endpoint="${FORM_ENDPOINT}" novalidate aria-describedby="form-note">
         <div class="field">
           <label for="f-nombre">Nombre</label>
           <div class="field__control"><input id="f-nombre" name="nombre" type="text" autocomplete="name" required aria-describedby="e-nombre"></div>
@@ -838,9 +830,9 @@ write("/contacto", page({
           <div class="field__control"><textarea id="f-mensaje" name="mensaje" rows="5" required aria-describedby="e-mensaje"></textarea></div>
           <p class="field__error" id="e-mensaje" aria-live="polite"></p>
         </div>
-        <div class="hp" aria-hidden="true"><label for="f-hp">No completar</label><input id="f-hp" name="empresa_web" type="text" tabindex="-1" autocomplete="off"></div>
+        <div class="hp" aria-hidden="true"><label for="f-hp">No completar</label><input id="f-hp" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
         <div class="form__foot">
-          <button class="btn btn--blue" type="submit"><span class="btn__label">Enviar mensaje</span><svg class="spinner" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>${ARROW}</button>
+          <button class="btn" type="submit"><span class="btn__label">Enviar mensaje</span><svg class="spinner" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>${ARROW}</button>
           <p class="form__note" id="form-note">Todos los campos son obligatorios.</p>
         </div>
       </form>
@@ -871,12 +863,12 @@ write("/404", page({
     <p class="eyebrow">Error 404</p>
     <h1 id="t" class="display">Esta página<br>no existe.</h1>
     <p class="lead">Puede que el enlace haya cambiado. Volvé al inicio o escribinos.</p>
-    <p style="display:flex;gap:16px;flex-wrap:wrap"><a class="btn btn--ivory" href="/">Ir al inicio ${ARROW}</a><a class="btn btn--ghost" href="/contacto">Hablemos</a></p>
+    <p style="display:flex;gap:16px;flex-wrap:wrap"><a class="btn" href="/">Ir al inicio ${ARROW}</a><a class="btn btn--ghost" href="/contacto">Hablemos</a></p>
   </div>
 </section>`,
 }));
 
 // favicon
 fs.writeFileSync(path.join(OUT, "assets/img/favicon.svg"),
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 ${parseFloat(ISO_VB.split(" ")[2]) + 16} ${parseFloat(ISO_VB.split(" ")[3]) + 16}"><path fill="#2340f5" d="${ISO_D}"/></svg>`);
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 ${parseFloat(ISO_VB.split(" ")[2]) + 16} ${parseFloat(ISO_VB.split(" ")[3]) + 16}"><path fill="#0053fd" d="${ISO_D}"/></svg>`);
 console.log("ok");
