@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es-UY">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Automatización de pedidos para una distribuidora — KROMA</title>
+<meta name="description" content="Proyecto conceptual de KROMA: automatización de pedidos para una distribuidora.">
+<meta name="theme-color" content="#2340f5">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Automatización de pedidos para una distribuidora — KROMA">
+<meta property="og:description" content="Proyecto conceptual de KROMA: automatización de pedidos para una distribuidora.">
+<meta property="og:locale" content="es_UY">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/main.css">
+<script>(function(d){var h=d.documentElement;h.classList.add("js");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("js","is-entering")},3000)})(document);</script>
+<script src="/assets/js/main.js" defer></script>
+<script type="speculationrules">{"prefetch":[{"source":"document","where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="iso" viewBox="0 0 100.00 92.71"><path fill="currentColor" d="M79.41 92.62C78.43 92.71 77.33 92.75 76.28 92.71C75.24 92.67 74.20 92.56 73.16 92.38C72.12 92.20 71.08 91.95 70.04 91.62C69.00 91.29 67.89 90.85 66.91 90.41C65.93 89.96 65.08 89.49 64.16 88.93C63.24 88.37 63.24 88.53 61.40 87.05C59.56 85.57 54.79 81.37 53.13 80.05C51.48 78.74 52.00 79.35 51.48 79.16C50.96 78.96 50.50 78.87 50.01 78.87C49.52 78.87 49.03 78.98 48.54 79.16C48.05 79.33 48.77 78.58 47.07 79.93C45.37 81.28 40.28 85.72 38.32 87.27C36.36 88.82 36.30 88.68 35.31 89.25C34.32 89.83 33.41 90.29 32.37 90.73C31.33 91.17 30.19 91.59 29.06 91.89C27.93 92.20 26.73 92.43 25.57 92.57C24.41 92.71 23.21 92.75 22.08 92.71C20.95 92.68 19.78 92.53 18.77 92.36C17.76 92.19 16.93 91.98 16.01 91.69C15.10 91.40 14.13 91.03 13.26 90.63C12.38 90.23 11.57 89.79 10.77 89.29C9.98 88.80 9.20 88.25 8.48 87.67C7.76 87.08 7.09 86.48 6.43 85.80C5.78 85.12 5.11 84.33 4.55 83.60C3.99 82.86 3.55 82.19 3.09 81.39C2.63 80.59 2.16 79.65 1.80 78.82C1.44 77.99 1.18 77.23 0.94 76.43C0.70 75.63 0.51 74.84 0.36 74.04C0.22 73.24 0.11 72.48 0.05 71.65C-0.01 70.83 -0.03 69.94 0.00 69.08C0.03 68.22 0.12 67.33 0.24 66.51C0.36 65.68 0.52 64.91 0.73 64.12C0.94 63.32 1.21 62.50 1.50 61.73C1.79 60.96 2.06 60.32 2.48 59.52C2.89 58.73 3.43 57.79 4.00 56.95C4.57 56.12 5.22 55.29 5.91 54.52C6.59 53.76 7.32 53.04 8.11 52.36C8.91 51.67 9.83 50.98 10.69 50.40C11.54 49.82 12.34 49.35 13.26 48.87C14.18 48.38 14.09 48.30 16.20 47.49C18.31 46.68 24.07 44.74 25.94 44.02C27.81 43.31 27.00 43.50 27.42 43.17C27.85 42.84 28.23 42.50 28.50 42.07C28.78 41.64 28.99 41.18 29.10 40.60C29.21 40.02 29.46 40.48 29.18 38.58C28.90 36.68 27.79 31.59 27.43 29.21C27.07 26.82 27.02 25.78 27.00 24.24C26.97 22.71 27.08 21.37 27.27 20.02C27.46 18.67 27.85 17.20 28.14 16.16C28.43 15.12 28.70 14.54 29.03 13.77C29.36 13.01 29.71 12.30 30.13 11.57C30.55 10.83 31.06 10.05 31.55 9.36C32.05 8.68 32.55 8.07 33.10 7.46C33.66 6.84 34.28 6.23 34.90 5.69C35.51 5.14 36.10 4.67 36.78 4.19C37.46 3.71 38.25 3.21 38.98 2.80C39.72 2.40 40.27 2.10 41.19 1.74C42.11 1.38 43.39 0.92 44.50 0.64C45.60 0.36 46.67 0.18 47.80 0.07C48.94 -0.04 50.16 -0.06 51.29 0.00C52.43 0.06 53.50 0.20 54.60 0.43C55.70 0.66 56.84 0.98 57.91 1.38C58.98 1.77 60.02 2.24 61.03 2.80C62.04 3.36 63.07 4.04 63.97 4.74C64.88 5.43 65.65 6.11 66.46 6.97C67.28 7.83 68.16 8.90 68.85 9.91C69.55 10.92 70.14 11.96 70.65 13.04C71.17 14.11 71.59 15.18 71.93 16.34C72.28 17.51 72.57 18.82 72.75 20.02C72.93 21.21 73.00 22.32 73.02 23.51C73.03 24.70 73.21 24.64 72.85 27.18C72.48 29.73 71.15 36.53 70.83 38.76C70.50 41.00 70.82 40.08 70.92 40.60C71.01 41.12 71.16 41.49 71.40 41.88C71.64 42.28 71.95 42.65 72.36 42.99C72.76 43.32 71.83 43.12 73.83 43.91C75.83 44.70 82.12 46.85 84.37 47.72C86.62 48.60 86.36 48.64 87.31 49.16C88.25 49.69 89.15 50.25 90.04 50.89C90.93 51.53 91.82 52.25 92.64 53.02C93.45 53.78 94.24 54.64 94.92 55.48C95.60 56.32 96.17 57.14 96.72 58.05C97.27 58.97 97.82 60.08 98.22 60.99C98.63 61.91 98.89 62.71 99.13 63.57C99.38 64.42 99.57 65.28 99.72 66.14C99.86 67.00 99.96 67.82 100.00 68.71C100.04 69.60 100.04 70.55 99.98 71.47C99.91 72.39 99.79 73.34 99.62 74.22C99.45 75.11 99.23 75.97 98.97 76.80C98.71 77.62 98.42 78.39 98.06 79.19C97.70 79.98 97.28 80.81 96.82 81.57C96.37 82.34 95.87 83.08 95.33 83.78C94.79 84.48 94.18 85.18 93.58 85.80C92.98 86.42 92.40 86.96 91.72 87.52C91.04 88.07 90.28 88.63 89.51 89.12C88.75 89.61 87.92 90.07 87.13 90.46C86.33 90.84 85.56 91.16 84.74 91.44C83.91 91.73 83.05 91.98 82.16 92.18C81.28 92.37 80.39 92.53 79.41 92.62Z"/></symbol></defs></svg>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="site-header" data-on="ivory">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="KROMA — Inicio"><svg class="brand__mark" viewBox="0 0 100.00 92.71" aria-hidden="true"><use href="#iso"/></svg><span class="brand__word" aria-hidden="true">KROMA</span></a>
+    <nav class="nav" aria-label="Principal">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="/">Inicio</a></li>
+        <li><a class="nav__link" href="/nosotros">Nosotros</a></li>
+        <li class="nav__item--sub">
+          <div class="nav__row">
+            <a class="nav__link" href="/servicios">Servicios</a>
+            <button class="nav__subtoggle" type="button" aria-expanded="false" aria-controls="sub-servicios" aria-label="Mostrar servicios"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          </div>
+          <ul class="nav__sub" id="sub-servicios">
+            <li><a href="/servicios/webs">Webs<span>01</span></a></li><li><a href="/servicios/automatizaciones">Automatizaciones<span>02</span></a></li><li><a href="/servicios/integraciones">Integraciones<span>03</span></a></li><li><a href="/servicios/identidad-digital">Identidad digital<span>04</span></a></li>
+          </ul>
+        </li>
+        <li><a class="nav__link" href="/proyectos" aria-current="page">Proyectos</a></li>
+      </ul>
+      <a class="btn nav__cta" href="/contacto">Hablemos <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir menú"><span></span><span></span></button>
+    </nav>
+  </div>
+</header>
+<div class="mobile-menu" id="menu-movil">
+  <nav aria-label="Menú móvil">
+    <ul class="mobile-menu__main">
+      <li><a href="/">Inicio</a></li>
+      <li><a href="/nosotros">Nosotros</a></li>
+      <li><a href="/servicios">Servicios</a>
+        <ul class="mobile-menu__sub"><li><a href="/servicios/webs">01 — Webs</a></li><li><a href="/servicios/automatizaciones">02 — Automatizaciones</a></li><li><a href="/servicios/integraciones">03 — Integraciones</a></li><li><a href="/servicios/identidad-digital">04 — Identidad digital</a></li></ul>
+      </li>
+      <li><a href="/proyectos" aria-current="page">Proyectos</a></li>
+      <li><a href="/contacto">Hablemos</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas.</p></div>
+</div>
+<main id="contenido" tabindex="-1">
+
+<section class="page-hero theme-ivory" data-theme="ivory" aria-labelledby="t" style="padding-bottom:0">
+  <div class="wrap page-hero__grid">
+    <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/proyectos">Proyectos</a></li><li aria-current="page">Concepto</li></ol></nav>
+    <h1 id="t" style="grid-column:1 / span 9" class="lines h1" data-lines><span class="ln"><span style="--i:0;--base:0ms">Automatización de pedidos para una distribuidora</span></span></h1>
+    <div class="page-hero__aside" data-reveal="rise" style="--delay:300ms;grid-column:10 / span 3">
+      <span class="tag-concept">Concepto</span>
+      <p class="muted">Servicio: <a href="/servicios/automatizaciones">Automatizaciones</a></p>
+    </div>
+  </div>
+  <div class="wrap case-hero__media" data-reveal="wipe">
+    <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/arq-volados.webp" type="image/webp"><img src="/assets/img/arq-volados.jpg" alt="" width="1800" height="1200" decoding="async" fetchpriority="high"></picture></div></div>
+  </div>
+</section>
+<section class="section theme-ivory" data-theme="ivory" aria-label="Detalle del caso">
+  <div class="wrap case-body">
+    <div class="case-notice"><strong>Proyecto conceptual.</strong><span>Es un ejemplo de cómo abordaríamos esta necesidad. No corresponde a un cliente real ni fue implementado.</span></div>
+    <div class="case-row" data-reveal="rise"><h2>Contexto</h2><div><p class="lead">Una distribuidora que recibe pedidos de comercios por email y WhatsApp, y los carga a mano en una planilla.</p></div></div>
+    <div class="case-row" data-reveal="rise"><h2>Necesidad</h2><div><p class="lead">Reducir el tiempo de carga y los errores de transcripción, y avisarle al cliente cuando su pedido quedó registrado.</p></div></div>
+    <div class="case-row" data-reveal="rise"><h2>Solución</h2><div><p class="lead">Un formulario de pedido para clientes frecuentes. Cada envío se valida, se registra en la planilla compartida y dispara dos avisos: la confirmación al cliente y la notificación al depósito.</p></div></div>
+    <div class="case-row" data-reveal="rise"><h2>Entregables</h2><div><ul><li>Mapa del proceso actual y del propuesto</li><li>Formulario de pedido</li><li>Flujo automatizado con avisos</li><li>Documentación y alerta ante errores</li></ul></div></div>
+    <div class="case-row" data-reveal="rise"><h2>Resultado</h2><div><p class="muted">No aplica: al ser un concepto, no hay resultados documentados para informar.</p></div></div>
+  </div>
+</section>
+<section class="section section--tight theme-black" data-theme="black" aria-label="Siguiente proyecto">
+  <div class="wrap case-next">
+    <div><p class="eyebrow">Siguiente concepto</p><p class="h3" style="margin-top:14px;font-weight:800;max-width:22ch">Integración entre tienda online y stock</p></div>
+    <a class="btn btn--blue" href="/proyectos/integracion-tienda-stock">Ver caso <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</section>
+<section class="section closing theme-blue" data-theme="blue" aria-labelledby="cierre-titulo">
+  <div class="wrap closing__inner">
+    <h2 id="cierre-titulo" class="lines display closing__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">¿Algo</span></span><span class="ln"><span style="--i:1;--base:0ms">parecido?</span></span></h2>
+    <div class="closing__side" data-reveal="rise" style="--delay:200ms">
+      <p class="lead">Si tu empresa tiene una necesidad similar, contanos y lo vemos.</p>
+      <a class="btn btn--ivory" href="/contacto?servicio=automatizaciones">Hablemos <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer" data-theme="black">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="brand" href="/" aria-label="KROMA — Inicio"><svg class="brand__mark" viewBox="0 0 100.00 92.71" aria-hidden="true"><use href="#iso"/></svg><span class="brand__word" aria-hidden="true">KROMA</span></a>
+        <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
+      </div>
+      <div class="footer__col">
+        <h2>Sitio</h2>
+        <ul><li><a href="/">Inicio</a></li><li><a href="/nosotros">Nosotros</a></li><li><a href="/proyectos">Proyectos</a></li><li><a href="/contacto">Hablemos</a></li></ul>
+      </div>
+      <div class="footer__col">
+        <h2>Servicios</h2>
+        <ul><li><a href="/servicios/webs">Webs</a></li><li><a href="/servicios/automatizaciones">Automatizaciones</a></li><li><a href="/servicios/integraciones">Integraciones</a></li><li><a href="/servicios/identidad-digital">Identidad digital</a></li></ul>
+      </div>
+      <div class="footer__col">
+        <h2>Contacto</h2>
+        <!-- PENDIENTE: agregar email, teléfono y redes reales de KROMA cuando estén disponibles. -->
+        <ul><li><a href="/contacto">Escribinos</a></li></ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year">2026</span> KROMA</span>
+      <span>Hecho en Uruguay</span>
+    </div>
+  </div>
+</footer>
+<div class="curtain" aria-hidden="true"><div class="curtain__body"></div><svg class="curtain__mark" viewBox="0 0 100.00 92.71" aria-hidden="true"><use href="#iso"/></svg></div>
+</body>
+</html>

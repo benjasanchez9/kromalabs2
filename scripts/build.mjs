@@ -1,0 +1,882 @@
+// Uso: node scripts/build.mjs .   (desde la carpeta raíz del proyecto)
+// Regenera todos los index.html a partir de este archivo. Editá textos y páginas acá.
+// Genera las páginas HTML estáticas de KROMA.
+import fs from "node:fs";
+import path from "node:path";
+
+const OUT = process.argv[2];
+const svgFile = fs.readFileSync(path.join(OUT, "assets/img/kroma-isotipo.svg"), "utf8");
+const ISO_VB = svgFile.match(/viewBox="([^"]+)"/)[1];
+const ISO_D = svgFile.match(/ d="([^"]+)"/)[1];
+
+/* ---------------- utilidades ---------------- */
+const ARROW = `<svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const arrowIcon = (cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const iso = (cls = "", label = "") =>
+  `<svg class="${cls}" viewBox="${ISO_VB}" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'}><use href="#iso"/></svg>`;
+
+function blob(pts) {
+  const n = pts.length; let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+    const c = (v) => v.toFixed(1);
+    d += `C${c(p1[0] + (p2[0] - p0[0]) / 6)} ${c(p1[1] + (p2[1] - p0[1]) / 6)} ${c(p2[0] - (p3[0] - p1[0]) / 6)} ${c(p2[1] - (p3[1] - p1[1]) / 6)} ${c(p2[0])} ${c(p2[1])}`;
+  }
+  return d + "Z";
+}
+const BLOB_1 = blob([[50, 4], [80, 12], [97, 40], [88, 72], [64, 96], [30, 92], [6, 70], [4, 36], [22, 12]]);
+const BLOB_2 = blob([[40, 2], [76, 8], [98, 32], [92, 64], [70, 90], [38, 98], [10, 80], [2, 48], [14, 18]]);
+const decoBlob = (d = BLOB_1) => `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${d}" fill="currentColor"/></svg>`;
+
+const lines = (arr, tag = "h1", cls = "", base = 0) =>
+  `<${tag} class="lines ${cls}" data-lines>${arr.map((l, i) => `<span class="ln"><span style="--i:${i};--base:${base}ms">${l}</span></span>`).join("")}</${tag}>`;
+
+const band = (fromColor, toTheme, rev = false) => `
+<div class="band theme-${toTheme}" data-band${rev ? '="rev"' : ""} aria-hidden="true">
+  <svg viewBox="0 0 1300 140" preserveAspectRatio="none"><path fill="${fromColor}" d="M0 0H1300V54C1170 120 1030 30 860 66C690 102 560 140 380 92C240 55 120 70 0 104Z"/></svg>
+</div>`;
+
+/* ---------------- datos ---------------- */
+const SERVICES = [
+  { slug: "webs", n: "01", name: "Webs", short: "Sitios claros, rápidos y fáciles de actualizar, pensados para que te encuentren y te contacten." },
+  { slug: "automatizaciones", n: "02", name: "Automatizaciones", short: "Tareas repetitivas que se resuelven solas, con menos errores y más tiempo para lo importante." },
+  { slug: "integraciones", n: "03", name: "Integraciones", short: "Tus herramientas conectadas para que la información no se cargue dos veces." },
+  { slug: "identidad-digital", n: "04", name: "Identidad digital", short: "Identidad visual y piezas para redes y otros puntos de contacto, con un sistema coherente." },
+];
+
+const PREVIEWS = {
+  webs: `<svg viewBox="0 0 240 180" aria-hidden="true"><rect width="240" height="180" fill="#f2eee4"/><rect x="18" y="20" width="176" height="128" rx="10" fill="#fff" stroke="#0b0b0c" stroke-opacity=".15"/><rect x="18" y="20" width="176" height="16" rx="8" fill="#e6e0d1"/><rect x="30" y="46" width="150" height="46" rx="6" fill="#0b0b0c"/><rect x="30" y="100" width="96" height="9" rx="4" fill="#0b0b0c"/><rect x="30" y="116" width="120" height="6" rx="3" fill="#0b0b0c" fill-opacity=".25"/><rect x="30" y="128" width="60" height="12" rx="6" fill="#2340f5"/><rect x="160" y="70" width="62" height="98" rx="12" fill="#2340f5"/><rect x="168" y="84" width="46" height="30" rx="5" fill="#f2eee4"/><rect x="168" y="122" width="36" height="6" rx="3" fill="#f2eee4" fill-opacity=".7"/></svg>`,
+  automatizaciones: `<svg viewBox="0 0 240 180" aria-hidden="true"><rect width="240" height="180" fill="#0b0b0c"/><path d="M30 92H210" stroke="#f2eee4" stroke-opacity=".25" stroke-width="2"/><path d="M30 92H150" stroke="#5b78ff" stroke-width="3"/><circle cx="30" cy="92" r="9" fill="#5b78ff"/><circle cx="90" cy="92" r="9" fill="#5b78ff"/><circle cx="150" cy="92" r="9" fill="#5b78ff"/><circle cx="210" cy="92" r="9" fill="none" stroke="#f2eee4" stroke-width="2"/><rect x="118" y="44" width="64" height="26" rx="13" fill="#2340f5"/><circle cx="131" cy="57" r="7" fill="#f2eee4"/><rect x="143" y="54" width="30" height="6" rx="3" fill="#f2eee4"/><rect x="18" y="118" width="40" height="5" rx="2.5" fill="#f2eee4" fill-opacity=".5"/><rect x="78" y="118" width="40" height="5" rx="2.5" fill="#f2eee4" fill-opacity=".5"/><rect x="138" y="118" width="40" height="5" rx="2.5" fill="#f2eee4" fill-opacity=".5"/><rect x="190" y="118" width="40" height="5" rx="2.5" fill="#f2eee4" fill-opacity=".25"/></svg>`,
+  integraciones: `<svg viewBox="0 0 240 180" aria-hidden="true"><rect width="240" height="180" fill="#f2eee4"/><path d="M62 46C100 46 92 90 120 90M62 134C100 134 92 90 120 90M120 90C150 90 150 46 180 46M120 90C150 90 150 134 180 134" fill="none" stroke="#2340f5" stroke-width="2.5"/><rect x="92" y="72" width="56" height="36" rx="12" fill="#0b0b0c"/><rect x="22" y="32" width="44" height="28" rx="9" fill="#fff" stroke="#0b0b0c" stroke-opacity=".2"/><rect x="22" y="120" width="44" height="28" rx="9" fill="#fff" stroke="#0b0b0c" stroke-opacity=".2"/><rect x="174" y="32" width="44" height="28" rx="9" fill="#fff" stroke="#0b0b0c" stroke-opacity=".2"/><rect x="174" y="120" width="44" height="28" rx="9" fill="#fff" stroke="#0b0b0c" stroke-opacity=".2"/><circle cx="160" cy="62" r="5" fill="#2340f5"/></svg>`,
+  "identidad-digital": `<svg viewBox="0 0 240 180" aria-hidden="true"><rect width="240" height="180" fill="#f2eee4"/><rect x="16" y="16" width="100" height="148" rx="12" fill="#1e3a2c"/><circle cx="66" cy="78" r="22" fill="#e2572b"/><rect x="40" y="114" width="52" height="8" rx="4" fill="#f4ecdc"/><rect x="124" y="16" width="100" height="70" rx="12" fill="#e2572b"/><rect x="136" y="30" width="60" height="10" rx="5" fill="#f4ecdc"/><rect x="136" y="46" width="44" height="10" rx="5" fill="#f4ecdc"/><rect x="124" y="94" width="48" height="70" rx="12" fill="#fff" stroke="#1e3a2c" stroke-opacity=".2"/><text x="134" y="140" font-family="Archivo, sans-serif" font-weight="800" font-size="28" fill="#1e3a2c">Aa</text><rect x="178" y="94" width="46" height="70" rx="12" fill="#1e3a2c"/></svg>`,
+};
+
+const PROJECTS = [
+  {
+    slug: "web-estudio-profesional", service: "webs", serviceName: "Webs", img: "arq-reticula",
+    title: "Web para un estudio profesional",
+    context: "Un estudio contable con una cartera estable de clientes. Su web actual fue armada hace años y casi no se actualiza.",
+    need: "Las consultas llegan por teléfono y suelen repetirse: horarios, documentación necesaria, servicios. El estudio quiere que la web responda lo básico y que los contactos nuevos lleguen con la información ordenada.",
+    solution: "Un sitio breve y claro, con los servicios explicados en lenguaje simple, una sección de preguntas frecuentes y un formulario que pide los datos necesarios según el tipo de consulta.",
+    deliverables: ["Arquitectura de contenidos", "Diseño responsive de cinco páginas", "Formulario con campos según el tipo de consulta", "Guía breve para actualizar textos"],
+  },
+  {
+    slug: "automatizacion-pedidos", service: "automatizaciones", serviceName: "Automatizaciones", img: "arq-volados",
+    title: "Automatización de pedidos para una distribuidora",
+    context: "Una distribuidora que recibe pedidos de comercios por email y WhatsApp, y los carga a mano en una planilla.",
+    need: "Reducir el tiempo de carga y los errores de transcripción, y avisarle al cliente cuando su pedido quedó registrado.",
+    solution: "Un formulario de pedido para clientes frecuentes. Cada envío se valida, se registra en la planilla compartida y dispara dos avisos: la confirmación al cliente y la notificación al depósito.",
+    deliverables: ["Mapa del proceso actual y del propuesto", "Formulario de pedido", "Flujo automatizado con avisos", "Documentación y alerta ante errores"],
+  },
+  {
+    slug: "integracion-tienda-stock", service: "integraciones", serviceName: "Integraciones", img: "arq-boveda",
+    title: "Integración entre tienda online y stock",
+    context: "Un comercio con local físico y tienda online, que maneja el stock en su sistema de gestión.",
+    need: "Evitar ventas de productos sin stock y dejar de actualizar cantidades a mano en dos lugares.",
+    solution: "Una integración que sincroniza el stock del sistema de gestión con la tienda online y registra cada venta web en el sistema, con un reporte diario de diferencias.",
+    deliverables: ["Diagnóstico de ambos sistemas", "Reglas de sincronización", "Integración implementada y probada", "Reporte diario de control"],
+  },
+  {
+    slug: "identidad-cafeteria", service: "identidad-digital", serviceName: "Identidad digital", img: "arq-fachada",
+    title: "Identidad digital para una cafetería de barrio",
+    context: "Una cafetería que abre su segundo local y comunica en redes con piezas armadas de forma improvisada.",
+    need: "Tener una imagen reconocible y poder publicar con frecuencia sin depender de un diseñador para cada pieza.",
+    solution: "Una actualización de la identidad visual con paleta, tipografías y reglas simples, más un set de plantillas editables para redes y cartelería del local.",
+    deliverables: ["Identidad visual actualizada", "Manual de uso breve", "Plantillas editables para redes", "Piezas para cartelería y menú"],
+  },
+];
+
+/* ---------------- layout ---------------- */
+function head({ title, desc, path: p }) {
+  const full = p === "/" ? "KROMA — Consultoría tecnológica para empresas" : `${title} — KROMA`;
+  return `<!doctype html>
+<html lang="es-UY">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>${full}</title>
+<meta name="description" content="${desc}">
+<meta name="theme-color" content="#2340f5">
+<meta property="og:type" content="website">
+<meta property="og:title" content="${full}">
+<meta property="og:description" content="${desc}">
+<meta property="og:locale" content="es_UY">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/main.css">
+<script>(function(d){var h=d.documentElement;h.classList.add("js");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("js","is-entering")},3000)})(document);</script>
+<script src="/assets/js/main.js" defer></script>
+<script type="speculationrules">{"prefetch":[{"source":"document","where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
+</head>`;
+}
+
+const sprite = `<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="iso" viewBox="${ISO_VB}"><path fill="currentColor" d="${ISO_D}"/></symbol></defs></svg>`;
+
+function header(active, tone) {
+  const cur = (k) => (active === k ? ' aria-current="page"' : "");
+  const subCur = active.startsWith("servicios") ? " is-current" : "";
+  return `
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="site-header" data-on="${tone}">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="KROMA — Inicio">${iso("brand__mark")}<span class="brand__word" aria-hidden="true">KROMA</span></a>
+    <nav class="nav" aria-label="Principal">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="/"${cur("inicio")}>Inicio</a></li>
+        <li><a class="nav__link" href="/nosotros"${cur("nosotros")}>Nosotros</a></li>
+        <li class="nav__item--sub${subCur}">
+          <div class="nav__row">
+            <a class="nav__link" href="/servicios"${cur("servicios")}>Servicios</a>
+            <button class="nav__subtoggle" type="button" aria-expanded="false" aria-controls="sub-servicios" aria-label="Mostrar servicios"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          </div>
+          <ul class="nav__sub" id="sub-servicios">
+            ${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}"${cur("servicios/" + s.slug)}>${s.name}<span>${s.n}</span></a></li>`).join("")}
+          </ul>
+        </li>
+        <li><a class="nav__link" href="/proyectos"${cur("proyectos")}>Proyectos</a></li>
+      </ul>
+      <a class="btn nav__cta" href="/contacto"${cur("contacto")}>Hablemos ${ARROW}</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir menú"><span></span><span></span></button>
+    </nav>
+  </div>
+</header>
+<div class="mobile-menu" id="menu-movil">
+  <nav aria-label="Menú móvil">
+    <ul class="mobile-menu__main">
+      <li><a href="/"${cur("inicio")}>Inicio</a></li>
+      <li><a href="/nosotros"${cur("nosotros")}>Nosotros</a></li>
+      <li><a href="/servicios"${cur("servicios")}>Servicios</a>
+        <ul class="mobile-menu__sub">${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}">${s.n} — ${s.name}</a></li>`).join("")}</ul>
+      </li>
+      <li><a href="/proyectos"${cur("proyectos")}>Proyectos</a></li>
+      <li><a href="/contacto"${cur("contacto")}>Hablemos</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas.</p></div>
+</div>`;
+}
+
+const footer = `
+<footer class="site-footer" data-theme="black">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="brand" href="/" aria-label="KROMA — Inicio">${iso("brand__mark")}<span class="brand__word" aria-hidden="true">KROMA</span></a>
+        <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
+      </div>
+      <div class="footer__col">
+        <h2>Sitio</h2>
+        <ul><li><a href="/">Inicio</a></li><li><a href="/nosotros">Nosotros</a></li><li><a href="/proyectos">Proyectos</a></li><li><a href="/contacto">Hablemos</a></li></ul>
+      </div>
+      <div class="footer__col">
+        <h2>Servicios</h2>
+        <ul>${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}">${s.name}</a></li>`).join("")}</ul>
+      </div>
+      <div class="footer__col">
+        <h2>Contacto</h2>
+        <!-- PENDIENTE: agregar email, teléfono y redes reales de KROMA cuando estén disponibles. -->
+        <ul><li><a href="/contacto">Escribinos</a></li></ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year">2026</span> KROMA</span>
+      <span>Hecho en Uruguay</span>
+    </div>
+  </div>
+</footer>
+<div class="curtain" aria-hidden="true"><div class="curtain__body"></div>${iso("curtain__mark")}</div>`;
+
+function page({ path: p, title, desc, active, tone, body }) {
+  return `${head({ title, desc, path: p })}
+<body>
+${sprite}
+${header(active, tone)}
+<main id="contenido" tabindex="-1">
+${body}
+</main>
+${footer}
+</body>
+</html>
+`;
+}
+
+function write(rel, html) {
+  const file = rel === "/" ? "index.html" : rel === "/404" ? "404.html" : path.join(rel.slice(1), "index.html");
+  const full = path.join(OUT, file);
+  fs.mkdirSync(path.dirname(full), { recursive: true });
+  fs.writeFileSync(full, html);
+}
+
+/* ---------------- componentes ---------------- */
+function svcRows() {
+  return `<ul class="svc-list">
+  ${SERVICES.map((s) => `<li class="svc-row">
+    <a class="svc-row__link" href="/servicios/${s.slug}">
+      <span class="svc-row__num">${s.n}</span>
+      <span class="svc-row__title">${s.name}</span>
+      <span class="svc-row__desc">${s.short}</span>
+      ${arrowIcon("svc-row__arrow")}
+      <span class="svc-row__preview" aria-hidden="true">${PREVIEWS[s.slug]}</span>
+    </a>
+  </li>`).join("\n  ")}
+</ul>`;
+}
+
+function projCard(pr, variant, i = 0) {
+  return `<article class="proj proj--${variant}" data-reveal="rise" style="--delay:${i * 80}ms">
+  <a class="proj__link" href="/proyectos/${pr.slug}">
+    <div class="proj__media">
+      <div class="proj__para" data-parallax="0.07">
+        <picture><source srcset="/assets/img/${pr.img}.webp" type="image/webp"><img src="/assets/img/${pr.img}.jpg" alt="" width="1200" height="1500" loading="lazy" decoding="async"></picture>
+      </div>
+      <span class="proj__cta">Ver caso ${arrowIcon()}</span>
+    </div>
+    <div class="proj__info">
+      <h3 class="proj__title">${pr.title}</h3>
+      <span class="proj__kind">Concepto · ${pr.serviceName}</span>
+    </div>
+  </a>
+</article>`;
+}
+
+function closing({ theme = "black", title, text, trail = false, cta = "Hablemos", href = "/contacto", size = "display" }) {
+  const btn = theme === "blue" ? "btn--ivory" : theme === "ivory" ? "btn--blue" : "btn--blue";
+  return `<section class="section closing theme-${theme}${trail ? " trail-zone" : ""}" data-theme="${theme}"${trail ? " data-trail" : ""} aria-labelledby="cierre-titulo">
+  <div class="wrap closing__inner">
+    ${lines(title, "h2", size + " closing__title").replace("<h2 ", '<h2 id="cierre-titulo" ')}
+    <div class="closing__side" data-reveal="rise" style="--delay:200ms">
+      <p class="lead">${text}</p>
+      <a class="btn ${btn}" href="${href}">${cta} ${ARROW}</a>
+    </div>
+  </div>
+</section>`;
+}
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+write("/", page({
+  path: "/", title: "Inicio", active: "inicio", tone: "blue",
+  desc: "KROMA es una consultora tecnológica para empresas uruguayas: webs, automatizaciones, integraciones e identidad digital, elegidas e implementadas con criterio.",
+  body: `
+<section class="hero theme-blue" data-theme="blue" aria-labelledby="hero-titulo">
+  <div class="hero__blob" aria-hidden="true">${decoBlob(BLOB_2)}</div>
+  <div class="wrap">
+    <div class="hero__grid">
+      <div class="hero__visual">
+      <div class="hero__media" role="img" aria-label="Fotografía arquitectónica en blanco y negro de una fachada curva">
+        <svg viewBox="0 0 400 500" aria-hidden="true">
+          <defs><clipPath id="hero-clip"><path id="hero-clip-path" d="${blob([[72,10],[208,-10],[344,20],[392,150],[408,310],[376,470],[248,500],[120,490],[16,450],[0,280],[8,110]])}"/></clipPath></defs>
+          <path class="hero__echo" d=""/>
+          <g clip-path="url(#hero-clip)">
+            <image class="hero__photo" href="/assets/img/arq-fachada.webp" x="-10" y="-30" width="420" height="560" preserveAspectRatio="xMidYMid slice"/>
+          </g>
+        </svg>
+      </div>
+      <div class="hero__mark"><div class="hero__mark-in">${iso("", "")}</div></div>
+      </div>
+      <div class="hero__text">
+        ${lines(["Tu negocio.", "Su próxima", "versión."], "h1", "display hero__title", 80).replace("<h1 ", '<h1 id="hero-titulo" ')}
+        <div class="hero__meta" data-reveal="fade" style="--delay:520ms">
+          <p>Consultoría tecnológica para empresas.</p>
+          <a class="btn btn--ivory" href="/contacto">Hablemos ${ARROW}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span class="hero__scroll" aria-hidden="true">Scroll</span>
+</section>
+${band("var(--blue)", "black")}
+<section class="section statement theme-black trail-zone" data-theme="black" data-trail aria-labelledby="criterio-titulo">
+  <div class="wrap grid12">
+    <div class="statement__title">
+      <p class="eyebrow" data-reveal="fade">Qué hacemos</p>
+      ${lines(["Tecnología", "con criterio."], "h2", "h1").replace("<h2 ", '<h2 id="criterio-titulo" style="margin-top:24px" ')}
+    </div>
+    <div class="statement__body" data-reveal="rise" style="--delay:160ms">
+      <p class="lead">Hoy existe una herramienta para casi todo. El desafío ya no es encontrarla: es saber cuál conviene, cómo implementarla y lograr que tu equipo la use.</p>
+      <p class="muted">En KROMA te ayudamos a elegir y poner en marcha la tecnología que tu empresa necesita, sin sumar complejidad donde no hace falta.</p>
+    </div>
+    <ul class="values">
+      <li data-reveal="rise"><span class="num accent">01</span><h3>Primero entendemos tu operación</h3><p class="muted">Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
+      <li data-reveal="rise" style="--delay:120ms"><span class="num accent">02</span><h3>Elegimos lo que tiene sentido</h3><p class="muted">Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
+      <li data-reveal="rise" style="--delay:240ms"><span class="num accent">03</span><h3>Lo dejamos funcionando</h3><p class="muted">Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
+    </ul>
+  </div>
+</section>
+${band("var(--black)", "ivory", true)}
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="servicios-titulo" style="padding-top:clamp(40px,6vw,90px)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow" data-reveal="fade">Servicios</p>
+        ${lines(["Cuatro formas de", "dar el próximo paso."], "h2", "h2").replace("<h2 ", '<h2 id="servicios-titulo" style="margin-top:20px" ')}
+      </div>
+      <a class="link-arrow" href="/servicios">Ver todos los servicios ${arrowIcon()}</a>
+    </div>
+    ${svcRows()}
+  </div>
+</section>
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="proyectos-titulo" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow" data-reveal="fade">Proyectos</p>
+        ${lines(["Así lo", "resolveríamos."], "h2", "h2").replace("<h2 ", '<h2 id="proyectos-titulo" style="margin-top:20px" ')}
+      </div>
+      <p class="muted" style="max-width:38ch">Casos conceptuales: ejemplos de cómo abordamos necesidades frecuentes. No corresponden a clientes reales.</p>
+    </div>
+    <div class="proj-grid">
+      ${projCard(PROJECTS[0], "a")}
+      ${projCard(PROJECTS[1], "b", 1)}
+    </div>
+    <p style="margin-top:56px"><a class="link-arrow" href="/proyectos">Ver todos los conceptos ${arrowIcon()}</a></p>
+  </div>
+</section>
+${closing({ theme: "black", trail: true, title: ["¿Por dónde", "empezamos?"], text: "Contanos qué querés mejorar en tu empresa y vemos juntos cuál es el primer paso." })}
+`,
+}));
+
+/* =========================================================
+   NOSOTROS
+   ========================================================= */
+const PROCESS = [
+  ["Entendemos", "Conversamos con vos y con tu equipo para ver cómo funciona hoy la operación, qué herramientas usan y dónde se traba el trabajo."],
+  ["Priorizamos", "Ordenamos las oportunidades según impacto, costo y esfuerzo. Definimos por dónde empezar y qué puede esperar."],
+  ["Desarrollamos", "Implementamos la solución por etapas, con pruebas y revisiones para que no haya sorpresas al final."],
+  ["Acompañamos", "Explicamos cómo usar lo que hicimos, dejamos documentación y seguimos cerca para ajustar lo necesario."],
+];
+write("/nosotros", page({
+  path: "/nosotros", title: "Nosotros", active: "nosotros", tone: "ivory",
+  desc: "KROMA nace para democratizar la digitalización de las empresas uruguayas: elegir bien las herramientas e implementarlas con criterio.",
+  body: `
+<section class="page-hero about-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
+  <div class="deco-blob" data-drift="80">${decoBlob(BLOB_1)}</div>
+  <div class="wrap page-hero__grid">
+    <p class="eyebrow page-hero__eyebrow" data-reveal="fade">Nosotros</p>
+    ${lines(["Digitalizar", "también es", '<span class="accent">elegir bien.</span>'], "h1", "display about-hero__title").replace("<h1 ", '<h1 id="t" ')}
+    <p class="lead page-hero__aside" data-reveal="rise" style="--delay:400ms">KROMA es una consultora tecnológica para empresas uruguayas. Nuestro propósito es democratizar la digitalización.</p>
+  </div>
+</section>
+<div class="band about-band theme-black" data-band aria-hidden="true">
+  <svg viewBox="0 0 1300 140" preserveAspectRatio="none"><path fill="var(--ivory)" d="M0 0H1300V40C1150 110 990 10 820 60C650 110 520 140 350 84C220 42 110 60 0 96Z"/><path fill="var(--blue)" d="M0 96C110 60 220 42 350 84C520 140 650 110 820 60C990 10 1150 110 1300 40V78C1150 140 990 46 820 96C650 140 520 140 350 118C220 84 110 96 0 130Z"/></svg>
+</div>
+<section class="section theme-black" data-theme="black" aria-labelledby="proposito">
+  <div class="wrap purpose">
+    <h2 id="proposito" class="sr-only">Nuestro propósito</h2>
+    <p class="purpose__big" data-reveal="clip">Nunca hubo tantas herramientas disponibles. Pero más opciones no siempre significan mejores decisiones.</p>
+    <div class="purpose__cols" data-reveal="rise" style="--delay:150ms">
+      <p class="muted">Para muchas empresas, digitalizarse se volvió una lista de suscripciones que nadie termina de usar. El valor no está en sumar tecnología, sino en elegirla bien e implementarla con criterio.</p>
+      <p class="muted">Democratizar la digitalización es eso: que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala.</p>
+    </div>
+    <figure class="purpose__figure" data-reveal="wipe">
+      <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/arq-boveda.webp" type="image/webp"><img src="/assets/img/arq-boveda.jpg" alt="Bóvedas de hormigón en blanco y negro" width="1800" height="1200" loading="lazy" decoding="async"></picture></div></div>
+    </figure>
+    <p class="purpose__quote" data-reveal="rise" style="--delay:200ms">Tecnología que se entiende, se usa y se puede mantener. <span class="accent">Ese es nuestro criterio.</span></p>
+  </div>
+</section>
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="proceso">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow" data-reveal="fade">Proceso</p>
+        ${lines(["Cómo", "trabajamos."], "h2", "h2").replace("<h2 ", '<h2 id="proceso" style="margin-top:20px" ')}
+      </div>
+    </div>
+    <div class="process">
+      <div class="process__aside" aria-hidden="true">
+        <div class="process__bignum">${PROCESS.map((_, i) => `<span>0${i + 1}</span>`).join("")}</div>
+        <div><p class="num" style="margin-bottom:14px">Etapa del proceso</p><div class="process__bar"><i></i></div></div>
+      </div>
+      <ol class="process__steps">
+        ${PROCESS.map(([t, d], i) => `<li class="process__step"><span class="num">0${i + 1}</span><h3>${t}.</h3><p class="lead muted">${d}</p></li>`).join("\n        ")}
+      </ol>
+    </div>
+  </div>
+</section>
+<section class="section section--tight theme-ivory" data-theme="ivory" aria-labelledby="principios" style="padding-top:0">
+  <div class="wrap">
+    <h2 id="principios" class="h3" style="margin-bottom:32px" data-reveal="fade">Lo que nos guía</h2>
+    <ul class="steps-inline steps-inline--3">
+      <li data-reveal="rise"><h3>Claridad</h3><p class="muted">Explicamos cada decisión sin jerga, para que puedas evaluarla.</p></li>
+      <li data-reveal="rise" style="--delay:100ms"><h3>Escala</h3><p class="muted">Proponemos soluciones acordes al tamaño y al momento de tu empresa.</p></li>
+      <li data-reveal="rise" style="--delay:200ms"><h3>Autonomía</h3><p class="muted">Buscamos que tu equipo pueda usar y mantener lo que implementamos.</p></li>
+    </ul>
+  </div>
+</section>
+${closing({ theme: "blue", title: ["Empecemos por", "entender."], text: "Una primera conversación alcanza para identificar por dónde conviene empezar." })}
+`,
+}));
+
+/* =========================================================
+   SERVICIOS (índice)
+   ========================================================= */
+write("/servicios", page({
+  path: "/servicios", title: "Servicios", active: "servicios", tone: "ivory",
+  desc: "Webs, automatizaciones, integraciones e identidad digital para empresas uruguayas.",
+  body: `
+<section class="page-hero svc-index-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
+  <div class="deco-blob" data-drift="60">${decoBlob(BLOB_2)}</div>
+  <div class="wrap page-hero__grid">
+    <p class="eyebrow page-hero__eyebrow" data-reveal="fade">Servicios</p>
+    ${lines(["Cuatro frentes,", "un mismo criterio."], "h1", "h1 svc-index-hero__title").replace("<h1 ", '<h1 id="t" ')}
+    <p class="lead page-hero__aside" data-reveal="rise" style="--delay:300ms;grid-column:7 / span 6">Cada servicio puede contratarse por separado, pero todos parten de lo mismo: entender tu operación antes de proponer.</p>
+  </div>
+</section>
+<section class="section theme-ivory" data-theme="ivory" aria-label="Lista de servicios" style="padding-top:0">
+  <div class="wrap">${svcRows()}</div>
+</section>
+<section class="section theme-black" data-theme="black" aria-labelledby="dudas">
+  <div class="wrap split">
+    <div class="split__head">
+      <p class="eyebrow" data-reveal="fade">¿No sabés por dónde empezar?</p>
+      ${lines(["Es lo más", "común."], "h2", "h2").replace("<h2 ", '<h2 id="dudas" style="margin-top:20px" ')}
+    </div>
+    <div class="split__body" data-reveal="rise">
+      <p class="lead" style="margin-bottom:24px">Muchas veces la necesidad no encaja en un solo servicio: una web que debería cargar pedidos, una planilla que debería hablar con la facturación, una marca que necesita piezas nuevas.</p>
+      <p class="muted" style="margin-bottom:36px">En la primera conversación ordenamos el problema y te decimos qué combinación tiene sentido, o si conviene esperar.</p>
+      <a class="btn btn--blue" href="/contacto?servicio=no-se">Contanos tu caso ${ARROW}</a>
+    </div>
+  </div>
+</section>
+`,
+}));
+
+/* =========================================================
+   PÁGINAS DE SERVICIO
+   ========================================================= */
+const SVC_PAGES = {
+  webs: {
+    tone: "blue", heroTheme: "blue",
+    title: ["Una web que", "trabaja para", "tu negocio."],
+    lead: "Diseñamos y desarrollamos sitios claros, rápidos y fáciles de actualizar, pensados para que tus clientes entiendan qué hacés y cómo contactarte.",
+    desc: "Diseño y desarrollo de sitios web claros, rápidos y fáciles de actualizar para empresas uruguayas.",
+    problem: "Muchas webs se ven bien pero no ayudan: <em>la información queda desactualizada</em>, cargan lento en el celular o nadie sabe cómo cambiar un texto.",
+    includes: [
+      ["Estrategia y contenidos", "Ordenamos qué decir, en qué orden y para quién, antes de diseñar."],
+      ["Diseño a medida", "Una propuesta visual coherente con tu marca, sin plantillas genéricas."],
+      ["Desarrollo responsive", "Funciona bien en celular, tablet y computadora, con atención a la velocidad y al posicionamiento básico."],
+      ["Publicación y autogestión", "Dejamos el sitio publicado, con dominio configurado y una forma simple de editar lo esencial."],
+    ],
+    examples: [
+      ["Sitio institucional", "Para un estudio o empresa de servicios que necesita explicar qué hace y recibir consultas ordenadas."],
+      ["Landing de campaña", "Una página enfocada para lanzar un servicio, un producto o una convocatoria."],
+      ["Catálogo con consulta", "Productos presentados con claridad y un canal directo para pedir información."],
+      ["Rediseño", "Una web existente que ya no se puede mantener, migrada a una base simple."],
+    ],
+    steps: [["Relevamiento", "Objetivos, público y contenidos disponibles."], ["Estructura y diseño", "Mapa del sitio y diseño de las páginas clave."], ["Desarrollo", "Construcción, pruebas en dispositivos y ajustes."], ["Publicación", "Dominio, puesta en línea y guía de uso."]],
+    faq: [
+      ["¿Puedo actualizar la web yo mismo?", "Sí. Definimos juntos qué partes vas a querer editar y elegimos una solución que lo permita sin conocimientos técnicos."],
+      ["¿Cuánto demora?", "Depende del alcance. Lo estimamos después de la primera conversación, con etapas y fechas concretas."],
+      ["¿Se encargan del dominio y el hosting?", "Te ayudamos a elegirlos y configurarlos. Quedan a nombre de tu empresa."],
+      ["Ya tengo una web, ¿hay que hacerla de cero?", "No necesariamente. La revisamos y te decimos qué conviene: mejorarla, migrarla o rehacerla."],
+    ],
+  },
+  automatizaciones: {
+    tone: "black", heroTheme: "black",
+    title: ["Menos tareas", "repetidas.", '<span class="accent">Más tiempo útil.</span>'],
+    lead: "Identificamos tareas manuales que se repiten todos los días y las resolvemos con herramientas que ya usás o que conviene sumar.",
+    desc: "Automatización de tareas repetitivas para empresas: pedidos, avisos, reportes y flujos de trabajo.",
+    problem: "Copiar datos de un email a una planilla, mandar el mismo aviso diez veces, armar un reporte a mano cada lunes: <em>son tareas necesarias, pero no deberían ocupar a una persona</em>.",
+    includes: [
+      ["Relevamiento de procesos", "Detectamos qué tareas se repiten, cuánto tiempo llevan y dónde aparecen errores."],
+      ["Diseño del flujo", "Definimos qué dispara cada automatización, qué pasos sigue y quién se entera."],
+      ["Implementación y pruebas", "Construimos el flujo con datos reales y lo probamos antes de dejarlo en uso."],
+      ["Documentación y ajuste", "Dejamos explicado cómo funciona y lo ajustamos en las primeras semanas."],
+    ],
+    examples: [
+      ["Pedidos sin carga manual", "Pedidos que llegan por formulario y se registran solos en una planilla o sistema."],
+      ["Recordatorios automáticos", "Avisos de turnos, vencimientos o renovaciones que salen en el momento justo."],
+      ["Reportes periódicos", "Resúmenes semanales que se generan y se envían sin intervención."],
+      ["Respuestas iniciales", "Primeras respuestas a consultas frecuentes mientras el equipo atiende lo demás."],
+    ],
+    steps: [["Mapeo", "Seguimos la tarea paso a paso como se hace hoy."], ["Propuesta", "Qué se automatiza, con qué herramienta y qué costo tiene."], ["Implementación", "Construcción, pruebas y avisos ante errores."], ["Seguimiento", "Revisión en uso real y ajustes."]],
+    faq: [
+      ["¿Tengo que cambiar los programas que uso?", "No necesariamente. Primero vemos qué se puede automatizar con lo que ya tenés."],
+      ["¿Qué pasa si algo falla?", "Diseñamos cada flujo con avisos ante errores y te explicamos cómo revisarlo."],
+      ["¿Es solo para empresas grandes?", "No. En equipos chicos, donde cada hora cuenta, una automatización simple suele notarse rápido."],
+      ["¿Quién mantiene la automatización?", "Te dejamos documentación y acordamos cómo acompañarte después de la entrega."],
+    ],
+  },
+  integraciones: {
+    tone: "ivory", heroTheme: "ivory",
+    title: ["Tus herramientas,", "hablando", "entre sí."],
+    lead: "Conectamos los sistemas que ya usás para que la información viaje sola y no haya que cargarla dos veces.",
+    desc: "Integración de sistemas para empresas: tienda online, gestión, facturación, CRM y reportes conectados.",
+    problem: "Cuando cada sistema funciona por separado, <em>los mismos datos se cargan varias veces</em> y aparecen diferencias entre lo que dice la tienda, la planilla y la facturación.",
+    includes: [
+      ["Diagnóstico de sistemas", "Revisamos qué herramientas usás, qué datos maneja cada una y cómo se pueden conectar."],
+      ["Conexión", "Integramos mediante las conexiones que ofrece cada sistema o con herramientas de integración."],
+      ["Reglas de sincronización", "Definimos qué dato manda en cada caso, con qué frecuencia viaja y qué pasa ante diferencias."],
+      ["Monitoreo y documentación", "Dejamos registro de cada conexión y avisos para detectar problemas a tiempo."],
+    ],
+    examples: [
+      ["Tienda y stock", "La tienda online toma el stock del sistema de gestión y cada venta vuelve a registrarse."],
+      ["Formulario y CRM", "Cada consulta web crea un contacto con su origen y su estado."],
+      ["Venta y facturación", "La factura se emite a partir de la venta, sin volver a tipear datos."],
+      ["Reporte unificado", "Datos de varias fuentes reunidos en un solo tablero o planilla."],
+    ],
+    steps: [["Diagnóstico", "Sistemas, datos y posibilidades de conexión."], ["Diseño", "Flujo de datos y reglas acordadas."], ["Integración", "Implementación en un entorno de prueba y luego en uso real."], ["Control", "Monitoreo, documentación y ajustes."]],
+    faq: [
+      ["¿Cualquier sistema se puede integrar?", "No siempre. Depende de si el sistema permite conectarse, por ejemplo mediante una API. Lo verificamos antes de proponer una solución."],
+      ["¿Es seguro?", "Usamos accesos con los permisos mínimos necesarios y documentamos qué datos viajan y hacia dónde."],
+      ["¿Qué pasa si cambio de sistema?", "La integración se puede ajustar. Te explicamos qué partes dependen de cada herramienta."],
+      ["¿Las herramientas tienen costo?", "Algunas herramientas de integración tienen suscripción propia. Te lo indicamos antes de empezar, con alternativas."],
+    ],
+  },
+  "identidad-digital": {
+    tone: "blue", heroTheme: "blue",
+    title: ["Una marca", "que se reconoce", "en todos lados."],
+    lead: "Creamos o actualizamos tu identidad visual y diseñamos las piezas que la llevan a redes, web y otros puntos de contacto.",
+    desc: "Identidad visual y diseño de material para redes y otros puntos de contacto, con un sistema coherente.",
+    problem: "Un logo distinto en cada lugar, colores que cambian según quién diseñe, publicaciones armadas a último momento: <em>la marca pierde fuerza cuando no hay un sistema</em>.",
+    includes: [
+      ["Identidad visual", "Logo, paleta de colores y tipografías pensadas para usarse en pantalla e impresión."],
+      ["Manual de uso", "Reglas simples para aplicar la marca sin depender de un diseñador."],
+      ["Plantillas para redes", "Formatos editables para publicar con frecuencia y mantener la coherencia."],
+      ["Otros puntos de contacto", "Presentaciones, cartelería, firmas de email y lo que tu marca necesite."],
+    ],
+    examples: [
+      ["Marca nueva", "Para un emprendimiento que necesita presentarse con claridad desde el inicio."],
+      ["Actualización", "Una identidad existente modernizada sin perder lo que la gente ya reconoce."],
+      ["Sistema para redes", "Plantillas y criterios para publicar seguido sin improvisar cada pieza."],
+      ["Material comercial", "Presentaciones e impresos coherentes con el resto de la marca."],
+    ],
+    steps: [["Diagnóstico", "Qué existe, qué funciona y qué falta."], ["Concepto", "Dirección visual y primeras aplicaciones."], ["Sistema", "Desarrollo de piezas, reglas y plantillas."], ["Entrega", "Archivos ordenados y guía de uso."]],
+    faq: [
+      ["¿Hacen solo el logo?", "Podemos, pero recomendamos al menos definir colores, tipografías y reglas básicas para que el logo funcione en todos lados."],
+      ["¿Puedo editar las plantillas?", "Sí. Las entregamos en herramientas que tu equipo pueda usar, como Canva o Figma, según prefieras."],
+      ["¿Gestionan las redes sociales?", "Nos enfocamos en el sistema visual y las piezas. Si necesitás gestión de redes, te orientamos sobre cómo organizarla."],
+      ["¿Cuántas instancias de revisión hay?", "Trabajamos por etapas, con revisiones acordadas al inicio para avanzar con decisiones claras."],
+    ],
+  },
+};
+
+function svcDemo(slug) {
+  if (slug === "automatizaciones") {
+    const stages = [
+      ["Pedido recibido", "Llega un pedido", "Un cliente completa el formulario de tu web."],
+      ["Datos revisados", "Se revisan los datos", "Se controla que estén completos y se ordenan."],
+      ["Registrado", "Se registra", "El pedido queda cargado en tu planilla o sistema."],
+      ["Aviso enviado", "Se avisa", "El cliente recibe la confirmación y tu equipo, el aviso."],
+    ];
+    return `<section class="section theme-black auto" data-theme="black" aria-labelledby="demo-t">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:0">
+      <div><p class="eyebrow" data-reveal="fade">Cómo se ve</p>${lines(["Una tarea,", "de punta a punta."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" style="margin-top:20px" ')}</div>
+      <p class="muted" style="max-width:34ch">Ejemplo ilustrativo. Cada flujo se diseña según tu operación y las herramientas que usás.</p>
+    </div>
+    <div class="auto__track">
+      <div class="auto__rail" aria-hidden="true"></div><div class="auto__fill" aria-hidden="true"></div>
+      <div class="auto__task" aria-hidden="true"><span class="auto__task-dot">01</span><span class="auto__task-label">Pedido recibido</span></div>
+      ${stages.map(([lab, t, d], i) => `<div class="auto__stage${i === 0 ? " is-done" : ""}" data-label="${lab}"><span class="num">0${i + 1}</span><h3>${t}</h3><p class="muted">${d}</p><span class="auto__state"><span class="s-wait">Pendiente</span><span class="s-done">Listo</span></span></div>`).join("")}
+    </div>
+  </div>
+</section>`;
+  }
+  if (slug === "integraciones") {
+    const N = [
+      { id: "form", x: 30, y: 222, w: 220, k: "Entrada", t: "Formulario web", desc: "Formulario web: es donde entra el pedido. Sus datos viajan al sistema de gestión sin volver a cargarse." },
+      { id: "hub", x: 380, y: 212, w: 250, h: 96, k: "Centro", t: "Sistema de gestión", desc: "Sistema de gestión: recibe el pedido y reparte la información a facturación, reportes y avisos." },
+      { id: "fact", x: 750, y: 50, w: 220, k: "Salida", t: "Facturación", desc: "Facturación: la factura se genera con los datos de la venta, sin tipearlos de nuevo." },
+      { id: "sheet", x: 750, y: 222, w: 220, k: "Salida", t: "Planilla de reportes", desc: "Planilla de reportes: cada venta se suma al resumen que usa el equipo." },
+      { id: "mail", x: 750, y: 394, w: 220, k: "Salida", t: "Email al cliente", desc: "Email al cliente: la confirmación sale automáticamente cuando el pedido queda registrado." },
+    ];
+    const node = (n) => {
+      const h = n.h || 76;
+      return `<g class="integ__node${n.id === "hub" ? " integ__hub" : ""}" data-node="${n.id}" data-desc="${n.desc}" tabindex="0" role="button" aria-label="${n.desc}"><rect x="${n.x}" y="${n.y}" width="${n.w}" height="${h}" rx="${h / 2}"/><text class="k" x="${n.x + 28}" y="${n.y + h / 2 - 8}">${n.k.toUpperCase()}</text><text x="${n.x + 28}" y="${n.y + h / 2 + 16}">${n.t}</text></g>`;
+    };
+    return `<section class="section theme-black" data-theme="black" aria-labelledby="demo-t">
+  <div class="wrap integ" data-route="p1,p2,p3,p4">
+    <div class="sec-head">
+      <div><p class="eyebrow" data-reveal="fade">Cómo se ve</p>${lines(["Un dato,", "un solo viaje."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" style="margin-top:20px" ')}</div>
+      <p class="muted" style="max-width:34ch">Ejemplo ilustrativo. Pasá el cursor o navegá con el teclado por cada herramienta para ver qué hace.</p>
+    </div>
+    <div class="integ__scroll" tabindex="-1">
+    <svg class="integ__svg" viewBox="0 0 1000 520" role="group" aria-label="Diagrama: un pedido viaja del formulario web al sistema de gestión, y de ahí a facturación, reportes y email al cliente">
+      <path class="integ__path" id="p1" data-from="form" data-to="hub" d="M250 260C310 260 320 260 380 260"/>
+      <path class="integ__path" id="p2" data-from="hub" data-to="fact" d="M630 260C700 260 680 88 750 88"/>
+      <path class="integ__path" id="p3" data-from="hub" data-to="sheet" d="M630 260C690 260 690 260 750 260"/>
+      <path class="integ__path" id="p4" data-from="hub" data-to="mail" d="M630 260C700 260 680 432 750 432"/>
+      <circle class="integ__signal" r="7" cx="250" cy="260" aria-hidden="true"/>
+      ${N.map(node).join("")}
+    </svg>
+    </div>
+    <p class="integ__hint num">Deslizá para ver el diagrama completo →</p>
+    <p class="integ__caption lead" aria-live="polite"></p>
+    <ol class="integ__flow">
+      <li>Un pedido entra por el formulario web.</li>
+      <li>El sistema de gestión genera la factura.</li>
+      <li>La venta se suma al reporte del equipo.</li>
+      <li>El cliente recibe la confirmación.</li>
+    </ol>
+  </div>
+</section>`;
+  }
+  if (slug === "identidad-digital") {
+    return `<section class="section theme-ivory ident" data-theme="ivory" aria-labelledby="demo-t">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow" data-reveal="fade">Cómo se ve</p>${lines(["De piezas sueltas", "a un sistema."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" style="margin-top:20px" ')}</div>
+      <p class="muted" style="max-width:34ch">Ejemplo con una marca ficticia, “Almacén Norte”. Al avanzar, cada pieza encuentra su lugar dentro del mismo sistema.</p>
+    </div>
+    <div class="ident__board" role="img" aria-label="Sistema visual de ejemplo: logo, paleta, tipografía, publicación para redes, tarjeta, cartel y perfil en redes de una marca ficticia">
+      <div class="piece pc-logo" style="--dx:-120;--dy:80;--rot:-9deg"><span class="w">Almacén<br>Norte</span><span class="piece__label">Logo</span></div>
+      <div class="piece pc-palette" style="--dx:60;--dy:140;--rot:7deg"><i></i><i></i><i></i></div>
+      <div class="piece pc-type" style="--dx:180;--dy:-40;--rot:10deg"><span class="aa">Aa</span><span class="piece__label" style="position:static">Tipografía</span></div>
+      <div class="piece pc-post" style="--dx:-60;--dy:-120;--rot:6deg"><span class="piece__label" style="position:static">Publicación</span><strong>Pan de masa madre, todos los jueves.</strong></div>
+      <div class="piece pc-card" style="--dx:140;--dy:110;--rot:-12deg"><strong>Almacén Norte</strong><span class="piece__label" style="position:static">Tarjeta</span></div>
+      <div class="piece pc-sign" style="--dx:-160;--dy:60;--rot:-5deg"><i></i>Almacén Norte</div>
+      <div class="piece pc-avatar" style="--dx:120;--dy:-90;--rot:14deg"><span class="av"><i></i></span><span class="piece__label" style="position:static">Perfil en redes</span></div>
+    </div>
+  </div>
+</section>`;
+  }
+  return "";
+}
+
+function websHeroStage() {
+  const frame = (cls, depth, label, img, mobile = false) => `
+  <div class="webs-layer ${cls}" data-depth="${depth}">
+    <div class="frame${mobile ? " frame--mobile" : ""}">
+      ${mobile ? "" : `<div class="frame__bar"><i></i><i></i><i></i><b>${label}</b></div>`}
+      <div class="frame__body">
+        <div class="frame__img" style="background-image:url(/assets/img/${img}.webp)"></div>
+        <div class="frame__h"></div><div class="frame__p"></div><div class="frame__p"></div><div class="frame__btn"></div>
+      </div>
+    </div>
+  </div>`;
+  return `<div class="webs-stage" role="img" aria-label="Previews ilustrativas de un sitio web en computadora y celular">
+  ${frame("webs-layer--1", 0.6, "inicio", "arq-boveda")}
+  ${frame("webs-layer--2", 1, "servicios", "arq-reticula")}
+  ${frame("webs-layer--3", 1.6, "", "arq-fachada", true)}
+</div>`;
+}
+
+for (const s of SERVICES) {
+  const d = SVC_PAGES[s.slug];
+  const idx = SERVICES.indexOf(s);
+  const next = SERVICES[(idx + 1) % SERVICES.length];
+  const heroBtn = d.heroTheme === "blue" ? "btn--ivory" : d.heroTheme === "black" ? "btn--blue" : "btn";
+  const isWebs = s.slug === "webs";
+  const problemTheme = d.heroTheme === "ivory" ? "blue" : "ivory";
+  const body = `
+<section class="page-hero theme-${d.heroTheme}" data-theme="${d.heroTheme}" aria-labelledby="t">
+  ${d.heroTheme !== "blue" ? `<div class="deco-blob" data-drift="70" style="width:24vw;aspect-ratio:1;right:-11vw;top:-4vw;color:var(--blue)">${decoBlob(idx % 2 ? BLOB_1 : BLOB_2)}</div>` : `<div class="deco-blob" data-drift="70" style="width:40vw;aspect-ratio:1;left:-14vw;top:-10vw;color:var(--blue-deep)">${decoBlob(BLOB_2)}</div>`}
+  <div class="wrap page-hero__grid">
+    <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/servicios">Servicios</a></li><li aria-current="page">${s.n} ${s.name}</li></ol></nav>
+    ${lines(d.title, "h1", "h1 svc-hero__title").replace("<h1 ", '<h1 id="t" ')}
+    <div class="page-hero__aside svc-hero__aside" data-reveal="rise" style="--delay:380ms">
+      <p class="lead">${d.lead}</p>
+      <a class="btn ${heroBtn}" href="/contacto?servicio=${s.slug}">Consultar por ${s.name.toLowerCase()} ${ARROW}</a>
+    </div>
+  </div>
+  ${isWebs ? `<div class="wrap" style="margin-top:clamp(48px,7vw,96px)">${websHeroStage()}</div>` : ""}
+</section>
+<section class="section section--tight theme-${problemTheme}" data-theme="${problemTheme}" aria-labelledby="problema">
+  <div class="wrap problem">
+    <h2 id="problema" class="eyebrow problem__label" style="font-weight:400;letter-spacing:.08em;line-height:1.4">Qué resuelve</h2>
+    <p class="problem__text" data-reveal="clip">${d.problem}</p>
+  </div>
+</section>
+${svcDemo(s.slug)}
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="incluye">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow" data-reveal="fade">Qué incluye</p>${lines(["Lo que", "hacemos."], "h2", "h2").replace("<h2 ", '<h2 id="incluye" style="margin-top:20px" ')}</div></div>
+    <ul class="includes">
+      ${d.includes.map(([t, x], i) => `<li data-reveal="rise" style="--delay:${(i % 2) * 100}ms"><span class="num accent">0${i + 1}</span><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
+    </ul>
+  </div>
+</section>
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="ejemplos" style="padding-top:0">
+  <div class="wrap split">
+    <div class="split__head split__head--sticky"><p class="eyebrow" data-reveal="fade">Ejemplos de aplicación</p><h2 id="ejemplos" class="h3" style="margin-top:20px" data-reveal="rise">Situaciones en las que suele aplicarse.</h2></div>
+    <ol class="split__body examples">
+      ${d.examples.map(([t, x]) => `<li data-reveal="fade"><strong>${t}</strong><p class="muted">${x}</p></li>`).join("\n      ")}
+    </ol>
+  </div>
+</section>
+<section class="section theme-blue" data-theme="blue" aria-labelledby="como">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow" data-reveal="fade">Cómo trabajamos</p>${lines(["Paso", "a paso."], "h2", "h2").replace("<h2 ", '<h2 id="como" style="margin-top:20px" ')}</div><a class="link-arrow" href="/nosotros">Nuestro proceso ${arrowIcon()}</a></div>
+    <ol class="steps-inline">
+      ${d.steps.map(([t, x], i) => `<li data-reveal="rise" style="--delay:${i * 110}ms"><span class="num">0${i + 1}</span><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
+    </ol>
+  </div>
+</section>
+<section class="section theme-ivory" data-theme="ivory" aria-labelledby="faq">
+  <div class="wrap split">
+    <div class="split__head"><p class="eyebrow" data-reveal="fade">Preguntas frecuentes</p><h2 id="faq" class="h2" style="margin-top:20px" data-reveal="rise">Dudas habituales.</h2></div>
+    <div class="split__body faq">
+      ${d.faq.map(([q, a]) => `<details><summary>${q}<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">${a}</p></div></details>`).join("\n      ")}
+    </div>
+  </div>
+</section>
+${closing({ theme: "black", size: "h1", title: ["Hablemos", "de " + s.name.toLowerCase() + "."], text: `Contanos qué necesitás y te decimos cómo lo encararíamos. ¿Te interesa otro frente? Seguí por <a href="/servicios/${next.slug}">${next.name}</a>.`, href: `/contacto?servicio=${s.slug}` })}
+`;
+  write(`/servicios/${s.slug}`, page({ path: `/servicios/${s.slug}`, title: s.name, active: "servicios/" + s.slug, tone: d.tone, desc: d.desc, body }));
+}
+
+/* =========================================================
+   PROYECTOS
+   ========================================================= */
+write("/proyectos", page({
+  path: "/proyectos", title: "Proyectos", active: "proyectos", tone: "black",
+  desc: "Proyectos conceptuales de KROMA: ejemplos de cómo abordamos webs, automatizaciones, integraciones e identidad digital.",
+  body: `
+<section class="page-hero theme-black" data-theme="black" aria-labelledby="t">
+  <div class="wrap page-hero__grid">
+    <p class="eyebrow page-hero__eyebrow" data-reveal="fade">Proyectos</p>
+    ${lines(["Casos", "de ejemplo."], "h1", "display").replace("<h1 ", '<h1 id="t" style="grid-column:1 / span 8" ')}
+    <div class="page-hero__aside" data-reveal="rise" style="--delay:300ms">
+      <span class="tag-concept">Conceptos</span>
+      <p class="muted">Estos proyectos son conceptos: muestran cómo abordaríamos necesidades frecuentes. No corresponden a clientes reales y no presentan resultados.</p>
+    </div>
+  </div>
+</section>
+<section class="section theme-black" data-theme="black" aria-label="Lista de proyectos" style="padding-top:0">
+  <div class="wrap">
+    <div class="proj-grid">
+      ${projCard(PROJECTS[0], "a")}
+      ${projCard(PROJECTS[1], "b", 1)}
+      ${projCard(PROJECTS[2], "c")}
+      ${projCard(PROJECTS[3], "d", 1)}
+    </div>
+  </div>
+</section>
+${closing({ theme: "blue", title: ["¿Tu caso", "es el próximo?"], text: "Cuando publiquemos proyectos realizados, van a estar acá. Mientras tanto, contanos el tuyo." })}
+`,
+}));
+
+PROJECTS.forEach((pr, i) => {
+  const next = PROJECTS[(i + 1) % PROJECTS.length];
+  write(`/proyectos/${pr.slug}`, page({
+    path: `/proyectos/${pr.slug}`, title: pr.title, active: "proyectos", tone: "ivory",
+    desc: `Proyecto conceptual de KROMA: ${pr.title.toLowerCase()}.`,
+    body: `
+<section class="page-hero theme-ivory" data-theme="ivory" aria-labelledby="t" style="padding-bottom:0">
+  <div class="wrap page-hero__grid">
+    <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/proyectos">Proyectos</a></li><li aria-current="page">Concepto</li></ol></nav>
+    ${lines([pr.title], "h1", "h1").replace("<h1 ", '<h1 id="t" style="grid-column:1 / span 9" ')}
+    <div class="page-hero__aside" data-reveal="rise" style="--delay:300ms;grid-column:10 / span 3">
+      <span class="tag-concept">Concepto</span>
+      <p class="muted">Servicio: <a href="/servicios/${pr.service}">${pr.serviceName}</a></p>
+    </div>
+  </div>
+  <div class="wrap case-hero__media" data-reveal="wipe">
+    <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/${pr.img}.webp" type="image/webp"><img src="/assets/img/${pr.img}.jpg" alt="" width="1800" height="1200" decoding="async" fetchpriority="high"></picture></div></div>
+  </div>
+</section>
+<section class="section theme-ivory" data-theme="ivory" aria-label="Detalle del caso">
+  <div class="wrap case-body">
+    <div class="case-notice"><strong>Proyecto conceptual.</strong><span>Es un ejemplo de cómo abordaríamos esta necesidad. No corresponde a un cliente real ni fue implementado.</span></div>
+    <div class="case-row" data-reveal="rise"><h2>Contexto</h2><div><p class="lead">${pr.context}</p></div></div>
+    <div class="case-row" data-reveal="rise"><h2>Necesidad</h2><div><p class="lead">${pr.need}</p></div></div>
+    <div class="case-row" data-reveal="rise"><h2>Solución</h2><div><p class="lead">${pr.solution}</p></div></div>
+    <div class="case-row" data-reveal="rise"><h2>Entregables</h2><div><ul>${pr.deliverables.map((x) => `<li>${x}</li>`).join("")}</ul></div></div>
+    <div class="case-row" data-reveal="rise"><h2>Resultado</h2><div><p class="muted">No aplica: al ser un concepto, no hay resultados documentados para informar.</p></div></div>
+  </div>
+</section>
+<section class="section section--tight theme-black" data-theme="black" aria-label="Siguiente proyecto">
+  <div class="wrap case-next">
+    <div><p class="eyebrow">Siguiente concepto</p><p class="h3" style="margin-top:14px;font-weight:800;max-width:22ch">${next.title}</p></div>
+    <a class="btn btn--blue" href="/proyectos/${next.slug}">Ver caso ${ARROW}</a>
+  </div>
+</section>
+${closing({ theme: "blue", title: ["¿Algo", "parecido?"], text: "Si tu empresa tiene una necesidad similar, contanos y lo vemos.", href: `/contacto?servicio=${pr.service}` })}
+`,
+  }));
+});
+
+/* =========================================================
+   CONTACTO
+   ========================================================= */
+write("/contacto", page({
+  path: "/contacto", title: "Hablemos", active: "contacto", tone: "ivory",
+  desc: "Contale a KROMA qué querés mejorar en tu empresa: webs, automatizaciones, integraciones o identidad digital.",
+  body: `
+<section class="page-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
+  <div class="wrap contact">
+    <div class="contact__intro">
+      <p class="eyebrow" data-reveal="fade">Hablemos</p>
+      ${lines(["Contanos", "en qué estás."], "h1", "h1").replace("<h1 ", '<h1 id="t" ')}
+      <p class="lead" data-reveal="rise" style="--delay:300ms">Escribinos sobre tu empresa y lo que querés resolver. Con esa información preparamos la primera conversación.</p>
+      <div data-reveal="rise" style="--delay:400ms">
+        <p style="font-weight:700;margin-bottom:10px">Ayuda contarnos:</p>
+        <ul class="muted" style="padding-left:1.1em;display:grid;gap:6px">
+          <li>A qué se dedica tu empresa.</li>
+          <li>Qué herramientas usan hoy.</li>
+          <li>Qué te gustaría mejorar primero.</li>
+        </ul>
+      </div>
+      <!-- PENDIENTE: agregar email, teléfono o WhatsApp reales de KROMA como canales alternativos. -->
+    </div>
+    <div class="contact__form-wrap" data-reveal="rise" style="--delay:200ms">
+      <form class="form" id="contact-form" action="/api/contact" method="post" data-endpoint="/api/contact" novalidate aria-describedby="form-note">
+        <div class="field">
+          <label for="f-nombre">Nombre</label>
+          <div class="field__control"><input id="f-nombre" name="nombre" type="text" autocomplete="name" required aria-describedby="e-nombre"></div>
+          <p class="field__error" id="e-nombre" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-contacto">Email o teléfono</label>
+          <span class="hint" id="h-contacto">Usamos este dato solo para responderte.</span>
+          <div class="field__control"><input id="f-contacto" name="contacto" type="text" autocomplete="email" inputmode="email" required aria-describedby="h-contacto e-contacto"></div>
+          <p class="field__error" id="e-contacto" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-servicio">Servicio de interés</label>
+          <div class="field__control"><select id="f-servicio" name="servicio" required aria-describedby="e-servicio">
+            <option value="">Elegí una opción</option>
+            ${SERVICES.map((s) => `<option value="${s.slug}">${s.name}</option>`).join("")}
+            <option value="no-se">Todavía no sé</option>
+          </select></div>
+          <p class="field__error" id="e-servicio" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-mensaje">Mensaje</label>
+          <div class="field__control"><textarea id="f-mensaje" name="mensaje" rows="5" required aria-describedby="e-mensaje"></textarea></div>
+          <p class="field__error" id="e-mensaje" aria-live="polite"></p>
+        </div>
+        <div class="hp" aria-hidden="true"><label for="f-hp">No completar</label><input id="f-hp" name="empresa_web" type="text" tabindex="-1" autocomplete="off"></div>
+        <div class="form__foot">
+          <button class="btn btn--blue" type="submit"><span class="btn__label">Enviar mensaje</span><svg class="spinner" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>${ARROW}</button>
+          <p class="form__note" id="form-note">Todos los campos son obligatorios.</p>
+        </div>
+      </form>
+      <div class="form-status form-status--ok" id="form-ok" tabindex="-1" role="status">
+        <h3>Recibimos tu mensaje.</h3>
+        <p>Gracias por escribirnos. Te vamos a responder al dato de contacto que dejaste.</p>
+      </div>
+      <div class="form-status form-status--error" id="form-error" tabindex="-1" role="alert">
+        <h3>Tu mensaje no se envió.</h3>
+        <p id="form-error-text"></p>
+        <p><button class="btn btn--ivory" type="button" id="form-retry">Volver al formulario ${ARROW}</button></p>
+      </div>
+    </div>
+  </div>
+</section>
+`,
+}));
+
+/* =========================================================
+   404
+   ========================================================= */
+write("/404", page({
+  path: "/404", title: "Página no encontrada", active: "", tone: "blue",
+  desc: "La página que buscás no existe.",
+  body: `
+<section class="theme-blue" data-theme="blue" aria-labelledby="t">
+  <div class="wrap nf">
+    <p class="eyebrow">Error 404</p>
+    <h1 id="t" class="display">Esta página<br>no existe.</h1>
+    <p class="lead">Puede que el enlace haya cambiado. Volvé al inicio o escribinos.</p>
+    <p style="display:flex;gap:16px;flex-wrap:wrap"><a class="btn btn--ivory" href="/">Ir al inicio ${ARROW}</a><a class="btn btn--ghost" href="/contacto">Hablemos</a></p>
+  </div>
+</section>`,
+}));
+
+// favicon
+fs.writeFileSync(path.join(OUT, "assets/img/favicon.svg"),
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 ${parseFloat(ISO_VB.split(" ")[2]) + 16} ${parseFloat(ISO_VB.split(" ")[3]) + 16}"><path fill="#2340f5" d="${ISO_D}"/></svg>`);
+console.log("ok");
