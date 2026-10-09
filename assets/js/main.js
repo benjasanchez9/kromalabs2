@@ -353,8 +353,9 @@
     if (reduce()) return;
     const TOP = base.photo[base.photo.length - 1][1];
 
-    let scrollK = 0, t0 = performance.now(), raf = 0, inView = true, last = 0, tNow = 0;
-    // Cada punto de la curva se mueve en 2D con su propia semilla; los extremos quedan anclados al borde.
+    // Un solo motor para todo el hero: el scroll fija un objetivo y el motor lo alcanza con inercia,
+    // combinándolo con la flotación ambiental en una única transformación por elemento.
+    let target = 0, sp = 0, t0 = performance.now(), raf = 0, inView = true, last = 0, tNow = 0;
     const breathe = (pts, amp, seed, keepFirst, keepLast) => pts.map((p, i) => {
       if ((keepFirst && i === 0) || (keepLast && i === pts.length - 1)) return p;
       const s = seed + i * 1.37;
@@ -362,43 +363,43 @@
       const w = Math.sin(Math.PI * (i + 0.5) / pts.length) * 0.7 + 0.3;
       return [p[0] + amp * w * organic(tNow, s), p[1] + amp * 0.75 * w * organic(tNow * 0.87, s + 11)];
     });
+    const smooth = (x) => x * x * (3 - 2 * x); // curva suave en ambos extremos
     const render = () => {
-      const k = scrollK, t = tNow;
-      // Scroll: la foto se abre hacia la izquierda y el lóbulo baja
-      const ivory = breathe(base.ivory.map(([x, y]) => [x - 0.03 * k, y + 0.02 * k]), 0.022, 0.0, false, true);
-      const photoPts = breathe(base.photo.map(([x, y], i) => [x - 0.035 * k * (1 - i / base.photo.length), y]), 0.024, 2.1, true, true);
-      const lobe = breathe(base.lobe.map(([x, y]) => [x, y + 0.03 * k]), 0.02, 4.2, true, true);
+      const t = tNow, k = smooth(clamp(sp * 1.35));
+      const amp = mqDesktop.matches ? 1 : 0.45;
+      // Scroll: la foto se abre apenas hacia la izquierda y el lóbulo baja
+      const ivory = breathe(base.ivory.map(([x, y]) => [x - 0.025 * k, y + 0.018 * k]), 0.022, 0.0, false, true);
+      const photoPts = breathe(base.photo.map(([x, y], i) => [x - 0.03 * k * (1 - i / base.photo.length), y]), 0.024, 2.1, true, true);
+      const lobe = breathe(base.lobe.map(([x, y]) => [x, y + 0.025 * k]), 0.02, 4.2, true, true);
       photoPts[0] = lobe[lobe.length - 1];
       const top = photoPts[photoPts.length - 1];
       if (ivoryPath) ivoryPath.setAttribute("d", `M${ivory[0][0]} ${ivory[0][1]}${spline(ivory)}L1 ${TOP}L1 ${lobe[0][1]}${spline(lobe)}L.5 1L0 1Z`);
       if (clip) clip.setAttribute("d", `M${top[0]} ${top[1]}L1 ${TOP}L1 ${lobe[0][1]}${spline(lobe)}${spline(photoPts)}Z`);
-      // La foto deriva dentro de su recorte (cámara lenta, en dos ejes y con zoom suave)
-      if (frame) frame.style.transform = `translate3d(${(organic(t, 7) * 1.6).toFixed(3)}%, ${(organic(t * 0.8, 3) * 1.3).toFixed(3)}%, 0) scale(${(1.03 + organic(t * 0.6, 9) * 0.02).toFixed(4)})`;
-      // El isotipo flota: traslación y una leve rotación (sin deformarlo)
+      // Foto: deriva lenta + parallax suave del scroll, en una sola transformación
+      if (frame) frame.style.transform = `translate3d(${(organic(t, 7) * 1.4).toFixed(3)}%, calc(${(organic(t * 0.8, 3) * 1.1).toFixed(3)}% + ${(sp * 56 * amp).toFixed(2)}px), 0) scale(${(1.035 + organic(t * 0.6, 9) * 0.018 - k * 0.02).toFixed(4)})`;
+      // Isotipo: sube con el scroll (más rápido que la foto: separa planos) y flota
+      if (mark) mark.style.translate = `0 ${(-sp * 70 * amp).toFixed(2)}px`;
       if (markFloat) markFloat.style.transform = `translate3d(${(organic(t * 1.1, 5) * 10).toFixed(2)}px, ${(organic(t * 1.3, 1) * 16).toFixed(2)}px, 0) rotate(${(organic(t * 0.9, 2) * 6).toFixed(2)}deg)`;
-      // El bloque de texto acompaña muy poco, para no perder legibilidad
       if (text && mqDesktop.matches) text.style.transform = `translate3d(${(organic(t * 0.7, 13) * 3).toFixed(2)}px, ${(organic(t * 0.6, 17) * 5).toFixed(2)}px, 0)`;
     };
     const loop = (now) => {
       raf = requestAnimationFrame(loop);
-      if (now - last < 16) return;
+      const dt = Math.min(0.05, (now - (last || now)) / 1000);
       last = now; tNow = (now - t0) / 1000;
+      // inercia independiente de la frecuencia de la pantalla (60/120 Hz)
+      sp += (target - sp) * (1 - Math.exp(-dt * 7));
       render();
     };
     const io = new IntersectionObserver(([e]) => {
       inView = e.isIntersecting; cancelAnimationFrame(raf);
-      if (inView) raf = requestAnimationFrame(loop);
+      if (inView) { last = 0; raf = requestAnimationFrame(loop); }
     });
     io.observe(hero);
-    on(document, "visibilitychange", () => { cancelAnimationFrame(raf); if (!document.hidden && inView) raf = requestAnimationFrame(loop); });
+    on(document, "visibilitychange", () => { cancelAnimationFrame(raf); if (!document.hidden && inView) { last = 0; raf = requestAnimationFrame(loop); } });
     cleanups.push(() => { cancelAnimationFrame(raf); io.disconnect(); });
 
-    Scroll.add(hero, (p) => {
-      scrollK = ease(clamp(p * 1.5));
-      const amp = mqDesktop.matches ? 1 : 0.4;
-      if (photo) photo.parentElement.style.transform = `translate3d(0, ${(p * 70 * amp).toFixed(1)}px, 0)`;
-      if (mark) mark.style.translate = `0 ${(-p * 80 * amp).toFixed(1)}px`;
-    }, "top");
+    // El scroll solo actualiza el objetivo; el movimiento lo resuelve el motor de arriba
+    Scroll.add(hero, (p) => { target = p; }, "top");
 
     // Sobre azul no hay rastro: el isotipo acompaña levemente al puntero (solo posición)
     if (follow) {
