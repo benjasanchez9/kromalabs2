@@ -3,6 +3,7 @@
 // Genera las páginas HTML estáticas de KROMA.
 import fs from "node:fs";
 import path from "node:path";
+import { ICONS, PREVIEWS } from "./icons.mjs";
 
 const OUT = process.argv[2];
 const svgFile = fs.readFileSync(path.join(OUT, "assets/img/kroma-isotipo.svg"), "utf8");
@@ -26,6 +27,14 @@ function blob(pts, prec = 1) {
 }
 const BLOB_1 = blob([[50, 4], [80, 12], [97, 40], [88, 72], [64, 96], [30, 92], [6, 70], [4, 36], [22, 12]]);
 const BLOB_2 = blob([[40, 2], [76, 8], [98, 32], [92, 64], [70, 90], [38, 98], [10, 80], [2, 48], [14, 18]]);
+// Forma viva: el contorno respira (main.js lo anima con ruido orgánico). Puntos en 0..100.
+const LIVE_SHAPES = {
+  orb:  [[50,4],[78,10],[96,34],[92,64],[72,90],[42,97],[14,82],[3,52],[16,20]],
+  drop: [[44,2],[80,12],[98,40],[86,74],[56,98],[22,90],[4,62],[12,26]],
+  wave: [[0,0],[100,0],[100,100],[60,100],[46,82],[54,62],[38,44],[46,24],[34,6]],
+};
+const liveShape = (kind, cls, style = "", amp = 3.2) =>
+  `<div class="live ${cls}" style="${style}" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path data-live='${JSON.stringify({ pts: LIVE_SHAPES[kind], amp, open: kind === "wave" })}' fill="currentColor" d="${blob(LIVE_SHAPES[kind])}"/></svg></div>`;
 const decoBlob = (d = BLOB_1) => `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${d}" fill="currentColor"/></svg>`;
 
 const lines = (arr, tag = "h1", cls = "", base = 0) =>
@@ -111,7 +120,7 @@ function head({ title, desc, path: p }) {
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/jakarta.woff2" as="font" type="font/woff2" crossorigin>${p === "/" ? `\n<link rel="preload" as="image" type="image/webp" href="/assets/img/arq-escalera-curva.webp" imagesrcset="/assets/img/arq-escalera-curva-900.webp 900w, /assets/img/arq-escalera-curva.webp 1536w" imagesizes="(max-width: 820px) 80vw, 66vw" fetchpriority="high">` : ""}
+<link rel="preload" href="/assets/fonts/figtree-900.woff2" as="font" type="font/woff2" crossorigin>${p === "/" ? `\n<link rel="preload" as="image" type="image/webp" href="/assets/img/arq-escalera-curva.webp" imagesrcset="/assets/img/arq-escalera-curva-900.webp 900w, /assets/img/arq-escalera-curva.webp 1536w" imagesizes="(max-width: 820px) 80vw, 66vw" fetchpriority="high">` : ""}
 <link rel="stylesheet" href="/assets/css/main.css">
 <script>(function(d){var h=d.documentElement;h.classList.add("js");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("js","is-entering")},3000)})(document);</script>
 <script src="/assets/js/main.js" defer></script>
@@ -131,6 +140,7 @@ function header(active, tone) {
     <a class="brand" href="/" aria-label="KROMA — Inicio"><span class="brand__word" aria-hidden="true">kroma</span></a>
     <nav class="nav" aria-label="Principal">
       <ul class="nav__list">
+        <li class="nav__pill-ind" aria-hidden="true"></li>
         <li><a class="nav__link" href="/"${cur("inicio")}>Inicio</a></li>
         <li><a class="nav__link" href="/nosotros"${cur("nosotros")}>Nosotros</a></li>
         <li class="nav__item--sub${subCur}">
@@ -138,9 +148,21 @@ function header(active, tone) {
             <a class="nav__link" href="/servicios"${cur("servicios")}>Servicios</a>
             <button class="nav__subtoggle" type="button" aria-expanded="false" aria-controls="sub-servicios" aria-label="Mostrar servicios"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
           </div>
-          <ul class="nav__sub" id="sub-servicios">
-            ${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}"${cur("servicios/" + s.slug)}>${s.name}<span>${s.n}</span></a></li>`).join("")}
-          </ul>
+          <div class="nav__sub mega" id="sub-servicios">
+            <ul class="mega__grid">
+              ${SERVICES.map((s, i) => `<li style="--i:${i}"><a class="mega__tile" href="/servicios/${s.slug}"${cur("servicios/" + s.slug)}>
+                <span class="mega__ico">${ICONS[s.slug]}</span>
+                <span class="mega__txt"><span class="mega__num">${s.n}</span><span class="mega__name">${s.name}</span><span class="mega__desc">${s.short}</span></span>
+                <span class="mega__go" aria-hidden="true">${arrowIcon()}</span>
+              </a></li>`).join("")}
+            </ul>
+            <div class="mega__side">
+              <span class="mega__label">Servicios · 04</span>
+              <p>Elegimos la herramienta según tu operación, no al revés.</p>
+              <a class="mega__all" href="/servicios">Ver todos los servicios ${arrowIcon()}</a>
+              <a class="mega__cta" href="/contacto?servicio=no-se">¿No sabés por dónde empezar? <strong>Hablemos</strong></a>
+            </div>
+          </div>
         </li>
         <li><a class="nav__link" href="/proyectos"${cur("proyectos")}>Proyectos</a></li>
       </ul>
@@ -155,7 +177,7 @@ function header(active, tone) {
       <li><a href="/"${cur("inicio")}>Inicio</a></li>
       <li><a href="/nosotros"${cur("nosotros")}>Nosotros</a></li>
       <li><a href="/servicios"${cur("servicios")}>Servicios</a>
-        <ul class="mobile-menu__sub">${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}">${s.n} — ${s.name}</a></li>`).join("")}</ul>
+        <ul class="mobile-menu__sub">${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}"><span class="mobile-menu__ico">${ICONS[s.slug]}</span>${s.name}</a></li>`).join("")}</ul>
       </li>
       <li><a href="/proyectos"${cur("proyectos")}>Proyectos</a></li>
       <li><a href="/contacto"${cur("contacto")}>Hablemos</a></li>
@@ -213,8 +235,13 @@ function tightPunct(html) {
   return html.replace(/<(h1|h2)([^>]*)>([\s\S]*?)<\/\1>/g, (m, tag, attrs, inner) =>
     `<${tag}${attrs}>${inner.replace(/([A-Za-zÁÉÍÓÚáéíóúñÑ])([.,])(?=[\s<]|$)/g, '$1<span class="pn">$2</span>')}</${tag}>`);
 }
+// La puntuación recupera el espacio que le quita el tracking negativo de los títulos.
+function airPunct(html) {
+  return html.replace(/<(h1|h2|h3|p)(\s[^>]*)?>([\s\S]*?)<\/\1>/g, (m, tag, attrs = "", inner) =>
+    `<${tag}${attrs}>${(">" + inner).replace(/(>[^<]*)/g, (seg) => seg.replace(/([A-Za-zÁÉÍÓÚáéíóúñÑüÜ])([.,;:?!]+)(?=[\s<)]|$)/g, '$1<span class="pt">$2</span>')).slice(1)}</${tag}>`);
+}
 function write(rel, html) {
-  html = tightPunct(html);
+  html = airPunct(html).replace(/(<\/(?:em|strong|a)>)([.,;:?!]+)/g, '$1<span class="pt">$2</span>');
   const file = rel === "/" ? "index.html" : rel === "/404" ? "404.html" : path.join(rel.slice(1), "index.html");
   const full = path.join(OUT, file);
   fs.mkdirSync(path.dirname(full), { recursive: true });
@@ -226,10 +253,11 @@ function svcRows() {
   return `<ul class="svc-list">
   ${SERVICES.map((s) => `<li class="svc-row">
     <a class="svc-row__link" href="/servicios/${s.slug}">
-      <span class="svc-row__num">${s.n}</span>
+      <span class="svc-row__num"><span>${s.n}</span><span class="svc-row__ico">${ICONS[s.slug]}</span></span>
       <span class="svc-row__body"><span class="svc-row__title">${s.name}</span><span class="svc-row__desc">${s.short}</span></span>
       <span class="svc-row__thumb" aria-hidden="true"><picture><source srcset="/assets/img/${s.img}-sm.webp" type="image/webp"><img src="/assets/img/${s.img}-sm.jpg" alt="" width="640" height="427" loading="lazy" decoding="async"></picture></span>
       <span class="circle-arrow" aria-hidden="true">${arrowIcon()}</span>
+      <span class="svc-row__preview" aria-hidden="true">${PREVIEWS[s.slug]}</span>
     </a>
   </li>`).join("\n  ")}
 </ul>`;
@@ -378,7 +406,8 @@ write("/nosotros", page({
   desc: "KROMA nace para democratizar la digitalización de las empresas uruguayas: elegir bien las herramientas e implementarlas con criterio.",
   body: `
 <section class="page-hero about-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
-  <div class="about-hero__mark" data-float="60" aria-hidden="true">${iso()}</div>
+  ${liveShape("orb", "about-hero__orb", "color:var(--blue)", 7)}
+  <div class="about-hero__mark" data-float="60" aria-hidden="true"><div class="float-soft">${iso()}</div></div>
   <div class="wrap page-hero__grid">
     ${lines(["Digitalizar también", "es elegir bien."], "h1", "display about-hero__title").replace("<h1 ", '<h1 id="t" ')}
     <p class="lead about-hero__sub" data-reveal="rise" style="--delay:400ms">Democratizamos la digitalización<br>de las empresas uruguayas.</p>
@@ -437,9 +466,7 @@ write("/servicios", page({
   desc: "Webs, automatizaciones, integraciones e identidad digital para empresas uruguayas.",
   body: `
 <section class="page-hero svc-index-hero theme-black" data-theme="black" aria-labelledby="t">
-  <div class="svc-index-hero__shape" data-float="40" aria-hidden="true">
-    <svg viewBox="0 0 600 700" preserveAspectRatio="none"><path fill="var(--blue)" d="M600 0H300C260 90 330 170 300 260C270 350 120 380 110 500C100 610 220 690 330 700H600Z"/></svg>
-  </div>
+  ${liveShape("wave", "svc-index-hero__shape", "color:var(--blue)", 7)}
   <div class="wrap page-hero__grid">
     <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/">Inicio</a></li><li aria-current="page">Servicios</li></ol></nav>
     ${lines(["Herramientas que", "mueven tu negocio."], "h1", "display svc-index-hero__title").replace("<h1 ", '<h1 id="t" ')}
@@ -687,7 +714,7 @@ for (const s of SERVICES) {
   const problemTheme = d.heroTheme === "ivory" ? "blue" : "ivory";
   const body = `
 <section class="page-hero theme-${d.heroTheme}" data-theme="${d.heroTheme}" aria-labelledby="t">
-  ${d.heroTheme !== "blue" ? `<div class="deco-blob" data-drift="70" style="width:17vw;aspect-ratio:1;right:-12.5vw;top:calc(var(--header-h) + 1vw);color:var(--blue)">${decoBlob(idx % 2 ? BLOB_1 : BLOB_2)}</div>` : `<div class="deco-blob" data-drift="70" style="width:40vw;aspect-ratio:1;left:-14vw;top:-10vw;color:var(--blue-deep)">${decoBlob(BLOB_2)}</div>`}
+  ${d.heroTheme === "blue" ? liveShape("drop", "svc-hero__live svc-hero__live--onblue", "color:var(--black)", 7) : liveShape(idx % 2 ? "orb" : "drop", "svc-hero__live", "color:var(--blue)", 7)}
   <div class="wrap page-hero__grid">
     <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/servicios">Servicios</a></li><li aria-current="page">${s.n} ${s.name}</li></ol></nav>
     ${lines(d.title, "h1", "h1 svc-hero__title").replace("<h1 ", '<h1 id="t" ')}
@@ -750,6 +777,7 @@ write("/proyectos", page({
   desc: "Proyectos conceptuales de KROMA: ejemplos de cómo abordamos webs, automatizaciones, integraciones e identidad digital.",
   body: `
 <section class="page-hero theme-black" data-theme="black" aria-labelledby="t">
+  ${liveShape("orb", "proj-hero__live", "color:var(--blue)", 7)}
   <div class="wrap page-hero__grid">
     <p class="eyebrow page-hero__eyebrow" data-reveal="fade">Proyectos</p>
     ${lines(["Casos", "de ejemplo."], "h1", "display").replace("<h1 ", '<h1 id="t" ').replace('class="lines display"', 'class="lines display page-hero__title"')}
@@ -759,14 +787,31 @@ write("/proyectos", page({
     </div>
   </div>
 </section>
-<section class="section theme-black" data-theme="black" aria-label="Lista de proyectos" style="padding-top:0">
+<section class="section theme-black stack-section" data-theme="black" aria-label="Lista de proyectos" style="padding-top:0">
   <div class="wrap">
-    <div class="proj-grid">
-      ${projCard(PROJECTS[0], "a", 0, "h2", true)}
-      ${projCard(PROJECTS[1], "b", 1, "h2")}
-      ${projCard(PROJECTS[2], "c", 0, "h2")}
-      ${projCard(PROJECTS[3], "d", 1, "h2")}
+    <div class="pfilter" role="group" aria-label="Filtrar por servicio" data-reveal="fade">
+      <button type="button" class="pfilter__chip" aria-pressed="true" data-filter="all">Todos <span>${String(PROJECTS.length).padStart(2, "0")}</span></button>
+      ${SERVICES.map((s) => `<button type="button" class="pfilter__chip" aria-pressed="false" data-filter="${s.slug}"><span class="pfilter__ico">${ICONS[s.slug]}</span>${s.name} <span>${String(PROJECTS.filter((p) => p.service === s.slug).length).padStart(2, "0")}</span></button>`).join("")}
+      <p class="pfilter__status num" aria-live="polite"><span data-count>${String(PROJECTS.length).padStart(2, "0")}</span> conceptos</p>
     </div>
+    <ol class="stack">
+      ${PROJECTS.map((pr, i) => `<li class="stack__item" data-service="${pr.service}" style="--i:${i}">
+        <article class="pcard pcard--${["blue", "ivory", "ink", "sand"][i % 4]}" aria-labelledby="pc-${i}">
+          <div class="pcard__media">
+            <div class="pcard__para"><picture><source srcset="/assets/img/${pr.img}-900.webp 900w, /assets/img/${pr.img}.webp 1536w" sizes="(max-width: 920px) 100vw, 56vw" type="image/webp"><img src="/assets/img/${pr.img}.jpg" srcset="/assets/img/${pr.img}-900.jpg 900w, /assets/img/${pr.img}.jpg 1536w" sizes="(max-width: 920px) 100vw, 56vw" alt="" width="1536" height="1024" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture></div>
+            <span class="pcard__index" aria-hidden="true">${String(i + 1).padStart(2, "0")}<small>/${String(PROJECTS.length).padStart(2, "0")}</small></span>
+          </div>
+          <div class="pcard__body">
+            <div class="pcard__meta"><span class="tag-concept">Concepto</span><span class="pcard__svc"><span class="pcard__svc-ico">${ICONS[pr.service]}</span>${pr.serviceName}</span></div>
+            <h2 class="pcard__title" id="pc-${i}">${pr.title}</h2>
+            <p class="pcard__need">${pr.need}</p>
+            <p class="sr-only">Entregables:</p><ul class="pcard__deliv">${pr.deliverables.map((d) => `<li>${d}</li>`).join("")}</ul>
+            <a class="btn pcard__cta" href="/proyectos/${pr.slug}">Ver caso<span class="sr-only">: ${pr.title}</span> ${ARROW}</a>
+          </div>
+        </article>
+      </li>`).join("\n      ")}
+    </ol>
+    <p class="pfilter__empty" hidden>No hay conceptos para este servicio todavía.</p>
   </div>
 </section>
 ${closing({ theme: "blue", title: ["¿Tu caso", "es el próximo?"], text: "Cuando publiquemos proyectos realizados, van a estar acá. Mientras tanto, contanos el tuyo." })}
@@ -779,7 +824,8 @@ PROJECTS.forEach((pr, i) => {
     path: `/proyectos/${pr.slug}`, title: pr.title, active: "proyectos", tone: "ivory",
     desc: `Proyecto conceptual de KROMA: ${pr.title.toLowerCase()}.`,
     body: `
-<section class="page-hero theme-ivory" data-theme="ivory" aria-labelledby="t" style="padding-bottom:0">
+<section class="page-hero theme-ivory case-hero" data-theme="ivory" aria-labelledby="t" style="padding-bottom:0">
+  ${liveShape("orb", "case-hero__live", "color:var(--blue)", 7)}
   <div class="wrap page-hero__grid">
     <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/proyectos">Proyectos</a></li><li aria-current="page">Concepto</li></ol></nav>
     ${lines([pr.title], "h1", "h1 page-hero__title").replace("<h1 ", '<h1 id="t" ')}
@@ -820,7 +866,8 @@ write("/contacto", page({
   path: "/contacto", title: "Hablemos", active: "contacto", tone: "ivory",
   desc: "Contale a KROMA qué querés mejorar en tu empresa: webs, automatizaciones, integraciones o identidad digital.",
   body: `
-<section class="page-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
+<section class="page-hero theme-ivory contact-hero" data-theme="ivory" aria-labelledby="t">
+  ${liveShape("drop", "contact-hero__live", "color:var(--blue)", 7)}
   <div class="wrap contact">
     <div class="contact__intro">
       <p class="eyebrow" data-reveal="fade">Hablemos</p>

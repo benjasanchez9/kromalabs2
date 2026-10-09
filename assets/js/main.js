@@ -124,6 +124,34 @@
     on(header, "focusin", () => header.classList.remove("is-hidden"));
     update();
 
+    // Indicador deslizante dentro de la cápsula de navegación
+    const list = $(".nav__list"), ind = $(".nav__pill-ind");
+    if (list && ind) {
+      const links = $$(".nav__link", list);
+      const active = links.find((a) => a.getAttribute("aria-current") === "page") || $(".nav__item--sub.is-current .nav__link", list);
+      const moveTo = (el) => {
+        if (!el) { list.classList.remove("has-ind"); return; }
+        const target = el.closest(".nav__row") || el;
+        const lr = list.getBoundingClientRect(), r = target.getBoundingClientRect();
+        list.style.setProperty("--x", `${(r.left - lr.left).toFixed(1)}px`);
+        list.style.setProperty("--w", `${r.width.toFixed(1)}px`);
+        list.classList.add("has-ind");
+      };
+      // el indicador arranca en la página actual sin animar
+      ind.style.transition = "none"; moveTo(active); requestAnimationFrame(() => (ind.style.transition = ""));
+      links.forEach((a) => { on(a, "pointerenter", () => moveTo(a)); on(a, "focus", () => moveTo(a)); });
+      const sub = $(".nav__subtoggle", list); if (sub) { on(sub, "pointerenter", () => moveTo(sub)); on(sub, "focus", () => moveTo(sub)); }
+      on(list, "pointerleave", () => moveTo(active));
+      on(list, "focusout", (e) => { if (!list.contains(e.relatedTarget)) moveTo(active); });
+      on(window, "resize", () => moveTo(active));
+      document.fonts && document.fonts.ready.then(() => moveTo(active));
+    }
+    // Brillo que sigue al puntero en las tarjetas del menú
+    $$(".mega__tile").forEach((t) => on(t, "pointermove", (e) => {
+      const r = t.getBoundingClientRect();
+      t.style.setProperty("--mx", `${e.clientX - r.left}px`); t.style.setProperty("--my", `${e.clientY - r.top}px`);
+    }, { passive: true }));
+
     // Submenú de Servicios (teclado y click)
     $$(".nav__item--sub").forEach((item) => {
       const btn = $(".nav__subtoggle", item);
@@ -204,38 +232,156 @@
     return d;
   }
 
+  /* Ruido orgánico: suma de ondas con frecuencias no múltiplos entre sí.
+     El movimiento nunca se repite igual y se percibe natural, no mecánico. */
+  const organic = (t, seed) =>
+    Math.sin(t * 0.31 + seed) * 0.55 +
+    Math.sin(t * 0.53 + seed * 1.9) * 0.3 +
+    Math.sin(t * 0.97 + seed * 3.7) * 0.15;
+
+  /* Formas vivas de los heros internos: cada punto del contorno respira con ruido orgánico,
+     y la forma entera deriva y reacciona levemente al puntero. Se pausa fuera de pantalla. */
+  function initLiveShapes() {
+    const paths = $$("path[data-live]");
+    if (!paths.length || reduce()) return;
+    const items = paths.map((p, n) => {
+      const cfg = JSON.parse(p.dataset.live);
+      const wrap = p.closest(".live");
+      return { p, wrap, cfg, seed: n * 7.3 + 1, visible: true, mx: 0, my: 0, cx: 0, cy: 0 };
+    });
+    const f = (v) => v.toFixed(2);
+    const closed = (pts) => {
+      const n = pts.length; let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
+      for (let i = 0; i < n; i++) {
+        const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+        d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)} ${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)} ${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])} ${f(p2[1])}`;
+      }
+      return d + "Z";
+    };
+    const openWave = (pts) => {
+      // forma de banda: los 3 primeros puntos son esquinas fijas, el resto es el borde vivo
+      const [a, b, c, ...edge] = pts;
+      return `M${a[0]} ${a[1]}L${b[0]} ${b[1]}L${c[0]} ${c[1]}L${f(edge[0][0])} ${f(edge[0][1])}${spline(edge)}Z`;
+    };
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      const it = items.find((x) => x.wrap === e.target); if (it) it.visible = e.isIntersecting;
+    }));
+    items.forEach((it) => it.wrap && io.observe(it.wrap));
+    // reacción al puntero (solo desktop): la forma se corre unos píxeles hacia el cursor
+    on(window, "pointermove", (e) => {
+      if (!fine()) return;
+      items.forEach((it) => {
+        if (!it.visible || !it.wrap) return;
+        const r = it.wrap.getBoundingClientRect();
+        it.mx = clamp((e.clientX - (r.left + r.width / 2)) / innerWidth, -0.5, 0.5) * 30;
+        it.my = clamp((e.clientY - (r.top + r.height / 2)) / innerHeight, -0.5, 0.5) * 24;
+      });
+    }, { passive: true });
+    const t0 = performance.now(); let raf = 0, last = 0;
+    const loop = (now) => {
+      raf = requestAnimationFrame(loop);
+      if (now - last < 20) return; last = now;
+      const t = (now - t0) / 1000;
+      items.forEach((it) => {
+        if (!it.visible) return;
+        const { pts, amp, open } = it.cfg;
+        const moved = pts.map((p, i) => {
+          if (open && i < 3) return p;
+          const s = it.seed + i * 1.37;
+          return [p[0] + amp * organic(t * 1.25, s), p[1] + amp * organic(t * 1.1, s + 9)];
+        });
+        it.p.setAttribute("d", open ? openWave(moved) : closed(moved));
+        it.cx = lerp(it.cx, it.mx, 0.05); it.cy = lerp(it.cy, it.my, 0.05);
+        if (it.wrap) {
+          it.wrap.style.translate = `${f(organic(t * 0.55, it.seed + 3) * 30 + it.cx)}px ${f(organic(t * 0.5, it.seed + 5) * 36 + it.cy)}px`;
+          if (!open) it.wrap.style.rotate = `${f(organic(t * 0.35, it.seed + 8) * 14)}deg`;
+        }
+      });
+    };
+    raf = requestAnimationFrame(loop);
+    on(document, "visibilitychange", () => { cancelAnimationFrame(raf); if (!document.hidden) raf = requestAnimationFrame(loop); });
+    cleanups.push(() => { cancelAnimationFrame(raf); io.disconnect(); });
+  }
+
+  /* Proyectos: filtro por servicio y tarjetas que se apilan con el scroll */
+  function initProjects() {
+    const stack = $(".stack");
+    if (!stack) return;
+    const items = $$(".stack__item", stack), chips = $$(".pfilter__chip"), count = $("[data-count]"), empty = $(".pfilter__empty");
+    chips.forEach((chip) => on(chip, "click", () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+      let n = 0;
+      items.forEach((it) => {
+        const show = f === "all" || it.dataset.service === f;
+        if (show) { n++; it.hidden = false; requestAnimationFrame(() => it.classList.remove("is-out")); }
+        else { it.classList.add("is-out"); setTimeout(() => { if (it.classList.contains("is-out")) it.hidden = true; }, reduce() ? 0 : 340); }
+      });
+      if (count) count.textContent = String(n).padStart(2, "0");
+      if (empty) empty.hidden = n > 0;
+      // al filtrar, se vuelve al inicio de la lista para ver el resultado
+      const top = stack.getBoundingClientRect().top + scrollY - 200;
+      if (scrollY > top) scrollTo({ top, behavior: reduce() ? "auto" : "smooth" });
+    }));
+    if (reduce()) return;
+    // Cada tarjeta se achica y oscurece a medida que la siguiente la tapa; la foto tiene parallax suave.
+    items.forEach((it, i) => {
+      const card = $(".pcard", it), para = $(".pcard__para", it);
+      Scroll.add(it, (p) => {
+        if (para) para.style.transform = `translate3d(0, ${((p - 0.5) * -10).toFixed(2)}%, 0)`;
+      });
+      const next = items[i + 1];
+      if (!next || !card) return;
+      Scroll.add(next, () => {
+        if (!mqDesktop.matches || it.hidden || next.hidden) { card.style.transform = ""; card.style.setProperty("--dim", 0); return; }
+        const a = it.getBoundingClientRect(), b = next.getBoundingClientRect();
+        // k = cuánto cubrió la siguiente tarjeta a esta (0 → nada, 1 → completa)
+        const k = clamp((a.bottom - b.top) / a.height);
+        card.style.transform = `scale(${(1 - k * 0.06).toFixed(4)})`;
+        card.style.setProperty("--dim", (k * 0.45).toFixed(3));
+      }, "through", true);
+    });
+  }
+
   function initHero() {
     const hero = $(".hero");
     if (!hero || !hero.dataset.shape) return;
     const base = JSON.parse(hero.dataset.shape);
     const clip = $("#hero-clip-path"), ivoryPath = $("#hero-ivory-path");
     const photo = $(".hero__photo"), mark = $(".hero__mark"), follow = $(".hero__mark-follow");
+    const markFloat = $(".hero__mark-float"), text = $(".hero__text"), frame = $(".hero__frame picture");
     if (reduce()) return;
     const TOP = base.photo[base.photo.length - 1][1];
 
-    let scrollK = 0, t0 = performance.now(), raf = 0, inView = true, last = 0;
-    // Cada punto respira con su propia fase; los extremos (bordes del hero) quedan fijos.
-    const wobble = (pts, amp, speed, seed, keepFirst, keepLast) => pts.map((p, i) => {
+    let scrollK = 0, t0 = performance.now(), raf = 0, inView = true, last = 0, tNow = 0;
+    // Cada punto de la curva se mueve en 2D con su propia semilla; los extremos quedan anclados al borde.
+    const breathe = (pts, amp, seed, keepFirst, keepLast) => pts.map((p, i) => {
       if ((keepFirst && i === 0) || (keepLast && i === pts.length - 1)) return p;
-      const ph = seed + i * 1.7, w = (now) => Math.sin(now * speed + ph);
-      return [p[0] + amp * w(tNow) , p[1] + amp * 0.6 * Math.cos(tNow * speed * 0.8 + ph)];
+      const s = seed + i * 1.37;
+      // la amplitud crece hacia el centro de la curva (los tramos cerca del borde se mueven menos)
+      const w = Math.sin(Math.PI * (i + 0.5) / pts.length) * 0.7 + 0.3;
+      return [p[0] + amp * w * organic(tNow, s), p[1] + amp * 0.75 * w * organic(tNow * 0.87, s + 11)];
     });
-    let tNow = 0;
     const render = () => {
-      const k = scrollK;
-      // Scroll: la foto se abre un poco hacia la izquierda y el lóbulo baja
-      const ivory = wobble(base.ivory.map(([x, y]) => [x - 0.03 * k, y + 0.02 * k]), 0.006, 0.55, 0.0, false, true);
-      const photoPts = wobble(base.photo.map(([x, y], i) => [x - 0.035 * k * (1 - i / base.photo.length), y]), 0.007, 0.5, 2.1, true, true);
-      const lobe = wobble(base.lobe.map(([x, y]) => [x, y + 0.03 * k]), 0.006, 0.45, 4.2, true, true);
-      // los tramos comparten extremos: el lóbulo termina donde empieza el borde de la foto
+      const k = scrollK, t = tNow;
+      // Scroll: la foto se abre hacia la izquierda y el lóbulo baja
+      const ivory = breathe(base.ivory.map(([x, y]) => [x - 0.03 * k, y + 0.02 * k]), 0.022, 0.0, false, true);
+      const photoPts = breathe(base.photo.map(([x, y], i) => [x - 0.035 * k * (1 - i / base.photo.length), y]), 0.024, 2.1, true, true);
+      const lobe = breathe(base.lobe.map(([x, y]) => [x, y + 0.03 * k]), 0.02, 4.2, true, true);
       photoPts[0] = lobe[lobe.length - 1];
       const top = photoPts[photoPts.length - 1];
       if (ivoryPath) ivoryPath.setAttribute("d", `M${ivory[0][0]} ${ivory[0][1]}${spline(ivory)}L1 ${TOP}L1 ${lobe[0][1]}${spline(lobe)}L.5 1L0 1Z`);
       if (clip) clip.setAttribute("d", `M${top[0]} ${top[1]}L1 ${TOP}L1 ${lobe[0][1]}${spline(lobe)}${spline(photoPts)}Z`);
+      // La foto deriva dentro de su recorte (cámara lenta, en dos ejes y con zoom suave)
+      if (frame) frame.style.transform = `translate3d(${(organic(t, 7) * 1.6).toFixed(3)}%, ${(organic(t * 0.8, 3) * 1.3).toFixed(3)}%, 0) scale(${(1.03 + organic(t * 0.6, 9) * 0.02).toFixed(4)})`;
+      // El isotipo flota: traslación y una leve rotación (sin deformarlo)
+      if (markFloat) markFloat.style.transform = `translate3d(${(organic(t * 1.1, 5) * 10).toFixed(2)}px, ${(organic(t * 1.3, 1) * 16).toFixed(2)}px, 0) rotate(${(organic(t * 0.9, 2) * 6).toFixed(2)}deg)`;
+      // El bloque de texto acompaña muy poco, para no perder legibilidad
+      if (text && mqDesktop.matches) text.style.transform = `translate3d(${(organic(t * 0.7, 13) * 3).toFixed(2)}px, ${(organic(t * 0.6, 17) * 5).toFixed(2)}px, 0)`;
     };
     const loop = (now) => {
       raf = requestAnimationFrame(loop);
-      if (now - last < 33) return;          // ~30 fps alcanzan para un movimiento lento
+      if (now - last < 16) return;
       last = now; tNow = (now - t0) / 1000;
       render();
     };
@@ -403,13 +549,19 @@
       if (prev) {
         // El preview acompaña al puntero en horizontal, sin quedar fijo sobre el texto
         let raf = 0;
+        let lastX = null, rot = -2;
         const place = (e) => {
           const r = link.getBoundingClientRect();
           const w = prev.offsetWidth;
-          let x = e.clientX - r.left;
-          if (x + w + 40 > r.width) x = x - w - 56;   // cerca del borde: va a la izquierda del cursor
+          let x = e.clientX - r.left + 28;
+          if (x + w + 24 > r.width) x = e.clientX - r.left - w - 28;   // cerca del borde: a la izquierda del cursor
           prev.style.setProperty("--px", `${Math.max(0, x).toFixed(0)}px`);
+          // se inclina levemente según la velocidad del puntero
+          if (lastX !== null) rot = clamp(lerp(rot, (e.clientX - lastX) * 0.35 - 2, 0.25), -9, 7);
+          lastX = e.clientX;
+          prev.style.setProperty("--rot", `${rot.toFixed(2)}deg`);
         };
+        on(link, "pointerleave", () => { lastX = null; rot = -2; });
         on(link, "pointerenter", place);
         on(link, "pointermove", (e) => {
           if (!fine()) return;
@@ -670,6 +822,8 @@
       initHeader();
       initReveals();
       initHero();
+      initLiveShapes();
+      initProjects();
       initParallax();
       initTrails();
       initServiceRows();

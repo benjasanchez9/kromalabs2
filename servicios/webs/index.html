@@ -19,7 +19,7 @@
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/jakarta.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/figtree-900.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/main.css">
 <script>(function(d){var h=d.documentElement;h.classList.add("js");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("js","is-entering")},3000)})(document);</script>
 <script src="/assets/js/main.js" defer></script>
@@ -34,6 +34,7 @@
     <a class="brand" href="/" aria-label="KROMA — Inicio"><span class="brand__word" aria-hidden="true">kroma</span></a>
     <nav class="nav" aria-label="Principal">
       <ul class="nav__list">
+        <li class="nav__pill-ind" aria-hidden="true"></li>
         <li><a class="nav__link" href="/">Inicio</a></li>
         <li><a class="nav__link" href="/nosotros">Nosotros</a></li>
         <li class="nav__item--sub is-current">
@@ -41,9 +42,59 @@
             <a class="nav__link" href="/servicios">Servicios</a>
             <button class="nav__subtoggle" type="button" aria-expanded="false" aria-controls="sub-servicios" aria-label="Mostrar servicios"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
           </div>
-          <ul class="nav__sub" id="sub-servicios">
-            <li><a href="/servicios/webs" aria-current="page">Webs<span>01</span></a></li><li><a href="/servicios/automatizaciones">Automatizaciones<span>02</span></a></li><li><a href="/servicios/integraciones">Integraciones<span>03</span></a></li><li><a href="/servicios/identidad-digital">Identidad digital<span>04</span></a></li>
-          </ul>
+          <div class="nav__sub mega" id="sub-servicios">
+            <ul class="mega__grid">
+              <li style="--i:0"><a class="mega__tile" href="/servicios/webs" aria-current="page">
+                <span class="mega__ico"><svg class="ico ico--webs" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s" x="5" y="8" width="38" height="32" rx="4"/><path class="s" d="M5 15h38"/>
+    <circle class="f" cx="9.5" cy="11.5" r="1.1"/><circle class="f o" cx="13.2" cy="11.5" r="1.1"/>
+    <svg x="5" y="15" width="38" height="25" overflow="hidden"><g class="ico-scroll">
+      <rect class="f" x="5" y="4" width="19" height="4" rx="1"/><rect class="f o" x="5" y="11" width="28" height="2" rx="1"/>
+      <rect class="f o" x="5" y="15" width="22" height="2" rx="1"/><rect class="a" x="5" y="20" width="12" height="4" rx="1"/>
+      <rect class="f" x="5" y="29" width="28" height="9" rx="1.5"/><rect class="f o" x="5" y="41" width="24" height="2" rx="1"/>
+      <rect class="f" x="5" y="47" width="19" height="4" rx="1"/><rect class="f o" x="5" y="54" width="28" height="2" rx="1"/>
+    </g></svg>
+    <path class="ico-cursor" d="M31 27l9 3.5-4 1.4-1.4 4z"/>
+  </svg></span>
+                <span class="mega__txt"><span class="mega__num">01</span><span class="mega__name">Webs</span><span class="mega__desc">Sitios a medida, rápidos y pensados para convertir.</span></span>
+                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a></li><li style="--i:1"><a class="mega__tile" href="/servicios/automatizaciones">
+                <span class="mega__ico"><svg class="ico ico--auto" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M7 32H41"/><path class="ico-progress" d="M7 32H41"/>
+    <circle class="ico-node n1" cx="7" cy="32" r="3.6"/><circle class="ico-node n2" cx="18.3" cy="32" r="3.6"/>
+    <circle class="ico-node n3" cx="29.6" cy="32" r="3.6"/><circle class="ico-node n4" cx="41" cy="32" r="3.6"/>
+    <g class="ico-task"><rect class="a" x="1" y="12" width="12" height="9" rx="2.5"/><path class="ico-check" d="M4 16.6l2 2 3.6-3.8"/></g>
+  </svg></span>
+                <span class="mega__txt"><span class="mega__num">02</span><span class="mega__name">Automatizaciones</span><span class="mega__desc">Menos trabajo manual. Más tiempo para lo importante.</span></span>
+                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a></li><li style="--i:2"><a class="mega__tile" href="/servicios/integraciones">
+                <span class="mega__ico"><svg class="ico ico--integ" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M13 12C20 12 18 24 24 24M13 36C20 36 18 24 24 24M24 24C30 24 28 12 35 12M24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow" d="M13 12C20 12 18 24 24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow f2" d="M13 36C20 36 18 24 24 24C30 24 28 12 35 12"/>
+    <rect class="s" x="4" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="4" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="s" x="35" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="35" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="ico-hub" x="19" y="19" width="10" height="10" rx="3"/>
+  </svg></span>
+                <span class="mega__txt"><span class="mega__num">03</span><span class="mega__name">Integraciones</span><span class="mega__desc">Conectamos tus herramientas para que todo fluya.</span></span>
+                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a></li><li style="--i:3"><a class="mega__tile" href="/servicios/identidad-digital">
+                <span class="mega__ico"><svg class="ico ico--ident" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s o" x="5" y="5" width="38" height="38" rx="5"/>
+    <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
+    <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
+  </svg></span>
+                <span class="mega__txt"><span class="mega__num">04</span><span class="mega__name">Identidad digital</span><span class="mega__desc">Una presencia digital sólida y coherente con tu negocio.</span></span>
+                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a></li>
+            </ul>
+            <div class="mega__side">
+              <span class="mega__label">Servicios · 04</span>
+              <p>Elegimos la herramienta según tu operación<span class="pt">,</span> no al revés<span class="pt">.</span></p>
+              <a class="mega__all" href="/servicios">Ver todos los servicios <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              <a class="mega__cta" href="/contacto?servicio=no-se">¿No sabés por dónde empezar? <strong>Hablemos</strong></a>
+            </div>
+          </div>
         </li>
         <li><a class="nav__link" href="/proyectos">Proyectos</a></li>
       </ul>
@@ -58,23 +109,49 @@
       <li><a href="/">Inicio</a></li>
       <li><a href="/nosotros">Nosotros</a></li>
       <li><a href="/servicios">Servicios</a>
-        <ul class="mobile-menu__sub"><li><a href="/servicios/webs">01 — Webs</a></li><li><a href="/servicios/automatizaciones">02 — Automatizaciones</a></li><li><a href="/servicios/integraciones">03 — Integraciones</a></li><li><a href="/servicios/identidad-digital">04 — Identidad digital</a></li></ul>
+        <ul class="mobile-menu__sub"><li><a href="/servicios/webs"><span class="mobile-menu__ico"><svg class="ico ico--webs" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s" x="5" y="8" width="38" height="32" rx="4"/><path class="s" d="M5 15h38"/>
+    <circle class="f" cx="9.5" cy="11.5" r="1.1"/><circle class="f o" cx="13.2" cy="11.5" r="1.1"/>
+    <svg x="5" y="15" width="38" height="25" overflow="hidden"><g class="ico-scroll">
+      <rect class="f" x="5" y="4" width="19" height="4" rx="1"/><rect class="f o" x="5" y="11" width="28" height="2" rx="1"/>
+      <rect class="f o" x="5" y="15" width="22" height="2" rx="1"/><rect class="a" x="5" y="20" width="12" height="4" rx="1"/>
+      <rect class="f" x="5" y="29" width="28" height="9" rx="1.5"/><rect class="f o" x="5" y="41" width="24" height="2" rx="1"/>
+      <rect class="f" x="5" y="47" width="19" height="4" rx="1"/><rect class="f o" x="5" y="54" width="28" height="2" rx="1"/>
+    </g></svg>
+    <path class="ico-cursor" d="M31 27l9 3.5-4 1.4-1.4 4z"/>
+  </svg></span>Webs</a></li><li><a href="/servicios/automatizaciones"><span class="mobile-menu__ico"><svg class="ico ico--auto" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M7 32H41"/><path class="ico-progress" d="M7 32H41"/>
+    <circle class="ico-node n1" cx="7" cy="32" r="3.6"/><circle class="ico-node n2" cx="18.3" cy="32" r="3.6"/>
+    <circle class="ico-node n3" cx="29.6" cy="32" r="3.6"/><circle class="ico-node n4" cx="41" cy="32" r="3.6"/>
+    <g class="ico-task"><rect class="a" x="1" y="12" width="12" height="9" rx="2.5"/><path class="ico-check" d="M4 16.6l2 2 3.6-3.8"/></g>
+  </svg></span>Automatizaciones</a></li><li><a href="/servicios/integraciones"><span class="mobile-menu__ico"><svg class="ico ico--integ" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M13 12C20 12 18 24 24 24M13 36C20 36 18 24 24 24M24 24C30 24 28 12 35 12M24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow" d="M13 12C20 12 18 24 24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow f2" d="M13 36C20 36 18 24 24 24C30 24 28 12 35 12"/>
+    <rect class="s" x="4" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="4" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="s" x="35" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="35" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="ico-hub" x="19" y="19" width="10" height="10" rx="3"/>
+  </svg></span>Integraciones</a></li><li><a href="/servicios/identidad-digital"><span class="mobile-menu__ico"><svg class="ico ico--ident" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s o" x="5" y="5" width="38" height="38" rx="5"/>
+    <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
+    <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
+  </svg></span>Identidad digital</a></li></ul>
       </li>
       <li><a href="/proyectos">Proyectos</a></li>
       <li><a href="/contacto">Hablemos</a></li>
     </ul>
   </nav>
-  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas.</p><p style="margin-top:10px"><a href="mailto:somoskroma@gmail.com">somoskroma@gmail.com</a> · <a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">@_kromalabs</a></p></div>
+  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas<span class="pt">.</span></p><p style="margin-top:10px"><a href="mailto:somoskroma@gmail.com">somoskroma@gmail.com</a> · <a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">@_kromalabs</a></p></div>
 </div>
 <main id="contenido" tabindex="-1">
 
 <section class="page-hero theme-blue" data-theme="blue" aria-labelledby="t">
-  <div class="deco-blob" data-drift="70" style="width:40vw;aspect-ratio:1;left:-14vw;top:-10vw;color:var(--blue-deep)"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M40 2C50.3 0.3 66.3 3.0 76.0 8.0C85.7 13.0 95.3 22.7 98.0 32.0C100.7 41.3 96.7 54.3 92.0 64.0C87.3 73.7 79.0 84.3 70.0 90.0C61.0 95.7 48.0 99.7 38.0 98.0C28.0 96.3 16.0 88.3 10.0 80.0C4.0 71.7 1.3 58.3 2.0 48.0C2.7 37.7 7.7 25.7 14.0 18.0C20.3 10.3 29.7 3.7 40.0 2.0Z" fill="currentColor"/></svg></div>
+  <div class="live svc-hero__live svc-hero__live--onblue" style="color:var(--black)" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path data-live='{"pts":[[44,2],[80,12],[98,40],[86,74],[56,98],[22,90],[4,62],[12,26]],"amp":7,"open":false}' fill="currentColor" d="M44 2C55.3 -0.3 71.0 5.7 80.0 12.0C89.0 18.3 97.0 29.7 98.0 40.0C99.0 50.3 93.0 64.3 86.0 74.0C79.0 83.7 66.7 95.3 56.0 98.0C45.3 100.7 30.7 96.0 22.0 90.0C13.3 84.0 5.7 72.7 4.0 62.0C2.3 51.3 5.3 36.0 12.0 26.0C18.7 16.0 32.7 4.3 44.0 2.0Z"/></svg></div>
   <div class="wrap page-hero__grid">
     <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/servicios">Servicios</a></li><li aria-current="page">01 Webs</li></ol></nav>
-    <h1 id="t" class="lines h1 svc-hero__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">Una web que</span></span><span class="ln"><span style="--i:1;--base:0ms">trabaja para</span></span><span class="ln"><span style="--i:2;--base:0ms">tu negocio<span class="pn">.</span></span></span></h1>
+    <h1 id="t" class="lines h1 svc-hero__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">Una web que</span></span><span class="ln"><span style="--i:1;--base:0ms">trabaja para</span></span><span class="ln"><span style="--i:2;--base:0ms">tu negocio<span class="pt">.</span></span></span></h1>
     <div class="page-hero__aside svc-hero__aside" data-reveal="rise" style="--delay:380ms">
-      <p class="lead">Diseñamos y desarrollamos sitios claros, rápidos y fáciles de actualizar, pensados para que tus clientes entiendan qué hacés y cómo contactarte.</p>
+      <p class="lead">Diseñamos y desarrollamos sitios claros<span class="pt">,</span> rápidos y fáciles de actualizar<span class="pt">,</span> pensados para que tus clientes entiendan qué hacés y cómo contactarte<span class="pt">.</span></p>
       <a class="btn " href="/contacto?servicio=webs">Consultar por webs <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
@@ -114,59 +191,59 @@
 <section class="section section--tight theme-ivory" data-theme="ivory" aria-labelledby="problema">
   <div class="wrap problem">
     <h2 id="problema" class="eyebrow problem__label" style="font-weight:400;letter-spacing:.08em;line-height:1.4">Qué resuelve</h2>
-    <p class="problem__text" data-reveal="clip">Muchas webs se ven bien pero no ayudan: <em>la información queda desactualizada</em>, cargan lento en el celular o nadie sabe cómo cambiar un texto.</p>
+    <p class="problem__text" data-reveal="clip">Muchas webs se ven bien pero no ayudan<span class="pt">:</span> <em>la información queda desactualizada</em><span class="pt">,</span> cargan lento en el celular o nadie sabe cómo cambiar un texto<span class="pt">.</span></p>
   </div>
 </section>
 
 <section class="section theme-ivory" data-theme="ivory" aria-labelledby="incluye">
   <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow" data-reveal="fade">Qué incluye</p><h2 id="incluye" style="margin-top:20px" class="lines h2" data-lines><span class="ln"><span style="--i:0;--base:0ms">Lo que</span></span><span class="ln"><span style="--i:1;--base:0ms">hacemos<span class="pn">.</span></span></span></h2></div></div>
+    <div class="sec-head"><div><p class="eyebrow" data-reveal="fade">Qué incluye</p><h2 id="incluye" style="margin-top:20px" class="lines h2" data-lines><span class="ln"><span style="--i:0;--base:0ms">Lo que</span></span><span class="ln"><span style="--i:1;--base:0ms">hacemos<span class="pt">.</span></span></span></h2></div></div>
     <ul class="includes">
-      <li data-reveal="rise" style="--delay:0ms"><span class="num accent">01</span><h3>Estrategia y contenidos</h3><p class="muted">Ordenamos qué decir, en qué orden y para quién, antes de diseñar.</p></li>
-      <li data-reveal="rise" style="--delay:100ms"><span class="num accent">02</span><h3>Diseño a medida</h3><p class="muted">Una propuesta visual coherente con tu marca, sin plantillas genéricas.</p></li>
-      <li data-reveal="rise" style="--delay:0ms"><span class="num accent">03</span><h3>Desarrollo responsive</h3><p class="muted">Funciona bien en celular, tablet y computadora, con atención a la velocidad y al posicionamiento básico.</p></li>
-      <li data-reveal="rise" style="--delay:100ms"><span class="num accent">04</span><h3>Publicación y autogestión</h3><p class="muted">Dejamos el sitio publicado, con dominio configurado y una forma simple de editar lo esencial.</p></li>
+      <li data-reveal="rise" style="--delay:0ms"><span class="num accent">01</span><h3>Estrategia y contenidos</h3><p class="muted">Ordenamos qué decir<span class="pt">,</span> en qué orden y para quién<span class="pt">,</span> antes de diseñar<span class="pt">.</span></p></li>
+      <li data-reveal="rise" style="--delay:100ms"><span class="num accent">02</span><h3>Diseño a medida</h3><p class="muted">Una propuesta visual coherente con tu marca<span class="pt">,</span> sin plantillas genéricas<span class="pt">.</span></p></li>
+      <li data-reveal="rise" style="--delay:0ms"><span class="num accent">03</span><h3>Desarrollo responsive</h3><p class="muted">Funciona bien en celular<span class="pt">,</span> tablet y computadora<span class="pt">,</span> con atención a la velocidad y al posicionamiento básico<span class="pt">.</span></p></li>
+      <li data-reveal="rise" style="--delay:100ms"><span class="num accent">04</span><h3>Publicación y autogestión</h3><p class="muted">Dejamos el sitio publicado<span class="pt">,</span> con dominio configurado y una forma simple de editar lo esencial<span class="pt">.</span></p></li>
     </ul>
   </div>
 </section>
 <section class="section theme-ivory" data-theme="ivory" aria-labelledby="ejemplos" style="padding-top:0">
   <div class="wrap split">
-    <div class="split__head split__head--sticky"><p class="eyebrow" data-reveal="fade">Ejemplos de aplicación</p><h2 id="ejemplos" class="h3" style="margin-top:20px" data-reveal="rise">Situaciones en las que suele aplicarse<span class="pn">.</span></h2></div>
+    <div class="split__head split__head--sticky"><p class="eyebrow" data-reveal="fade">Ejemplos de aplicación</p><h2 id="ejemplos" class="h3" style="margin-top:20px" data-reveal="rise">Situaciones en las que suele aplicarse<span class="pt">.</span></h2></div>
     <ol class="split__body examples">
-      <li data-reveal="fade"><strong>Sitio institucional</strong><p class="muted">Para un estudio o empresa de servicios que necesita explicar qué hace y recibir consultas ordenadas.</p></li>
-      <li data-reveal="fade"><strong>Landing de campaña</strong><p class="muted">Una página enfocada para lanzar un servicio, un producto o una convocatoria.</p></li>
-      <li data-reveal="fade"><strong>Catálogo con consulta</strong><p class="muted">Productos presentados con claridad y un canal directo para pedir información.</p></li>
-      <li data-reveal="fade"><strong>Rediseño</strong><p class="muted">Una web existente que ya no se puede mantener, migrada a una base simple.</p></li>
+      <li data-reveal="fade"><strong>Sitio institucional</strong><p class="muted">Para un estudio o empresa de servicios que necesita explicar qué hace y recibir consultas ordenadas<span class="pt">.</span></p></li>
+      <li data-reveal="fade"><strong>Landing de campaña</strong><p class="muted">Una página enfocada para lanzar un servicio<span class="pt">,</span> un producto o una convocatoria<span class="pt">.</span></p></li>
+      <li data-reveal="fade"><strong>Catálogo con consulta</strong><p class="muted">Productos presentados con claridad y un canal directo para pedir información<span class="pt">.</span></p></li>
+      <li data-reveal="fade"><strong>Rediseño</strong><p class="muted">Una web existente que ya no se puede mantener<span class="pt">,</span> migrada a una base simple<span class="pt">.</span></p></li>
     </ol>
   </div>
 </section>
 <section class="section theme-blue" data-theme="blue" aria-labelledby="como">
   <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow" data-reveal="fade">Cómo trabajamos</p><h2 id="como" style="margin-top:20px" class="lines h2" data-lines><span class="ln"><span style="--i:0;--base:0ms">Paso</span></span><span class="ln"><span style="--i:1;--base:0ms">a paso<span class="pn">.</span></span></span></h2></div><a class="link-arrow" href="/nosotros">Nuestro proceso <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="sec-head"><div><p class="eyebrow" data-reveal="fade">Cómo trabajamos</p><h2 id="como" style="margin-top:20px" class="lines h2" data-lines><span class="ln"><span style="--i:0;--base:0ms">Paso</span></span><span class="ln"><span style="--i:1;--base:0ms">a paso<span class="pt">.</span></span></span></h2></div><a class="link-arrow" href="/nosotros">Nuestro proceso <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
     <ol class="steps-inline">
-      <li data-reveal="rise" style="--delay:0ms"><span class="num">01</span><h3>Relevamiento</h3><p class="muted">Objetivos, público y contenidos disponibles.</p></li>
-      <li data-reveal="rise" style="--delay:110ms"><span class="num">02</span><h3>Estructura y diseño</h3><p class="muted">Mapa del sitio y diseño de las páginas clave.</p></li>
-      <li data-reveal="rise" style="--delay:220ms"><span class="num">03</span><h3>Desarrollo</h3><p class="muted">Construcción, pruebas en dispositivos y ajustes.</p></li>
-      <li data-reveal="rise" style="--delay:330ms"><span class="num">04</span><h3>Publicación</h3><p class="muted">Dominio, puesta en línea y guía de uso.</p></li>
+      <li data-reveal="rise" style="--delay:0ms"><span class="num">01</span><h3>Relevamiento</h3><p class="muted">Objetivos<span class="pt">,</span> público y contenidos disponibles<span class="pt">.</span></p></li>
+      <li data-reveal="rise" style="--delay:110ms"><span class="num">02</span><h3>Estructura y diseño</h3><p class="muted">Mapa del sitio y diseño de las páginas clave<span class="pt">.</span></p></li>
+      <li data-reveal="rise" style="--delay:220ms"><span class="num">03</span><h3>Desarrollo</h3><p class="muted">Construcción<span class="pt">,</span> pruebas en dispositivos y ajustes<span class="pt">.</span></p></li>
+      <li data-reveal="rise" style="--delay:330ms"><span class="num">04</span><h3>Publicación</h3><p class="muted">Dominio<span class="pt">,</span> puesta en línea y guía de uso<span class="pt">.</span></p></li>
     </ol>
   </div>
 </section>
 <section class="section theme-ivory" data-theme="ivory" aria-labelledby="faq">
   <div class="wrap split">
-    <div class="split__head"><p class="eyebrow" data-reveal="fade">Preguntas frecuentes</p><h2 id="faq" class="h2" style="margin-top:20px" data-reveal="rise">Dudas habituales<span class="pn">.</span></h2></div>
+    <div class="split__head"><p class="eyebrow" data-reveal="fade">Preguntas frecuentes</p><h2 id="faq" class="h2" style="margin-top:20px" data-reveal="rise">Dudas habituales<span class="pt">.</span></h2></div>
     <div class="split__body faq">
-      <details><summary>¿Puedo actualizar la web yo mismo?<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">Sí. Definimos juntos qué partes vas a querer editar y elegimos una solución que lo permita sin conocimientos técnicos.</p></div></details>
-      <details><summary>¿Cuánto demora?<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">Depende del alcance. Lo estimamos después de la primera conversación, con etapas y fechas concretas.</p></div></details>
-      <details><summary>¿Se encargan del dominio y el hosting?<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">Te ayudamos a elegirlos y configurarlos. Quedan a nombre de tu empresa.</p></div></details>
-      <details><summary>Ya tengo una web, ¿hay que hacerla de cero?<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">No necesariamente. La revisamos y te decimos qué conviene: mejorarla, migrarla o rehacerla.</p></div></details>
+      <details><summary>¿Puedo actualizar la web yo mismo?<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">Sí<span class="pt">.</span> Definimos juntos qué partes vas a querer editar y elegimos una solución que lo permita sin conocimientos técnicos<span class="pt">.</span></p></div></details>
+      <details><summary>¿Cuánto demora?<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">Depende del alcance<span class="pt">.</span> Lo estimamos después de la primera conversación<span class="pt">,</span> con etapas y fechas concretas<span class="pt">.</span></p></div></details>
+      <details><summary>¿Se encargan del dominio y el hosting?<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">Te ayudamos a elegirlos y configurarlos<span class="pt">.</span> Quedan a nombre de tu empresa<span class="pt">.</span></p></div></details>
+      <details><summary>Ya tengo una web, ¿hay que hacerla de cero?<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">No necesariamente<span class="pt">.</span> La revisamos y te decimos qué conviene<span class="pt">:</span> mejorarla<span class="pt">,</span> migrarla o rehacerla<span class="pt">.</span></p></div></details>
     </div>
   </div>
 </section>
 <section class="section closing theme-black" data-theme="black" aria-labelledby="cierre-titulo">
   <div class="wrap closing__inner">
-    <h2 id="cierre-titulo" class="lines h1 closing__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">Hablemos de</span></span><span class="ln"><span style="--i:1;--base:0ms">webs<span class="pn">.</span></span></span></h2>
+    <h2 id="cierre-titulo" class="lines h1 closing__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">Hablemos de</span></span><span class="ln"><span style="--i:1;--base:0ms">webs<span class="pt">.</span></span></span></h2>
     <div class="closing__side" data-reveal="rise" style="--delay:200ms">
-      <p class="lead">Contanos qué necesitás y te decimos cómo lo encararíamos. ¿Te interesa otro frente? Seguí por <a href="/servicios/automatizaciones">Automatizaciones</a>.</p>
+      <p class="lead">Contanos qué necesitás y te decimos cómo lo encararíamos<span class="pt">.</span> ¿Te interesa otro frente<span class="pt">?</span> Seguí por <a href="/servicios/automatizaciones">Automatizaciones</a><span class="pt">.</span></p>
       <a class="btn btn--ivory" href="/contacto?servicio=webs">Hablemos <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
@@ -179,7 +256,7 @@
     <div class="footer__top">
       <div class="footer__brand">
         <a class="brand" href="/" aria-label="KROMA — Inicio"><svg class="brand__mark" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg><span class="brand__word" aria-hidden="true">kroma</span></a>
-        <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
+        <p>Consultoría tecnológica para empresas<span class="pt">.</span> Te ayudamos a elegir herramientas y aprovecharlas bien<span class="pt">.</span></p>
       </div>
       <div class="footer__col">
         <h2>Sitio</h2>

@@ -19,7 +19,7 @@
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/jakarta.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/figtree-900.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/main.css">
 <script>(function(d){var h=d.documentElement;h.classList.add("js");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("js","is-entering")},3000)})(document);</script>
 <script src="/assets/js/main.js" defer></script>
@@ -34,6 +34,7 @@
     <a class="brand" href="/" aria-label="KROMA — Inicio"><span class="brand__word" aria-hidden="true">kroma</span></a>
     <nav class="nav" aria-label="Principal">
       <ul class="nav__list">
+        <li class="nav__pill-ind" aria-hidden="true"></li>
         <li><a class="nav__link" href="/">Inicio</a></li>
         <li><a class="nav__link" href="/nosotros">Nosotros</a></li>
         <li class="nav__item--sub">
@@ -41,9 +42,59 @@
             <a class="nav__link" href="/servicios">Servicios</a>
             <button class="nav__subtoggle" type="button" aria-expanded="false" aria-controls="sub-servicios" aria-label="Mostrar servicios"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
           </div>
-          <ul class="nav__sub" id="sub-servicios">
-            <li><a href="/servicios/webs">Webs<span>01</span></a></li><li><a href="/servicios/automatizaciones">Automatizaciones<span>02</span></a></li><li><a href="/servicios/integraciones">Integraciones<span>03</span></a></li><li><a href="/servicios/identidad-digital">Identidad digital<span>04</span></a></li>
-          </ul>
+          <div class="nav__sub mega" id="sub-servicios">
+            <ul class="mega__grid">
+              <li style="--i:0"><a class="mega__tile" href="/servicios/webs">
+                <span class="mega__ico"><svg class="ico ico--webs" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s" x="5" y="8" width="38" height="32" rx="4"/><path class="s" d="M5 15h38"/>
+    <circle class="f" cx="9.5" cy="11.5" r="1.1"/><circle class="f o" cx="13.2" cy="11.5" r="1.1"/>
+    <svg x="5" y="15" width="38" height="25" overflow="hidden"><g class="ico-scroll">
+      <rect class="f" x="5" y="4" width="19" height="4" rx="1"/><rect class="f o" x="5" y="11" width="28" height="2" rx="1"/>
+      <rect class="f o" x="5" y="15" width="22" height="2" rx="1"/><rect class="a" x="5" y="20" width="12" height="4" rx="1"/>
+      <rect class="f" x="5" y="29" width="28" height="9" rx="1.5"/><rect class="f o" x="5" y="41" width="24" height="2" rx="1"/>
+      <rect class="f" x="5" y="47" width="19" height="4" rx="1"/><rect class="f o" x="5" y="54" width="28" height="2" rx="1"/>
+    </g></svg>
+    <path class="ico-cursor" d="M31 27l9 3.5-4 1.4-1.4 4z"/>
+  </svg></span>
+                <span class="mega__txt"><span class="mega__num">01</span><span class="mega__name">Webs</span><span class="mega__desc">Sitios a medida, rápidos y pensados para convertir.</span></span>
+                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a></li><li style="--i:1"><a class="mega__tile" href="/servicios/automatizaciones">
+                <span class="mega__ico"><svg class="ico ico--auto" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M7 32H41"/><path class="ico-progress" d="M7 32H41"/>
+    <circle class="ico-node n1" cx="7" cy="32" r="3.6"/><circle class="ico-node n2" cx="18.3" cy="32" r="3.6"/>
+    <circle class="ico-node n3" cx="29.6" cy="32" r="3.6"/><circle class="ico-node n4" cx="41" cy="32" r="3.6"/>
+    <g class="ico-task"><rect class="a" x="1" y="12" width="12" height="9" rx="2.5"/><path class="ico-check" d="M4 16.6l2 2 3.6-3.8"/></g>
+  </svg></span>
+                <span class="mega__txt"><span class="mega__num">02</span><span class="mega__name">Automatizaciones</span><span class="mega__desc">Menos trabajo manual. Más tiempo para lo importante.</span></span>
+                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a></li><li style="--i:2"><a class="mega__tile" href="/servicios/integraciones">
+                <span class="mega__ico"><svg class="ico ico--integ" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M13 12C20 12 18 24 24 24M13 36C20 36 18 24 24 24M24 24C30 24 28 12 35 12M24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow" d="M13 12C20 12 18 24 24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow f2" d="M13 36C20 36 18 24 24 24C30 24 28 12 35 12"/>
+    <rect class="s" x="4" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="4" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="s" x="35" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="35" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="ico-hub" x="19" y="19" width="10" height="10" rx="3"/>
+  </svg></span>
+                <span class="mega__txt"><span class="mega__num">03</span><span class="mega__name">Integraciones</span><span class="mega__desc">Conectamos tus herramientas para que todo fluya.</span></span>
+                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a></li><li style="--i:3"><a class="mega__tile" href="/servicios/identidad-digital">
+                <span class="mega__ico"><svg class="ico ico--ident" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s o" x="5" y="5" width="38" height="38" rx="5"/>
+    <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
+    <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
+  </svg></span>
+                <span class="mega__txt"><span class="mega__num">04</span><span class="mega__name">Identidad digital</span><span class="mega__desc">Una presencia digital sólida y coherente con tu negocio.</span></span>
+                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a></li>
+            </ul>
+            <div class="mega__side">
+              <span class="mega__label">Servicios · 04</span>
+              <p>Elegimos la herramienta según tu operación<span class="pt">,</span> no al revés<span class="pt">.</span></p>
+              <a class="mega__all" href="/servicios">Ver todos los servicios <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              <a class="mega__cta" href="/contacto?servicio=no-se">¿No sabés por dónde empezar? <strong>Hablemos</strong></a>
+            </div>
+          </div>
         </li>
         <li><a class="nav__link" href="/proyectos" aria-current="page">Proyectos</a></li>
       </ul>
@@ -58,93 +109,182 @@
       <li><a href="/">Inicio</a></li>
       <li><a href="/nosotros">Nosotros</a></li>
       <li><a href="/servicios">Servicios</a>
-        <ul class="mobile-menu__sub"><li><a href="/servicios/webs">01 — Webs</a></li><li><a href="/servicios/automatizaciones">02 — Automatizaciones</a></li><li><a href="/servicios/integraciones">03 — Integraciones</a></li><li><a href="/servicios/identidad-digital">04 — Identidad digital</a></li></ul>
+        <ul class="mobile-menu__sub"><li><a href="/servicios/webs"><span class="mobile-menu__ico"><svg class="ico ico--webs" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s" x="5" y="8" width="38" height="32" rx="4"/><path class="s" d="M5 15h38"/>
+    <circle class="f" cx="9.5" cy="11.5" r="1.1"/><circle class="f o" cx="13.2" cy="11.5" r="1.1"/>
+    <svg x="5" y="15" width="38" height="25" overflow="hidden"><g class="ico-scroll">
+      <rect class="f" x="5" y="4" width="19" height="4" rx="1"/><rect class="f o" x="5" y="11" width="28" height="2" rx="1"/>
+      <rect class="f o" x="5" y="15" width="22" height="2" rx="1"/><rect class="a" x="5" y="20" width="12" height="4" rx="1"/>
+      <rect class="f" x="5" y="29" width="28" height="9" rx="1.5"/><rect class="f o" x="5" y="41" width="24" height="2" rx="1"/>
+      <rect class="f" x="5" y="47" width="19" height="4" rx="1"/><rect class="f o" x="5" y="54" width="28" height="2" rx="1"/>
+    </g></svg>
+    <path class="ico-cursor" d="M31 27l9 3.5-4 1.4-1.4 4z"/>
+  </svg></span>Webs</a></li><li><a href="/servicios/automatizaciones"><span class="mobile-menu__ico"><svg class="ico ico--auto" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M7 32H41"/><path class="ico-progress" d="M7 32H41"/>
+    <circle class="ico-node n1" cx="7" cy="32" r="3.6"/><circle class="ico-node n2" cx="18.3" cy="32" r="3.6"/>
+    <circle class="ico-node n3" cx="29.6" cy="32" r="3.6"/><circle class="ico-node n4" cx="41" cy="32" r="3.6"/>
+    <g class="ico-task"><rect class="a" x="1" y="12" width="12" height="9" rx="2.5"/><path class="ico-check" d="M4 16.6l2 2 3.6-3.8"/></g>
+  </svg></span>Automatizaciones</a></li><li><a href="/servicios/integraciones"><span class="mobile-menu__ico"><svg class="ico ico--integ" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M13 12C20 12 18 24 24 24M13 36C20 36 18 24 24 24M24 24C30 24 28 12 35 12M24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow" d="M13 12C20 12 18 24 24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow f2" d="M13 36C20 36 18 24 24 24C30 24 28 12 35 12"/>
+    <rect class="s" x="4" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="4" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="s" x="35" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="35" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="ico-hub" x="19" y="19" width="10" height="10" rx="3"/>
+  </svg></span>Integraciones</a></li><li><a href="/servicios/identidad-digital"><span class="mobile-menu__ico"><svg class="ico ico--ident" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s o" x="5" y="5" width="38" height="38" rx="5"/>
+    <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
+    <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
+  </svg></span>Identidad digital</a></li></ul>
       </li>
       <li><a href="/proyectos" aria-current="page">Proyectos</a></li>
       <li><a href="/contacto">Hablemos</a></li>
     </ul>
   </nav>
-  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas.</p><p style="margin-top:10px"><a href="mailto:somoskroma@gmail.com">somoskroma@gmail.com</a> · <a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">@_kromalabs</a></p></div>
+  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas<span class="pt">.</span></p><p style="margin-top:10px"><a href="mailto:somoskroma@gmail.com">somoskroma@gmail.com</a> · <a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">@_kromalabs</a></p></div>
 </div>
 <main id="contenido" tabindex="-1">
 
 <section class="page-hero theme-black" data-theme="black" aria-labelledby="t">
+  <div class="live proj-hero__live" style="color:var(--blue)" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path data-live='{"pts":[[50,4],[78,10],[96,34],[92,64],[72,90],[42,97],[14,82],[3,52],[16,20]],"amp":7,"open":false}' fill="currentColor" d="M50 4C60.3 2.3 70.3 5.0 78.0 10.0C85.7 15.0 93.7 25.0 96.0 34.0C98.3 43.0 96.0 54.7 92.0 64.0C88.0 73.3 80.3 84.5 72.0 90.0C63.7 95.5 51.7 98.3 42.0 97.0C32.3 95.7 20.5 89.5 14.0 82.0C7.5 74.5 2.7 62.3 3.0 52.0C3.3 41.7 8.2 28.0 16.0 20.0C23.8 12.0 39.7 5.7 50.0 4.0Z"/></svg></div>
   <div class="wrap page-hero__grid">
     <p class="eyebrow page-hero__eyebrow" data-reveal="fade">Proyectos</p>
-    <h1 id="t" class="lines display page-hero__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">Casos</span></span><span class="ln"><span style="--i:1;--base:0ms">de ejemplo<span class="pn">.</span></span></span></h1>
+    <h1 id="t" class="lines display page-hero__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">Casos</span></span><span class="ln"><span style="--i:1;--base:0ms">de ejemplo<span class="pt">.</span></span></span></h1>
     <div class="page-hero__aside" data-reveal="rise" style="--delay:300ms">
       <span class="tag-concept">Conceptos</span>
-      <p class="muted">Estos proyectos son conceptos: muestran cómo abordaríamos necesidades frecuentes. No corresponden a clientes reales y no presentan resultados.</p>
+      <p class="muted">Estos proyectos son conceptos<span class="pt">:</span> muestran cómo abordaríamos necesidades frecuentes<span class="pt">.</span> No corresponden a clientes reales y no presentan resultados<span class="pt">.</span></p>
     </div>
   </div>
 </section>
-<section class="section theme-black" data-theme="black" aria-label="Lista de proyectos" style="padding-top:0">
+<section class="section theme-black stack-section" data-theme="black" aria-label="Lista de proyectos" style="padding-top:0">
   <div class="wrap">
-    <div class="proj-grid">
-      <article class="proj proj--a" data-reveal="rise" style="--delay:0ms">
-  <a class="proj__link" href="/proyectos/web-estudio-profesional">
-    <div class="proj__media">
-      <div class="proj__para" data-parallax="0.07">
-        <picture><source srcset="/assets/img/arq-esquina-900.webp 900w, /assets/img/arq-esquina.webp 1536w" sizes="(max-width: 920px) 100vw, 60vw" type="image/webp"><img src="/assets/img/arq-esquina.jpg" srcset="/assets/img/arq-esquina-900.jpg 900w, /assets/img/arq-esquina.jpg 1536w" sizes="(max-width: 920px) 100vw, 60vw" alt="" width="1536" height="1024" fetchpriority="high" decoding="async"></picture>
-      </div>
-      <span class="proj__cta">Ver caso <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <div class="pfilter" role="group" aria-label="Filtrar por servicio" data-reveal="fade">
+      <button type="button" class="pfilter__chip" aria-pressed="true" data-filter="all">Todos <span>04</span></button>
+      <button type="button" class="pfilter__chip" aria-pressed="false" data-filter="webs"><span class="pfilter__ico"><svg class="ico ico--webs" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s" x="5" y="8" width="38" height="32" rx="4"/><path class="s" d="M5 15h38"/>
+    <circle class="f" cx="9.5" cy="11.5" r="1.1"/><circle class="f o" cx="13.2" cy="11.5" r="1.1"/>
+    <svg x="5" y="15" width="38" height="25" overflow="hidden"><g class="ico-scroll">
+      <rect class="f" x="5" y="4" width="19" height="4" rx="1"/><rect class="f o" x="5" y="11" width="28" height="2" rx="1"/>
+      <rect class="f o" x="5" y="15" width="22" height="2" rx="1"/><rect class="a" x="5" y="20" width="12" height="4" rx="1"/>
+      <rect class="f" x="5" y="29" width="28" height="9" rx="1.5"/><rect class="f o" x="5" y="41" width="24" height="2" rx="1"/>
+      <rect class="f" x="5" y="47" width="19" height="4" rx="1"/><rect class="f o" x="5" y="54" width="28" height="2" rx="1"/>
+    </g></svg>
+    <path class="ico-cursor" d="M31 27l9 3.5-4 1.4-1.4 4z"/>
+  </svg></span>Webs <span>01</span></button><button type="button" class="pfilter__chip" aria-pressed="false" data-filter="automatizaciones"><span class="pfilter__ico"><svg class="ico ico--auto" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M7 32H41"/><path class="ico-progress" d="M7 32H41"/>
+    <circle class="ico-node n1" cx="7" cy="32" r="3.6"/><circle class="ico-node n2" cx="18.3" cy="32" r="3.6"/>
+    <circle class="ico-node n3" cx="29.6" cy="32" r="3.6"/><circle class="ico-node n4" cx="41" cy="32" r="3.6"/>
+    <g class="ico-task"><rect class="a" x="1" y="12" width="12" height="9" rx="2.5"/><path class="ico-check" d="M4 16.6l2 2 3.6-3.8"/></g>
+  </svg></span>Automatizaciones <span>01</span></button><button type="button" class="pfilter__chip" aria-pressed="false" data-filter="integraciones"><span class="pfilter__ico"><svg class="ico ico--integ" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M13 12C20 12 18 24 24 24M13 36C20 36 18 24 24 24M24 24C30 24 28 12 35 12M24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow" d="M13 12C20 12 18 24 24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow f2" d="M13 36C20 36 18 24 24 24C30 24 28 12 35 12"/>
+    <rect class="s" x="4" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="4" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="s" x="35" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="35" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="ico-hub" x="19" y="19" width="10" height="10" rx="3"/>
+  </svg></span>Integraciones <span>01</span></button><button type="button" class="pfilter__chip" aria-pressed="false" data-filter="identidad-digital"><span class="pfilter__ico"><svg class="ico ico--ident" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s o" x="5" y="5" width="38" height="38" rx="5"/>
+    <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
+    <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
+  </svg></span>Identidad digital <span>01</span></button>
+      <p class="pfilter__status num" aria-live="polite"><span data-count>04</span> conceptos</p>
     </div>
-    <div class="proj__info">
-      <h2 class="proj__title">Web para un estudio profesional</h2>
-      <span class="proj__kind">Concepto · Webs</span>
-    </div>
-  </a>
-</article>
-      <article class="proj proj--b" data-reveal="rise" style="--delay:80ms">
-  <a class="proj__link" href="/proyectos/automatizacion-pedidos">
-    <div class="proj__media">
-      <div class="proj__para" data-parallax="0.07">
-        <picture><source srcset="/assets/img/arq-escalera-900.webp 900w, /assets/img/arq-escalera.webp 1536w" sizes="(max-width: 920px) 100vw, 60vw" type="image/webp"><img src="/assets/img/arq-escalera.jpg" srcset="/assets/img/arq-escalera-900.jpg 900w, /assets/img/arq-escalera.jpg 1536w" sizes="(max-width: 920px) 100vw, 60vw" alt="" width="1536" height="1024" loading="lazy" decoding="async"></picture>
-      </div>
-      <span class="proj__cta">Ver caso <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    </div>
-    <div class="proj__info">
-      <h2 class="proj__title">Automatización de pedidos para una distribuidora</h2>
-      <span class="proj__kind">Concepto · Automatizaciones</span>
-    </div>
-  </a>
-</article>
-      <article class="proj proj--c" data-reveal="rise" style="--delay:0ms">
-  <a class="proj__link" href="/proyectos/integracion-tienda-stock">
-    <div class="proj__media">
-      <div class="proj__para" data-parallax="0.07">
-        <picture><source srcset="/assets/img/arq-voladizo-900.webp 900w, /assets/img/arq-voladizo.webp 1536w" sizes="(max-width: 920px) 100vw, 60vw" type="image/webp"><img src="/assets/img/arq-voladizo.jpg" srcset="/assets/img/arq-voladizo-900.jpg 900w, /assets/img/arq-voladizo.jpg 1536w" sizes="(max-width: 920px) 100vw, 60vw" alt="" width="1536" height="1024" loading="lazy" decoding="async"></picture>
-      </div>
-      <span class="proj__cta">Ver caso <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    </div>
-    <div class="proj__info">
-      <h2 class="proj__title">Integración entre tienda online y stock</h2>
-      <span class="proj__kind">Concepto · Integraciones</span>
-    </div>
-  </a>
-</article>
-      <article class="proj proj--d" data-reveal="rise" style="--delay:80ms">
-  <a class="proj__link" href="/proyectos/identidad-cafeteria">
-    <div class="proj__media">
-      <div class="proj__para" data-parallax="0.07">
-        <picture><source srcset="/assets/img/arq-curva-900.webp 900w, /assets/img/arq-curva.webp 1536w" sizes="(max-width: 920px) 100vw, 60vw" type="image/webp"><img src="/assets/img/arq-curva.jpg" srcset="/assets/img/arq-curva-900.jpg 900w, /assets/img/arq-curva.jpg 1536w" sizes="(max-width: 920px) 100vw, 60vw" alt="" width="1536" height="1024" loading="lazy" decoding="async"></picture>
-      </div>
-      <span class="proj__cta">Ver caso <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    </div>
-    <div class="proj__info">
-      <h2 class="proj__title">Identidad digital para una cafetería de barrio</h2>
-      <span class="proj__kind">Concepto · Identidad digital</span>
-    </div>
-  </a>
-</article>
-    </div>
+    <ol class="stack">
+      <li class="stack__item" data-service="webs" style="--i:0">
+        <article class="pcard pcard--blue" aria-labelledby="pc-0">
+          <div class="pcard__media">
+            <div class="pcard__para"><picture><source srcset="/assets/img/arq-esquina-900.webp 900w, /assets/img/arq-esquina.webp 1536w" sizes="(max-width: 920px) 100vw, 56vw" type="image/webp"><img src="/assets/img/arq-esquina.jpg" srcset="/assets/img/arq-esquina-900.jpg 900w, /assets/img/arq-esquina.jpg 1536w" sizes="(max-width: 920px) 100vw, 56vw" alt="" width="1536" height="1024" fetchpriority="high" decoding="async"></picture></div>
+            <span class="pcard__index" aria-hidden="true">01<small>/04</small></span>
+          </div>
+          <div class="pcard__body">
+            <div class="pcard__meta"><span class="tag-concept">Concepto</span><span class="pcard__svc"><span class="pcard__svc-ico"><svg class="ico ico--webs" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s" x="5" y="8" width="38" height="32" rx="4"/><path class="s" d="M5 15h38"/>
+    <circle class="f" cx="9.5" cy="11.5" r="1.1"/><circle class="f o" cx="13.2" cy="11.5" r="1.1"/>
+    <svg x="5" y="15" width="38" height="25" overflow="hidden"><g class="ico-scroll">
+      <rect class="f" x="5" y="4" width="19" height="4" rx="1"/><rect class="f o" x="5" y="11" width="28" height="2" rx="1"/>
+      <rect class="f o" x="5" y="15" width="22" height="2" rx="1"/><rect class="a" x="5" y="20" width="12" height="4" rx="1"/>
+      <rect class="f" x="5" y="29" width="28" height="9" rx="1.5"/><rect class="f o" x="5" y="41" width="24" height="2" rx="1"/>
+      <rect class="f" x="5" y="47" width="19" height="4" rx="1"/><rect class="f o" x="5" y="54" width="28" height="2" rx="1"/>
+    </g></svg>
+    <path class="ico-cursor" d="M31 27l9 3.5-4 1.4-1.4 4z"/>
+  </svg></span>Webs</span></div>
+            <h2 class="pcard__title" id="pc-0">Web para un estudio profesional</h2>
+            <p class="pcard__need">Las consultas llegan por teléfono y suelen repetirse<span class="pt">:</span> horarios<span class="pt">,</span> documentación necesaria<span class="pt">,</span> servicios<span class="pt">.</span> El estudio quiere que la web responda lo básico y que los contactos nuevos lleguen con la información ordenada<span class="pt">.</span></p>
+            <p class="sr-only">Entregables<span class="pt">:</span></p><ul class="pcard__deliv"><li>Arquitectura de contenidos</li><li>Diseño responsive de cinco páginas</li><li>Formulario con campos según el tipo de consulta</li><li>Guía breve para actualizar textos</li></ul>
+            <a class="btn pcard__cta" href="/proyectos/web-estudio-profesional">Ver caso<span class="sr-only">: Web para un estudio profesional</span> <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+      </li>
+      <li class="stack__item" data-service="automatizaciones" style="--i:1">
+        <article class="pcard pcard--ivory" aria-labelledby="pc-1">
+          <div class="pcard__media">
+            <div class="pcard__para"><picture><source srcset="/assets/img/arq-escalera-900.webp 900w, /assets/img/arq-escalera.webp 1536w" sizes="(max-width: 920px) 100vw, 56vw" type="image/webp"><img src="/assets/img/arq-escalera.jpg" srcset="/assets/img/arq-escalera-900.jpg 900w, /assets/img/arq-escalera.jpg 1536w" sizes="(max-width: 920px) 100vw, 56vw" alt="" width="1536" height="1024" loading="lazy" decoding="async"></picture></div>
+            <span class="pcard__index" aria-hidden="true">02<small>/04</small></span>
+          </div>
+          <div class="pcard__body">
+            <div class="pcard__meta"><span class="tag-concept">Concepto</span><span class="pcard__svc"><span class="pcard__svc-ico"><svg class="ico ico--auto" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M7 32H41"/><path class="ico-progress" d="M7 32H41"/>
+    <circle class="ico-node n1" cx="7" cy="32" r="3.6"/><circle class="ico-node n2" cx="18.3" cy="32" r="3.6"/>
+    <circle class="ico-node n3" cx="29.6" cy="32" r="3.6"/><circle class="ico-node n4" cx="41" cy="32" r="3.6"/>
+    <g class="ico-task"><rect class="a" x="1" y="12" width="12" height="9" rx="2.5"/><path class="ico-check" d="M4 16.6l2 2 3.6-3.8"/></g>
+  </svg></span>Automatizaciones</span></div>
+            <h2 class="pcard__title" id="pc-1">Automatización de pedidos para una distribuidora</h2>
+            <p class="pcard__need">Reducir el tiempo de carga y los errores de transcripción<span class="pt">,</span> y avisarle al cliente cuando su pedido quedó registrado<span class="pt">.</span></p>
+            <p class="sr-only">Entregables<span class="pt">:</span></p><ul class="pcard__deliv"><li>Mapa del proceso actual y del propuesto</li><li>Formulario de pedido</li><li>Flujo automatizado con avisos</li><li>Documentación y alerta ante errores</li></ul>
+            <a class="btn pcard__cta" href="/proyectos/automatizacion-pedidos">Ver caso<span class="sr-only">: Automatización de pedidos para una distribuidora</span> <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+      </li>
+      <li class="stack__item" data-service="integraciones" style="--i:2">
+        <article class="pcard pcard--ink" aria-labelledby="pc-2">
+          <div class="pcard__media">
+            <div class="pcard__para"><picture><source srcset="/assets/img/arq-voladizo-900.webp 900w, /assets/img/arq-voladizo.webp 1536w" sizes="(max-width: 920px) 100vw, 56vw" type="image/webp"><img src="/assets/img/arq-voladizo.jpg" srcset="/assets/img/arq-voladizo-900.jpg 900w, /assets/img/arq-voladizo.jpg 1536w" sizes="(max-width: 920px) 100vw, 56vw" alt="" width="1536" height="1024" loading="lazy" decoding="async"></picture></div>
+            <span class="pcard__index" aria-hidden="true">03<small>/04</small></span>
+          </div>
+          <div class="pcard__body">
+            <div class="pcard__meta"><span class="tag-concept">Concepto</span><span class="pcard__svc"><span class="pcard__svc-ico"><svg class="ico ico--integ" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M13 12C20 12 18 24 24 24M13 36C20 36 18 24 24 24M24 24C30 24 28 12 35 12M24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow" d="M13 12C20 12 18 24 24 24C30 24 28 36 35 36"/>
+    <path class="ico-flow f2" d="M13 36C20 36 18 24 24 24C30 24 28 12 35 12"/>
+    <rect class="s" x="4" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="4" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="s" x="35" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="35" y="32" width="9" height="9" rx="2.5"/>
+    <rect class="ico-hub" x="19" y="19" width="10" height="10" rx="3"/>
+  </svg></span>Integraciones</span></div>
+            <h2 class="pcard__title" id="pc-2">Integración entre tienda online y stock</h2>
+            <p class="pcard__need">Evitar ventas de productos sin stock y dejar de actualizar cantidades a mano en dos lugares<span class="pt">.</span></p>
+            <p class="sr-only">Entregables<span class="pt">:</span></p><ul class="pcard__deliv"><li>Diagnóstico de ambos sistemas</li><li>Reglas de sincronización</li><li>Integración implementada y probada</li><li>Reporte diario de control</li></ul>
+            <a class="btn pcard__cta" href="/proyectos/integracion-tienda-stock">Ver caso<span class="sr-only">: Integración entre tienda online y stock</span> <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+      </li>
+      <li class="stack__item" data-service="identidad-digital" style="--i:3">
+        <article class="pcard pcard--sand" aria-labelledby="pc-3">
+          <div class="pcard__media">
+            <div class="pcard__para"><picture><source srcset="/assets/img/arq-curva-900.webp 900w, /assets/img/arq-curva.webp 1536w" sizes="(max-width: 920px) 100vw, 56vw" type="image/webp"><img src="/assets/img/arq-curva.jpg" srcset="/assets/img/arq-curva-900.jpg 900w, /assets/img/arq-curva.jpg 1536w" sizes="(max-width: 920px) 100vw, 56vw" alt="" width="1536" height="1024" loading="lazy" decoding="async"></picture></div>
+            <span class="pcard__index" aria-hidden="true">04<small>/04</small></span>
+          </div>
+          <div class="pcard__body">
+            <div class="pcard__meta"><span class="tag-concept">Concepto</span><span class="pcard__svc"><span class="pcard__svc-ico"><svg class="ico ico--ident" viewBox="0 0 48 48" aria-hidden="true">
+    <rect class="s o" x="5" y="5" width="38" height="38" rx="5"/>
+    <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
+    <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
+  </svg></span>Identidad digital</span></div>
+            <h2 class="pcard__title" id="pc-3">Identidad digital para una cafetería de barrio</h2>
+            <p class="pcard__need">Tener una imagen reconocible y poder publicar con frecuencia sin depender de un diseñador para cada pieza<span class="pt">.</span></p>
+            <p class="sr-only">Entregables<span class="pt">:</span></p><ul class="pcard__deliv"><li>Identidad visual actualizada</li><li>Manual de uso breve</li><li>Plantillas editables para redes</li><li>Piezas para cartelería y menú</li></ul>
+            <a class="btn pcard__cta" href="/proyectos/identidad-cafeteria">Ver caso<span class="sr-only">: Identidad digital para una cafetería de barrio</span> <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+      </li>
+    </ol>
+    <p class="pfilter__empty" hidden>No hay conceptos para este servicio todavía<span class="pt">.</span></p>
   </div>
 </section>
 <section class="section closing theme-blue" data-theme="blue" aria-labelledby="cierre-titulo">
   <div class="wrap closing__inner">
-    <h2 id="cierre-titulo" class="lines display closing__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">¿Tu caso</span></span><span class="ln"><span style="--i:1;--base:0ms">es el próximo?</span></span></h2>
+    <h2 id="cierre-titulo" class="lines display closing__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">¿Tu caso</span></span><span class="ln"><span style="--i:1;--base:0ms">es el próximo<span class="pt">?</span></span></span></h2>
     <div class="closing__side" data-reveal="rise" style="--delay:200ms">
-      <p class="lead">Cuando publiquemos proyectos realizados, van a estar acá. Mientras tanto, contanos el tuyo.</p>
+      <p class="lead">Cuando publiquemos proyectos realizados<span class="pt">,</span> van a estar acá<span class="pt">.</span> Mientras tanto<span class="pt">,</span> contanos el tuyo<span class="pt">.</span></p>
       <a class="btn " href="/contacto">Hablemos <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
@@ -157,7 +297,7 @@
     <div class="footer__top">
       <div class="footer__brand">
         <a class="brand" href="/" aria-label="KROMA — Inicio"><svg class="brand__mark" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg><span class="brand__word" aria-hidden="true">kroma</span></a>
-        <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
+        <p>Consultoría tecnológica para empresas<span class="pt">.</span> Te ayudamos a elegir herramientas y aprovecharlas bien<span class="pt">.</span></p>
       </div>
       <div class="footer__col">
         <h2>Sitio</h2>

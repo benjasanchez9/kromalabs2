@@ -66,9 +66,14 @@ node scripts/build.mjs .
 404.html                  página de error
 assets/css/main.css       sistema visual completo (tokens, componentes, estados de movimiento)
 assets/js/main.js         motor de animaciones e interacciones (sin librerías)
-assets/fonts/             Plus Jakarta Sans (variable) e IBM Plex Mono, alojadas localmente
+assets/fonts/             Figtree (400–900, woff2 + woff) e IBM Plex Mono, alojadas localmente
+scripts/icons.mjs         íconos y previews animados de los servicios
 vercel.json               URLs limpias y cabeceras
 ```
+
+## Tipografía
+
+Figtree, la más cercana al mockup, alojada en el propio sitio en dos formatos. Si un navegador no la carga, entra un respaldo del sistema con las mismas proporciones, así que los títulos no se desarman. La puntuación de los títulos lleva un pequeño espacio compensado para que el punto o la coma nunca toquen la letra.
 
 ## Sistema de movimiento
 
@@ -77,6 +82,7 @@ vercel.json               URLs limpias y cabeceras
 - **Ligadas al scroll** (un único motor rAF que solo procesa lo visible): curvas y parallax del hero, bandas orgánicas, avance de la tarea en Automatizaciones, ensamblado de piezas en Identidad digital, profundidad en Webs, parallax de imágenes de proyectos.
 - **Una vez al entrar**: titulares por líneas con máscara, recortes, fundidos y subidas (distintos según el contenido).
 - **Respuesta**: filas de servicios con relleno direccional y foto que se abre, botones, enlaces, FAQ, nodos de Integraciones, isotipo del hero que sigue levemente al puntero.
+- **Heros vivos**: el hero principal combina ondas de distinta frecuencia (nunca se repite igual) en las curvas, la foto, el isotipo y el texto. Cada página interna tiene una forma orgánica que respira, deriva, gira lento y reacciona al mouse.
 - **Ambiente (flotación)**: los bordes de la banda marfil y de la foto del hero ondulan lento, la foto deriva dentro de su recorte, el isotipo y el texto flotan unos píxeles; formas decorativas de Nosotros y Servicios flotan; señal que recorre el diagrama de Integraciones. Se pausa fuera de pantalla.
 - **Rastro eléctrico**: solo en secciones negras (servicios y cierre del Inicio, lista de Servicios), con puntero fino; límite de 44 puntos y 5 ramificaciones, adaptado a la densidad de pantalla, pausado fuera de pantalla, sin interceptar clics.
 - **Movimiento reducido**: sin rastro, parallax, ambiente ni cortina; todo el contenido visible y las demos en su estado final.
