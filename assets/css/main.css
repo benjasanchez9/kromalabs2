@@ -1347,12 +1347,14 @@ main p.lead { max-width: min(100%, 30em); }
 .social__btn:active { transform: translateY(0) scale(.96); }
 /* etiqueta flotante al pasar el mouse */
 .social__btn::after {
-  content: attr(data-tip); position: absolute; left: calc(100% + 10px); top: 50%; transform: translate(-4px, -50%);
+  content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); transform: translate(-50%, -4px); z-index: 5;
   padding: 5px 9px; border-radius: 6px; background: var(--ivory); color: var(--black); font: 600 .72rem var(--f-sans); white-space: nowrap;
   opacity: 0; pointer-events: none; transition: opacity var(--d-micro) var(--ease-out), transform var(--d-ui) var(--ease-out);
 }
 .theme-ivory .social__btn::after, .contact .social__btn::after { background: var(--black); color: var(--ivory); }
-.social__btn:hover::after, .social__btn:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
+.social__btn:hover::after, .social__btn:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+.social__btn:first-child::after { left: 0; transform: translate(0, -4px); }
+.social__btn:first-child:hover::after, .social__btn:first-child:focus-visible::after { transform: none; }
 .social--footer { margin-top: 18px; }
 .social--menu { margin-top: 16px; }
 .social--menu .social__btn:hover { background: var(--black); box-shadow: inset 0 0 0 1.5px var(--black); }

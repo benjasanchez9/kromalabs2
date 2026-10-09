@@ -57,10 +57,12 @@ const IG_URL = "https://www.instagram.com/_kromalabs/";
 const WA_NUMBER = "";
 const WA_URL = WA_NUMBER ? `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hola KROMA, quiero hacer una consulta.")}` : "";
 const SOCIAL_SVG = {
+  mail: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4 7.5l8 5.6 8-5.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   instagram: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.25" fill="currentColor"/></svg>`,
   whatsapp: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2.5a9.43 9.43 0 0 0-8.14 14.2L2.6 21.5l4.92-1.29A9.43 9.43 0 1 0 12.04 2.5Zm0 17.2a7.8 7.8 0 0 1-3.98-1.09l-.29-.17-2.92.77.78-2.85-.19-.3a7.82 7.82 0 1 1 6.6 3.64Zm4.29-5.85c-.24-.12-1.4-.69-1.61-.77-.22-.08-.38-.12-.54.12-.16.24-.62.77-.76.93-.14.16-.28.18-.52.06a6.4 6.4 0 0 1-1.88-1.16 7.08 7.08 0 0 1-1.3-1.62c-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46a.89.89 0 0 0-.64.3 2.7 2.7 0 0 0-.84 2 4.68 4.68 0 0 0 .98 2.49 10.7 10.7 0 0 0 4.1 3.62c.57.25 1.02.4 1.37.51.58.18 1.1.16 1.52.1.46-.07 1.4-.57 1.6-1.13.2-.55.2-1.03.14-1.13-.06-.1-.22-.16-.46-.28Z"/></svg>`,
 };
 const socialIcons = (cls = "") => `<div class="social ${cls}">
+  <a class="social__btn" href="mailto:${EMAIL}" aria-label="Escribir a KROMA por email: ${EMAIL}" data-tip="${EMAIL}">${SOCIAL_SVG.mail}</a>
   <a class="social__btn" href="${IG_URL}" target="_blank" rel="noopener" aria-label="Instagram de KROMA (se abre en otra pestaña)" data-tip="Instagram">${SOCIAL_SVG.instagram}</a>
   ${WA_URL ? `<a class="social__btn social__btn--wa" href="${WA_URL}" target="_blank" rel="noopener" aria-label="Escribir a KROMA por WhatsApp (se abre en otra pestaña)" data-tip="WhatsApp">${SOCIAL_SVG.whatsapp}</a>` : ""}
 </div>`;
@@ -195,7 +197,7 @@ function header(active, tone) {
       <li><a href="/contacto"${cur("contacto")}>Hablemos</a></li>
     </ul>
   </nav>
-  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas.</p><p style="margin-top:10px"><a href="mailto:${EMAIL}">${EMAIL}</a></p>${socialIcons("social--menu")}</div>
+  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas.</p>${socialIcons("social--menu")}</div>
 </div>`;
 }
 
@@ -217,7 +219,7 @@ const footer = `
       </div>
       <div class="footer__col">
         <h2>Contacto</h2>
-        <ul><li><a href="mailto:${EMAIL}">${EMAIL}</a></li><li><a href="/contacto">Formulario</a></li></ul>
+        <ul><li><a href="/contacto">Formulario</a></li></ul>
         ${socialIcons("social--footer")}
       </div>
     </div>
@@ -964,7 +966,6 @@ write("/contacto", page({
       </div>
       <div class="contact__channels" data-reveal="rise" style="--delay:500ms">
         <p class="num">También podés escribirnos</p>
-        <a class="link-arrow" href="mailto:${EMAIL}">${EMAIL} ${arrowIcon()}</a>
         ${socialIcons("social--contact")}
       </div>
     </div>
