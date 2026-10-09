@@ -71,7 +71,7 @@
      2. Revelados que se disparan una vez
      ======================================================= */
   function initReveals() {
-    const els = $$("[data-reveal], .lines[data-lines], .hero__media, .hero__mark-in");
+    const els = $$("[data-reveal], .lines[data-lines], .hero__media, .hero__ivory, .hero__mark-in");
     if (reduce()) { els.forEach((el) => el.classList.add("is-in")); return; }
     // Un elemento recortado por completo con clip-path nunca "intersecta":
     // en esos casos se observa al contenedor y se revela el hijo.
@@ -91,7 +91,7 @@
     });
     cleanups.push(() => io.disconnect());
     // El hero arranca enseguida, sin esperar al observer
-    requestAnimationFrame(() => $$(".hero .lines, .hero__media, .hero__mark-in, .page-hero .lines").forEach((el) => el.classList.add("is-in")));
+    requestAnimationFrame(() => $$(".hero .lines, .hero__media, .hero__ivory, .hero__mark-in, .page-hero .lines").forEach((el) => el.classList.add("is-in")));
   }
 
   /* =======================================================
@@ -194,49 +194,84 @@
   /* =======================================================
      5. Hero de Inicio: máscara orgánica + parallax de planos
      ======================================================= */
-  // Dos formas con la misma estructura (objectBoundingBox 0..1): borde izquierdo en "S"
-  const MASK_A = [[.30,-.04],[.62,-.06],[1.06,-.04],[1.08,.50],[1.06,1.08],[.62,1.06],[.30,.96],[.10,.80],[.22,.56],[.06,.34],[.16,.10]];
-  const MASK_B = [[.22,-.04],[.60,-.06],[1.06,-.04],[1.08,.50],[1.06,1.08],[.66,1.06],[.38,.98],[.18,.76],[.30,.52],[.14,.30],[.24,.08]];
-  function blobPath(pts) {
-    const f = (v) => v.toFixed(4);
-    const n = pts.length; let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
-    for (let i = 0; i < n; i++) {
-      const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+  // Spline Catmull-Rom abierta (misma que en build.mjs)
+  function spline(pts) {
+    const f = (v) => v.toFixed(4); let d = "";
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
       d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)} ${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)} ${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])} ${f(p2[1])}`;
     }
-    return d + "Z";
+    return d;
   }
+
   function initHero() {
     const hero = $(".hero");
-    if (!hero) return;
-    const clip = $("#hero-clip-path"), photo = $(".hero__photo"), mark = $(".hero__mark"), follow = $(".hero__mark-follow");
-    if (clip) clip.setAttribute("d", blobPath(MASK_A));
+    if (!hero || !hero.dataset.shape) return;
+    const base = JSON.parse(hero.dataset.shape);
+    const clip = $("#hero-clip-path"), ivoryPath = $("#hero-ivory-path");
+    const photo = $(".hero__photo"), mark = $(".hero__mark"), follow = $(".hero__mark-follow");
     if (reduce()) return;
+    const TOP = base.photo[base.photo.length - 1][1];
+
+    let scrollK = 0, t0 = performance.now(), raf = 0, inView = true, last = 0;
+    // Cada punto respira con su propia fase; los extremos (bordes del hero) quedan fijos.
+    const wobble = (pts, amp, speed, seed, keepFirst, keepLast) => pts.map((p, i) => {
+      if ((keepFirst && i === 0) || (keepLast && i === pts.length - 1)) return p;
+      const ph = seed + i * 1.7, w = (now) => Math.sin(now * speed + ph);
+      return [p[0] + amp * w(tNow) , p[1] + amp * 0.6 * Math.cos(tNow * speed * 0.8 + ph)];
+    });
+    let tNow = 0;
+    const render = () => {
+      const k = scrollK;
+      // Scroll: la foto se abre un poco hacia la izquierda y el lóbulo baja
+      const ivory = wobble(base.ivory.map(([x, y]) => [x - 0.03 * k, y + 0.02 * k]), 0.006, 0.55, 0.0, false, true);
+      const photoPts = wobble(base.photo.map(([x, y], i) => [x - 0.035 * k * (1 - i / base.photo.length), y]), 0.007, 0.5, 2.1, true, true);
+      const lobe = wobble(base.lobe.map(([x, y]) => [x, y + 0.03 * k]), 0.006, 0.45, 4.2, true, true);
+      // los tramos comparten extremos: el lóbulo termina donde empieza el borde de la foto
+      photoPts[0] = lobe[lobe.length - 1];
+      const top = photoPts[photoPts.length - 1];
+      if (ivoryPath) ivoryPath.setAttribute("d", `M${ivory[0][0]} ${ivory[0][1]}${spline(ivory)}L1 ${TOP}L1 ${lobe[0][1]}${spline(lobe)}L.5 1L0 1Z`);
+      if (clip) clip.setAttribute("d", `M${top[0]} ${top[1]}L1 ${TOP}L1 ${lobe[0][1]}${spline(lobe)}${spline(photoPts)}Z`);
+    };
+    const loop = (now) => {
+      raf = requestAnimationFrame(loop);
+      if (now - last < 33) return;          // ~30 fps alcanzan para un movimiento lento
+      last = now; tNow = (now - t0) / 1000;
+      render();
+    };
+    const io = new IntersectionObserver(([e]) => {
+      inView = e.isIntersecting; cancelAnimationFrame(raf);
+      if (inView) raf = requestAnimationFrame(loop);
+    });
+    io.observe(hero);
+    on(document, "visibilitychange", () => { cancelAnimationFrame(raf); if (!document.hidden && inView) raf = requestAnimationFrame(loop); });
+    cleanups.push(() => { cancelAnimationFrame(raf); io.disconnect(); });
+
     Scroll.add(hero, (p) => {
-      const k = ease(clamp(p * 1.6));
-      if (clip) clip.setAttribute("d", blobPath(MASK_A.map((a, i) => [lerp(a[0], MASK_B[i][0], k), lerp(a[1], MASK_B[i][1], k)])));
+      scrollK = ease(clamp(p * 1.5));
       const amp = mqDesktop.matches ? 1 : 0.4;
-      if (photo) photo.style.transform = `translate3d(0, ${p * 60 * amp}px, 0) scale(${1.06 - p * 0.05})`;
-      if (mark) mark.style.transform = `translate3d(0, ${-p * 90 * amp}px, 0) scale(${1 + p * 0.1})`;
+      if (photo) photo.parentElement.style.transform = `translate3d(0, ${(p * 70 * amp).toFixed(1)}px, 0)`;
+      if (mark) mark.style.translate = `0 ${(-p * 80 * amp).toFixed(1)}px`;
     }, "top");
 
-    // Sobre azul no hay rastro: el isotipo responde con un desplazamiento leve (solo posición)
+    // Sobre azul no hay rastro: el isotipo acompaña levemente al puntero (solo posición)
     if (follow) {
-      let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, running = false;
-      const loop = () => {
+      let tx = 0, ty = 0, cx = 0, cy = 0, fr = 0, running = false;
+      const step = () => {
         cx = lerp(cx, tx, 0.07); cy = lerp(cy, ty, 0.07);
         follow.style.transform = `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0)`;
-        if (Math.abs(cx - tx) > 0.1 || Math.abs(cy - ty) > 0.1) raf = requestAnimationFrame(loop); else running = false;
+        if (Math.abs(cx - tx) > 0.1 || Math.abs(cy - ty) > 0.1) fr = requestAnimationFrame(step); else running = false;
       };
+      const kick = () => { if (!running) { running = true; fr = requestAnimationFrame(step); } };
       on(hero, "pointermove", (e) => {
         if (!fine()) return;
         const r = hero.getBoundingClientRect();
-        tx = ((e.clientX - r.left) / r.width - 0.5) * 24;
+        tx = ((e.clientX - r.left) / r.width - 0.5) * 26;
         ty = ((e.clientY - r.top) / r.height - 0.5) * 18;
-        if (!running) { running = true; raf = requestAnimationFrame(loop); }
+        kick();
       }, { passive: true });
-      on(hero, "pointerleave", () => { tx = 0; ty = 0; if (!running) { running = true; raf = requestAnimationFrame(loop); } });
-      cleanups.push(() => cancelAnimationFrame(raf));
+      on(hero, "pointerleave", () => { tx = 0; ty = 0; kick(); });
+      cleanups.push(() => cancelAnimationFrame(fr));
     }
   }
 
@@ -464,7 +499,6 @@
     const caption = $(".integ__caption", el), flow = $$(".integ__flow li", el);
     const signal = $(".integ__signal", el);
     const route = (el.dataset.route || "").split(",").map((s) => s.trim()).filter(Boolean); // ids de path en orden
-    const texts = flow.map((li) => li.textContent.trim());
     const hot = (ids) => {
       paths.forEach((p) => p.classList.toggle("is-hot", ids.includes(p.id)));
     };
@@ -473,7 +507,6 @@
       const pid = route[i]; const p = $("#" + pid, el);
       hot([pid]); nodeHot([p.dataset.from, p.dataset.to]);
       flow.forEach((li, k) => li.classList.toggle("is-active", k === i));
-      if (caption) caption.textContent = texts[i] || "";
     };
     // Hover / foco en un nodo: muestra sus conexiones
     nodes.forEach((n) => {
@@ -483,7 +516,7 @@
         hot(ids); nodeHot([n.dataset.node]);
         if (caption) caption.textContent = n.dataset.desc || "";
       };
-      const hide = () => { paused = false; setStep(step); };
+      const hide = () => { paused = false; setStep(step); if (caption) caption.textContent = caption.dataset.default || ""; };
       on(n, "pointerenter", show); on(n, "focus", show);
       on(n, "pointerleave", hide); on(n, "blur", hide);
     });
