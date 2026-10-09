@@ -1332,3 +1332,28 @@ main p.lead { max-width: min(100%, 30em); }
   .flow__tab { justify-items: center; }
 }
 .flow__panels:focus-visible { outline-offset: 4px; }
+
+/* Íconos de redes (CTA) */
+.social { display: flex; gap: 10px; margin-top: 14px; }
+.social__btn {
+  position: relative; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; text-decoration: none;
+  color: currentColor; box-shadow: inset 0 0 0 1.5px currentColor;
+  transition: background-color var(--d-ui) var(--ease-out), color var(--d-ui) var(--ease-out), box-shadow var(--d-ui) var(--ease-out), transform var(--d-micro) var(--ease-out);
+}
+.social__btn svg { width: 21px; height: 21px; transition: transform var(--d-ui) var(--ease-snap); }
+.social__btn:hover, .social__btn:focus-visible { background: var(--blue); color: var(--ivory); box-shadow: inset 0 0 0 1.5px var(--blue), 0 8px 24px -10px rgba(0,83,253,.8); transform: translateY(-2px); }
+.social__btn--wa:hover, .social__btn--wa:focus-visible { background: #1faa53; box-shadow: inset 0 0 0 1.5px #1faa53, 0 8px 24px -10px rgba(31,170,83,.8); }
+.social__btn:hover svg { transform: scale(1.1) rotate(-6deg); }
+.social__btn:active { transform: translateY(0) scale(.96); }
+/* etiqueta flotante al pasar el mouse */
+.social__btn::after {
+  content: attr(data-tip); position: absolute; left: calc(100% + 10px); top: 50%; transform: translate(-4px, -50%);
+  padding: 5px 9px; border-radius: 6px; background: var(--ivory); color: var(--black); font: 600 .72rem var(--f-sans); white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity var(--d-micro) var(--ease-out), transform var(--d-ui) var(--ease-out);
+}
+.theme-ivory .social__btn::after, .contact .social__btn::after { background: var(--black); color: var(--ivory); }
+.social__btn:hover::after, .social__btn:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
+.social--footer { margin-top: 18px; }
+.social--menu { margin-top: 16px; }
+.social--menu .social__btn:hover { background: var(--black); box-shadow: inset 0 0 0 1.5px var(--black); }
+.social--contact { margin-top: 6px; }
