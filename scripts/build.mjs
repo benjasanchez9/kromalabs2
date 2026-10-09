@@ -396,21 +396,51 @@ ${closing({ theme: "black", trail: true, title: ["¿Por dónde", "empezamos?"], 
    NOSOTROS
    ========================================================= */
 const PROCESS = [
-  ["Entendemos", "Nos sumergimos en tu negocio, tus desafíos y tus oportunidades."],
-  ["Priorizamos", "Definimos el camino con criterio y foco en lo que genera valor."],
-  ["Desarrollamos", "Creamos soluciones robustas, escalables y a medida."],
-  ["Acompañamos", "Estamos en cada etapa para que tu negocio siga creciendo."],
+  { t: "Entendemos", d: "Nos sumergimos en tu negocio, tus desafíos y tus oportunidades.",
+    a: ["Conversamos con quienes hacen el trabajo todos los días", "Relevamos herramientas, procesos y datos actuales", "Detectamos dónde se pierde tiempo o se repiten tareas"],
+    out: "Un diagnóstico claro de tu situación" },
+  { t: "Priorizamos", d: "Definimos el camino con criterio y foco en lo que genera valor.",
+    a: ["Ordenamos las oportunidades por impacto y esfuerzo", "Elegimos herramientas a la escala de tu empresa", "Acordamos alcance, etapas y costos antes de empezar"],
+    out: "Un plan por etapas, sin sorpresas" },
+  { t: "Desarrollamos", d: "Creamos soluciones robustas, escalables y a medida.",
+    a: ["Implementamos por etapas, de a una cosa por vez", "Probamos con datos y casos reales", "Revisamos juntos cada avance"],
+    out: "La solución funcionando en tu operación" },
+  { t: "Acompañamos", d: "Estamos en cada etapa para que tu negocio siga creciendo.",
+    a: ["Capacitamos a tu equipo en el uso diario", "Dejamos documentación simple y ordenada", "Ajustamos según cómo se usa en la práctica"],
+    out: "Autonomía para usar y mantener lo que hicimos" },
 ];
+const PRINCIPLES = [
+  ["Claridad", "Explicamos cada decisión sin jerga, para que puedas evaluarla."],
+  ["Escala", "Proponemos soluciones acordes al tamaño y al momento de tu empresa."],
+  ["Autonomía", "Buscamos que tu equipo pueda usar y mantener lo que implementamos."],
+];
+const words = (txt) => txt.split(" ").map((w, i) => `<span class="mw" style="--w:${i}">${w}</span>`).join(" ");
+// Dial del proceso: anillo con 4 nodos (arriba, derecha, abajo, izquierda)
+const DIAL_R = 168;
+const dialNode = (i) => {
+  const ang = -Math.PI / 2 + (i * Math.PI) / 2;
+  const x = (200 + DIAL_R * Math.cos(ang)).toFixed(1), y = (200 + DIAL_R * Math.sin(ang)).toFixed(1);
+  return `<g class="dial__node" data-i="${i}" transform="translate(${x} ${y})"><circle r="24"/><text dy=".35em">0${i + 1}</text></g>`;
+};
+
 write("/nosotros", page({
   path: "/nosotros", title: "Nosotros", active: "nosotros", tone: "ivory",
   desc: "KROMA nace para democratizar la digitalización de las empresas uruguayas: elegir bien las herramientas e implementarlas con criterio.",
   body: `
 <section class="page-hero about-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
-  ${liveShape("orb", "about-hero__orb", "color:var(--blue)", 7)}
-  <div class="about-hero__mark" data-float="60" aria-hidden="true"><div class="float-soft">${iso()}</div></div>
-  <div class="wrap page-hero__grid">
-    ${lines(["Digitalizar también", "es elegir bien."], "h1", "display about-hero__title").replace("<h1 ", '<h1 id="t" ')}
-    <p class="lead about-hero__sub" data-reveal="rise" style="--delay:400ms">Democratizamos la digitalización<br>de las empresas uruguayas.</p>
+  <div class="wrap about-hero__grid">
+    <div class="about-hero__text">
+      <p class="eyebrow" data-reveal="fade">Nosotros</p>
+      ${lines(["Digitalizar", "también es", "elegir bien."], "h1", "display about-hero__title").replace("<h1 ", '<h1 id="t" ')}
+      <div class="about-hero__intro" data-reveal="rise" style="--delay:400ms">
+        <p class="lead">Somos una consultora tecnológica uruguaya. Nuestro propósito es democratizar la digitalización de las empresas.</p>
+        <a class="link-arrow" href="#proceso">Ver cómo trabajamos ${arrowIcon()}</a>
+      </div>
+    </div>
+    <div class="about-hero__visual" aria-hidden="true">
+      ${liveShape("orb", "about-hero__orb", "color:var(--blue)", 6)}
+      <div class="about-hero__mark"><div class="float-soft">${iso()}</div></div>
+    </div>
   </div>
 </section>
 <div class="about-band" data-band aria-hidden="true">
@@ -419,39 +449,77 @@ write("/nosotros", page({
     <path fill="var(--blue)" d="M0 320V270C110 180 200 130 330 140C460 150 520 280 690 320Z"/>
   </svg>
 </div>
-<section class="section theme-ivory" data-theme="ivory" aria-labelledby="proceso" style="padding-top:clamp(56px,7vw,100px)">
+<section class="section theme-black manifesto" data-theme="black" aria-labelledby="proposito">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal="fade">Propósito</p>
+    <h2 id="proposito" class="manifesto__big" data-words>${words("Nunca hubo tantas herramientas disponibles. Pero más opciones no siempre significan mejores decisiones.")}</h2>
+    <div class="manifesto__grid">
+      <figure class="manifesto__figure" data-reveal="wipe">
+        <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/arq-escalera-900.webp 900w, /assets/img/arq-escalera.webp 1536w" sizes="(max-width: 920px) 100vw, 50vw" type="image/webp"><img src="/assets/img/arq-escalera.jpg" srcset="/assets/img/arq-escalera-900.jpg 900w, /assets/img/arq-escalera.jpg 1536w" sizes="(max-width: 920px) 100vw, 50vw" alt="Escalera recta entre volúmenes de hormigón, en blanco y negro" width="1536" height="1024" loading="lazy" decoding="async"></picture></div></div>
+      </figure>
+      <div class="manifesto__text" data-reveal="rise" style="--delay:120ms">
+        <p>Para muchas empresas, digitalizarse se volvió una lista de suscripciones que nadie termina de usar. El valor no está en sumar tecnología, sino en elegirla bien e implementarla con criterio.</p>
+        <p>Democratizar la digitalización es eso: que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala.</p>
+        <blockquote class="manifesto__quote">Tecnología que se entiende, se usa y se puede mantener. <span>Ese es nuestro criterio.</span></blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section theme-ivory flow" data-theme="ivory" aria-labelledby="proceso" id="proceso" style="--n:${PROCESS.length}">
+  <div class="wrap">
+    <div class="sec-head flow__head">
+      <div>
+        <p class="eyebrow" data-reveal="fade">Proceso</p>
+        ${lines(["Cómo trabajamos."], "h2", "h2").replace("<h2 ", '<h2 id="proceso-t" style="margin-top:18px" ')}
+      </div>
+      <p class="muted flow__lede" data-reveal="fade">Cuatro etapas claras. En cada momento sabés en qué punto estamos y qué viene después.</p>
+    </div>
+  </div>
+  <div class="flow__track">
+    <div class="flow__sticky">
+      <div class="wrap flow__grid">
+        <div class="flow__dial" aria-hidden="true">
+          <svg class="dial" viewBox="0 0 400 400">
+            <circle class="dial__ring" cx="200" cy="200" r="${DIAL_R}"/>
+            <circle class="dial__ticks" cx="200" cy="200" r="${DIAL_R - 34}"/>
+            <circle class="dial__progress" cx="200" cy="200" r="${DIAL_R}" pathLength="100" transform="rotate(-90 200 200)"/>
+            <g class="dial__orbit"><circle class="dial__dot" cx="200" cy="${200 - DIAL_R}" r="7"/></g>
+            ${PROCESS.map((_, i) => dialNode(i)).join("")}
+          </svg>
+          <div class="dial__center">
+            <span class="dial__num"><span data-dial-num>01</span><small>/0${PROCESS.length}</small></span>
+            <span class="dial__name" data-dial-name>${PROCESS[0].t}</span>
+          </div>
+        </div>
+        <div class="flow__main">
+          <div class="flow__tabs" role="tablist" aria-label="Etapas del proceso">
+            ${PROCESS.map((s, i) => `<button type="button" class="flow__tab" role="tab" id="ft-${i}" aria-controls="fp-${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-i="${i}"><span class="flow__tab-num">0${i + 1}</span><span class="flow__tab-name">${s.t}</span><span class="flow__tab-bar" aria-hidden="true"><i></i></span></button>`).join("")}
+          </div>
+          <div class="flow__panels" tabindex="0" aria-label="Detalle de cada etapa">
+            ${PROCESS.map((s, i) => `<div class="flow__panel${i === 0 ? " is-active" : ""}" role="tabpanel" id="fp-${i}" aria-labelledby="ft-${i}" data-i="${i}">
+              <p class="flow__step num">Etapa 0${i + 1} de 0${PROCESS.length}</p>
+              <h3 class="flow__title">${s.t}.</h3>
+              <p class="flow__desc lead">${s.d}</p>
+              <ul class="flow__acts">${s.a.map((x, k) => `<li style="--k:${k}"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>${x}</li>`).join("")}</ul>
+              <p class="flow__out"><span class="num">Te llevás</span><strong>${s.out}</strong></p>
+            </div>`).join("")}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section theme-black principles" data-theme="black" aria-labelledby="principios">
   <div class="wrap">
     <div class="sec-head">
-      ${lines(["Cómo trabajamos."], "h2", "h2").replace("<h2 ", '<h2 id="proceso" ')}
-      <p class="muted" style="max-width:30ch" data-reveal="fade">Un proceso claro, colaborativo y enfocado en resultados reales.</p>
+      <div>
+        <p class="eyebrow" data-reveal="fade">Principios</p>
+        ${lines(["Lo que nos guía."], "h2", "h2").replace("<h2 ", '<h2 id="principios" style="margin-top:18px" ')}
+      </div>
     </div>
-    <ol class="process">
-      ${PROCESS.map(([t, d], i) => `<li class="process__step"><span class="process__num">0${i + 1}</span><h3 class="process__title">${t}</h3><p class="process__desc">${d}</p><span class="circle-arrow" aria-hidden="true">${arrowIcon()}</span></li>`).join("\n      ")}
+    <ol class="principles__list">
+      ${PRINCIPLES.map(([t, d], i) => `<li class="principles__row" data-reveal="rise" style="--delay:${i * 90}ms"><span class="principles__num num">0${i + 1}</span><span class="principles__word">${t}</span><p class="principles__desc">${d}</p></li>`).join("")}
     </ol>
-  </div>
-</section>
-<section class="section theme-black" data-theme="black" aria-labelledby="proposito">
-  <div class="wrap purpose">
-    <h2 id="proposito" class="sr-only">Nuestro propósito</h2>
-    <p class="purpose__big" data-reveal="clip">Nunca hubo tantas herramientas disponibles. Pero más opciones no siempre significan mejores decisiones.</p>
-    <div class="purpose__cols" data-reveal="rise" style="--delay:150ms">
-      <p class="muted">Para muchas empresas, digitalizarse se volvió una lista de suscripciones que nadie termina de usar. El valor no está en sumar tecnología, sino en elegirla bien e implementarla con criterio.</p>
-      <p class="muted">Democratizar la digitalización es eso: que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala.</p>
-    </div>
-    <figure class="purpose__figure" data-reveal="wipe">
-      <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/arq-escalera-900.webp 900w, /assets/img/arq-escalera.webp 1536w" sizes="(max-width: 920px) 100vw, 50vw" type="image/webp"><img src="/assets/img/arq-escalera.jpg" srcset="/assets/img/arq-escalera-900.jpg 900w, /assets/img/arq-escalera.jpg 1536w" sizes="(max-width: 920px) 100vw, 50vw" alt="Escalera recta entre volúmenes de hormigón, en blanco y negro" width="1536" height="1024" loading="lazy" decoding="async"></picture></div></div>
-    </figure>
-    <p class="purpose__quote" data-reveal="rise" style="--delay:200ms">Tecnología que se entiende, se usa y se puede mantener. <span class="accent">Ese es nuestro criterio.</span></p>
-  </div>
-</section>
-<section class="section section--tight theme-ivory" data-theme="ivory" aria-labelledby="principios">
-  <div class="wrap">
-    <h2 id="principios" class="h3" style="margin-bottom:32px" data-reveal="fade">Lo que nos guía</h2>
-    <ul class="steps-inline steps-inline--3">
-      <li data-reveal="rise"><h3>Claridad</h3><p class="muted">Explicamos cada decisión sin jerga, para que puedas evaluarla.</p></li>
-      <li data-reveal="rise" style="--delay:100ms"><h3>Escala</h3><p class="muted">Proponemos soluciones acordes al tamaño y al momento de tu empresa.</p></li>
-      <li data-reveal="rise" style="--delay:200ms"><h3>Autonomía</h3><p class="muted">Buscamos que tu equipo pueda usar y mantener lo que implementamos.</p></li>
-    </ul>
   </div>
 </section>
 ${closing({ theme: "blue", title: ["Empecemos por", "entender."], text: "Una primera conversación alcanza para identificar por dónde conviene empezar." })}

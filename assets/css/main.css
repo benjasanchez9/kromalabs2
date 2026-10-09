@@ -1176,3 +1176,159 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .pt { margin-left: .045em; }
 p .pt { margin-left: .02em; }
 .problem__text .pt, .purpose__big .pt, .lead .pt { margin-left: .04em; }
+
+/* =========================================================
+   NOSOTROS (v2)
+   ========================================================= */
+/* Hero: texto a la izquierda, isotipo sobre orbe a la derecha */
+.about-hero { padding-bottom: clamp(32px, 5vw, 64px); }
+.about-hero__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: center; }
+.about-hero__text { grid-column: 1 / span 8; display: grid; gap: clamp(20px, 2.6vw, 32px); position: relative; z-index: 1; }
+.about-hero__title { grid-column: auto; }
+.about-hero__title .ln:nth-child(2) { padding-left: 0; }
+.about-hero__intro { display: grid; gap: 18px; justify-items: start; max-width: 44ch; }
+.about-hero__visual { grid-column: 9 / span 4; position: relative; aspect-ratio: 1; width: 100%; max-width: 420px; justify-self: end; }
+.about-hero__visual .live.about-hero__orb { position: absolute; inset: 4%; width: auto; aspect-ratio: auto; top: 4%; right: 4%; bottom: 4%; left: 4%; z-index: 0; }
+.about-hero__visual .about-hero__mark { position: absolute; inset: 0; width: auto; display: grid; place-items: center; z-index: 1; color: var(--black); }
+.about-hero__visual .about-hero__mark .float-soft { width: 58%; }
+.about-hero__visual .about-hero__mark svg { width: 100%; height: auto; }
+@media (max-width: 920px) {
+  .about-hero__grid { row-gap: 8px; }
+  .about-hero__text { grid-column: 1 / -1; grid-row: 2; }
+  .about-hero__visual { grid-column: 1 / -1; grid-row: 1; width: clamp(120px, 34vw, 200px); justify-self: end; margin-bottom: -6px; }
+}
+
+/* Manifiesto: frase que se enciende palabra por palabra */
+.manifesto { padding-top: clamp(40px, 6vw, 90px); }
+.manifesto__big { margin-top: 22px; font-size: clamp(1.9rem, 1rem + 3.4vw, 4.6rem); line-height: 1.04; max-width: 20ch; }
+.js .manifesto__big[data-words] .mw { opacity: var(--o, .22); transition: opacity 300ms var(--ease-out); }
+.manifesto__grid { margin-top: clamp(48px, 7vw, 96px); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 36px; align-items: start; }
+.manifesto__figure { grid-column: 1 / span 7; margin: 0; }
+.manifesto__figure .proj__media { --ar: 16 / 10; border-radius: 16px; }
+.manifesto__text { grid-column: 9 / span 4; display: grid; gap: 20px; color: rgba(245,241,232,.78); }
+.manifesto__quote { margin: 12px 0 0; padding-top: 22px; border-top: 1px solid var(--line-light); color: var(--ivory); font-size: var(--fs-lead); font-weight: 600; line-height: 1.3; letter-spacing: -.01em; }
+.manifesto__quote span { color: var(--blue-glow); }
+@media (max-width: 920px) { .manifesto__figure, .manifesto__text { grid-column: 1 / -1; } }
+
+/* Cómo trabajamos: dial + paneles */
+.flow { padding-bottom: clamp(56px, 8vw, 110px); }
+.flow__head { margin-bottom: clamp(28px, 4vw, 48px); }
+.flow__lede { max-width: 34ch; }
+.flow__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: center; }
+.flow__dial { grid-column: 1 / span 5; position: relative; width: 100%; max-width: 460px; aspect-ratio: 1; justify-self: start; }
+.dial { width: 100%; height: 100%; overflow: visible; }
+.dial__ring { fill: none; stroke: var(--line-dark); stroke-width: 2; }
+.dial__ticks { fill: none; stroke: rgba(7,7,8,.22); stroke-width: 1; stroke-dasharray: 1 9.2; }
+.dial__progress { fill: none; stroke: var(--blue); stroke-width: 4; stroke-linecap: round; stroke-dasharray: var(--pp, 0) 100; transition: stroke-dasharray 200ms linear; }
+.dial__orbit { transform-origin: 200px 200px; transform: rotate(calc(var(--pp, 0) * 3.6deg)); transition: transform 200ms linear; }
+.dial__dot { fill: var(--blue); filter: drop-shadow(0 0 8px rgba(0,83,253,.6)); }
+.dial__node circle { fill: var(--ivory); stroke: var(--line-dark); stroke-width: 2; transition: fill var(--d-ui) var(--ease-out), stroke var(--d-ui) var(--ease-out); }
+.dial__node text { font: 600 13px var(--f-mono); fill: var(--black); text-anchor: middle; transition: fill var(--d-ui) var(--ease-out); }
+.dial__node.is-done circle { fill: var(--black); stroke: var(--black); }
+.dial__node.is-done text { fill: var(--ivory); }
+.dial__node.is-active circle { fill: var(--blue); stroke: var(--blue); }
+.dial__node.is-active text { fill: var(--ivory); }
+.dial__center { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; gap: 6px; pointer-events: none; }
+.dial__num { font-weight: 900; font-size: clamp(3.6rem, 2rem + 4.4vw, 6.6rem); line-height: .9; letter-spacing: -.035em; color: var(--blue); display: inline-flex; align-items: baseline; }
+.dial__num small { font: 400 .9rem var(--f-mono); letter-spacing: 0; color: var(--ink-soft); margin-left: 6px; }
+.dial__name { font-weight: 800; font-size: 1.15rem; letter-spacing: -.01em; }
+
+.flow__main { grid-column: 7 / span 6; display: grid; gap: clamp(20px, 2.6vw, 30px); }
+.flow__tabs { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 6px; }
+.flow__tab {
+  display: grid; gap: 4px; justify-items: start; text-align: left; padding: 10px 10px 12px; border: 0; border-radius: 10px; cursor: pointer;
+  background: transparent; color: var(--ink-soft); transition: background-color var(--d-ui) var(--ease-out), color var(--d-ui) var(--ease-out);
+}
+.flow__tab:hover { background: rgba(7,7,8,.05); color: var(--black); }
+.flow__tab[aria-selected="true"] { color: var(--black); }
+.flow__tab-num { font: 400 .72rem var(--f-mono); letter-spacing: .06em; }
+.flow__tab-name { font-weight: 700; font-size: .95rem; }
+.flow__tab-bar { width: 100%; height: 3px; border-radius: 3px; background: var(--line-dark); overflow: hidden; margin-top: 6px; }
+.flow__tab-bar i { display: block; height: 100%; background: var(--blue); transform-origin: left; transform: scaleX(var(--f, 0)); transition: transform 200ms linear; }
+.flow__panels { position: relative; display: grid; }
+.flow__panel { display: grid; gap: 16px; align-content: start; }
+.flow__step { color: var(--blue); }
+.flow__title { font-size: clamp(2.4rem, 1.2rem + 3.2vw, 4.6rem); line-height: 1; }
+.flow__desc { max-width: 34ch; }
+.flow__acts { list-style: none; display: grid; gap: 0; border-top: 1px solid var(--line-dark); margin-top: 6px; }
+.flow__acts li { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line-dark); }
+.flow__check { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); display: grid; place-items: center; }
+.flow__check svg { width: 13px; height: 13px; fill: none; stroke: var(--ivory); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.flow__out { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; padding: 14px 16px; border-radius: 12px; background: var(--black); color: var(--ivory); justify-self: start; }
+.flow__out .num { color: rgba(245,241,232,.6); text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; }
+.flow__out strong { font-weight: 700; }
+
+/* Sin JS / movimiento reducido: todas las etapas en lista, sin dial fijo */
+.flow:not(.is-pinned) .flow__panels { gap: 48px; }
+.flow:not(.is-pinned) .flow__tabs { display: none; }
+.flow:not(.is-pinned) .flow__dial { display: none; }
+.flow:not(.is-pinned) .flow__main { grid-column: 1 / -1; }
+.flow:not(.is-pinned) .flow__panels { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
+
+/* Modo fijo (desktop con JS): el dial queda fijo y las etapas se suceden con el scroll */
+.flow.is-pinned .flow__track { height: calc(var(--n) * 62vh + 100vh); }
+.flow.is-pinned .flow__sticky { position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); display: grid; align-items: center; }
+.flow.is-pinned .flow__panel { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(18px); transition: opacity 360ms var(--ease-out), transform 520ms var(--ease-out), visibility 0s linear 520ms; }
+.flow.is-pinned .flow__panel.is-active { opacity: 1; visibility: visible; transform: none; transition: opacity 420ms var(--ease-out) 80ms, transform 560ms var(--ease-out) 80ms, visibility 0s; }
+.flow.is-pinned .flow__panel.is-up { transform: translateY(-18px); }
+.flow.is-pinned .flow__panel .flow__acts li { opacity: 0; transform: translateX(-10px); transition: opacity 300ms var(--ease-out), transform 420ms var(--ease-out); }
+.flow.is-pinned .flow__panel.is-active .flow__acts li { opacity: 1; transform: none; transition-delay: calc(220ms + var(--k) * 90ms); }
+
+/* Móvil: tarjetas deslizables con pestañas como índice */
+@media (max-width: 920px) {
+  .flow__dial { display: none !important; }
+  .flow__main { grid-column: 1 / -1 !important; }
+  .flow__tabs { display: grid !important; gap: 4px; }
+  .flow__tab { padding: 8px 6px 10px; min-width: 0; }
+  .flow__tab-name { font-size: .76rem; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .flow__panels { display: flex !important; grid-template-columns: none !important; gap: 12px !important; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(var(--gutter) * -1); padding: 4px var(--gutter) 8px; scrollbar-width: none; }
+  .flow__panels::-webkit-scrollbar { display: none; }
+  .flow__panel { flex: 0 0 86%; scroll-snap-align: start; padding: 22px 20px; border-radius: 16px; background: #fff; box-shadow: 0 0 0 1px var(--line-dark); }
+  .flow__title { font-size: 2.2rem; }
+}
+
+/* Principios: filas editoriales grandes */
+.principles__list { list-style: none; border-top: 1px solid var(--line-light); }
+.principles__row { display: grid; grid-template-columns: clamp(48px, 7vw, 110px) minmax(0, 1fr) minmax(0, 34ch); column-gap: var(--gutter); align-items: center; padding: clamp(18px, 2.4vw, 30px) 0; border-bottom: 1px solid var(--line-light); }
+.principles__num { color: rgba(245,241,232,.55); }
+.principles__word { font-weight: 900; font-size: clamp(2.6rem, 1.2rem + 4.6vw, 6.4rem); line-height: 1; letter-spacing: -.035em; transition: color var(--d-ui) var(--ease-out), transform var(--d-ui) var(--ease-out); }
+.principles__desc { color: rgba(245,241,232,.78); }
+.principles__row:hover .principles__word { color: var(--blue-glow); transform: translateX(8px); }
+@media (max-width: 720px) {
+  .principles__row { grid-template-columns: auto minmax(0, 1fr); row-gap: 8px; }
+  .principles__desc { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) { .principles__row:hover .principles__word { transform: none; } }
+
+/* =========================================================
+   Auditoría de posición de textos
+   ========================================================= */
+/* 1. Encabezados de sección sobre la grilla: título en cols 1–8, texto/enlace lateral siempre desde la col 9 */
+.sec-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 18px; align-items: end; }
+.sec-head > :first-child { grid-column: 1 / span 8; }
+.sec-head > :nth-child(2) { grid-column: 9 / span 4; justify-self: start; }
+.sec-head > .link-arrow:nth-child(2) { margin-bottom: .5em; }
+@media (max-width: 920px) {
+  .sec-head > :first-child, .sec-head > :nth-child(2) { grid-column: 1 / -1; }
+}
+/* 2. Principios: misma grilla (número col 1, palabra cols 2–8, descripción desde la col 9) */
+.principles__row { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+.principles__num { grid-column: 1; }
+.principles__word { grid-column: 2 / span 7; }
+.principles__desc { grid-column: 9 / span 4; }
+@media (max-width: 720px) {
+  .principles__row { grid-template-columns: 40px minmax(0, 1fr); }
+  .principles__word, .principles__desc { grid-column: 2; }
+}
+/* 3. Medida cómoda de lectura (máx. ~65 caracteres por línea) */
+main p:not([class*="__desc"]):not(.problem__text):not(.purpose__big):not(.lead) { max-width: min(100%, 36em); }
+main p.lead { max-width: min(100%, 30em); }
+.integ__caption { text-wrap: balance; }
+/* 4. Columnas laterales de los heros: nada se sale del margen */
+.page-hero__aside { grid-template-columns: minmax(0, 1fr); min-width: 0; }
+.page-hero__aside .btn { max-width: 100%; white-space: normal; text-align: left; line-height: 1.2; }
+@media (max-width: 480px) {
+  .flow__tab-name { display: none; }
+  .flow__tab { justify-items: center; }
+}
+.flow__panels:focus-visible { outline-offset: 4px; }

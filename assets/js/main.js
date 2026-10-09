@@ -577,20 +577,89 @@
      9. Nosotros: proceso con columna sticky
      ======================================================= */
   function initProcess() {
-    const wrap = $(".process");
-    if (!wrap) return;
-    const steps = $$(".process__step", wrap), nums = $$(".process__bignum span", wrap), bar = $(".process__bar", wrap);
-    const set = (idx) => {
-      steps.forEach((s, i) => s.classList.toggle("is-active", i === idx));
-      nums.forEach((n, i) => { n.classList.toggle("is-active", i === idx); n.classList.toggle("is-past", i < idx); });
-      if (bar) bar.style.setProperty("--pp", ((idx + 1) / steps.length).toFixed(3));
+    const flow = $(".flow");
+    if (!flow) return;
+    const track = $(".flow__track", flow), sticky = $(".flow__sticky", flow), panelsWrap = $(".flow__panels", flow);
+    const panels = $$(".flow__panel", flow), tabs = $$(".flow__tab", flow), nodes = $$(".dial__node", flow);
+    const numEl = $("[data-dial-num]", flow), nameEl = $("[data-dial-name]", flow), dial = $(".dial", flow);
+    const n = panels.length;
+    let idx = -1;
+    const setActive = (i, fromUser = false) => {
+      if (i === idx) return;
+      idx = i;
+      panels.forEach((p, k) => { p.classList.toggle("is-active", k === i); p.classList.toggle("is-up", k < i); });
+      tabs.forEach((t, k) => { t.setAttribute("aria-selected", String(k === i)); t.tabIndex = k === i ? 0 : -1; });
+      nodes.forEach((nd, k) => { nd.classList.toggle("is-active", k === i); nd.classList.toggle("is-done", k < i); });
+      if (numEl) numEl.textContent = String(i + 1).padStart(2, "0");
+      if (nameEl) nameEl.textContent = $(".flow__tab-name", tabs[i]).textContent;
     };
-    set(0);
+    const setBars = (fn) => tabs.forEach((t, k) => t.style.setProperty("--f", fn(k).toFixed(3)));
+    setActive(0);
+    const pinned = () => mqDesktop.matches && !reduce();
+    const isCarousel = () => !mqDesktop.matches;
+
+    // Desktop: progreso del scroll a lo largo del tramo fijo
+    const scrollable = () => track.offsetHeight - sticky.offsetHeight;
+    const progress = () => clamp(-track.getBoundingClientRect().top / Math.max(1, scrollable()));
+    const updatePinned = () => {
+      if (!flow.classList.contains("is-pinned")) return;
+      const p = progress();
+      setActive(Math.min(n - 1, Math.floor(p * n * 0.999)));
+      if (dial) dial.style.setProperty("--pp", (p * 100).toFixed(2));
+      setBars((k) => clamp(p * n - k));
+    };
+    const applyMode = () => {
+      flow.classList.toggle("is-pinned", pinned());
+      if (!pinned()) { if (dial) dial.style.setProperty("--pp", 100); setBars((k) => (k <= idx ? 1 : 0)); }
+      updatePinned();
+    };
+    applyMode();
+    on(mqDesktop, "change", applyMode);
+    Scroll.add(track, updatePinned, "through", true);
+
+    // Pestañas: clic y teclado (flechas, Inicio, Fin)
+    const goTo = (i) => {
+      if (flow.classList.contains("is-pinned")) {
+        const top = track.getBoundingClientRect().top + scrollY + ((i + 0.5) / n) * scrollable();
+        scrollTo({ top, behavior: reduce() ? "auto" : "smooth" });
+      } else if (isCarousel()) {
+        panelsWrap.scrollTo({ left: panels[i].offsetLeft - panelsWrap.offsetLeft - parseFloat(getComputedStyle(panelsWrap).paddingLeft), behavior: reduce() ? "auto" : "smooth" });
+        setActive(i); setBars((k) => (k <= i ? 1 : 0));
+      } else {
+        panels[i].scrollIntoView({ behavior: reduce() ? "auto" : "smooth", block: "center" });
+        setActive(i);
+      }
+    };
+    tabs.forEach((t, i) => {
+      on(t, "click", () => goTo(i));
+      on(t, "keydown", (e) => {
+        const map = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: n - 1 };
+        if (!(e.key in map)) return;
+        e.preventDefault();
+        const k = (map[e.key] + n) % n;
+        tabs[k].focus(); goTo(k);
+      });
+    });
+
+    // Móvil: el carrusel actualiza la pestaña activa
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) set(steps.indexOf(e.target)); });
-    }, { rootMargin: "-45% 0px -45% 0px" });
-    steps.forEach((s) => io.observe(s));
+      if (!isCarousel()) return;
+      entries.forEach((e) => { if (e.isIntersecting) { const i = panels.indexOf(e.target); setActive(i); setBars((k) => (k <= i ? 1 : 0)); } });
+    }, { root: panelsWrap, threshold: 0.6 });
+    panels.forEach((p) => io.observe(p));
     cleanups.push(() => io.disconnect());
+  }
+
+  /* Manifiesto: la frase se enciende palabra por palabra con el scroll */
+  function initWords() {
+    $$("[data-words]").forEach((el) => {
+      const ws = $$(".mw", el);
+      if (reduce()) { ws.forEach((w) => w.style.setProperty("--o", 1)); return; }
+      Scroll.add(el, (p) => {
+        const lit = clamp((p - 0.12) / 0.5) * ws.length;
+        ws.forEach((w, i) => w.style.setProperty("--o", (0.22 + 0.78 * clamp(lit - i)).toFixed(3)));
+      }, "center");
+    });
   }
 
   /* =======================================================
@@ -828,6 +897,7 @@
       initTrails();
       initServiceRows();
       initProcess();
+      initWords();
       initWebs();
       initAutomation();
       initIntegration();
