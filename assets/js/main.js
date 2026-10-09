@@ -460,8 +460,10 @@
       canvas.className = "trail-canvas"; canvas.setAttribute("aria-hidden", "true");
       zone.prepend(canvas);
       const ctx = canvas.getContext("2d");
-      const MAX_PTS = 44, LIFE = 460, MAX_BRANCH = 5, BRANCH_LIFE = 300;
-      let pts = [], branches = [], dpr = 1, w = 0, h = 0, raf = 0, active = false, inView = false, last = null;
+      // Límites para mantenerlo liviano
+      const MAX_PTS = 40, LIFE = 520, MAX_BRANCH = 9, BRANCH_LIFE = 280, MAX_SPARKS = 30, SPARK_LIFE = 460;
+      let pts = [], branches = [], sparks = [], dpr = 1, w = 0, h = 0, raf = 0, active = false, inView = false, last = null;
+      let jitterSeed = [], frame = 0;
 
       const size = () => {
         dpr = Math.min(2, devicePixelRatio || 1);
@@ -470,33 +472,96 @@
       };
       size();
       const ro = new ResizeObserver(size); ro.observe(zone);
-      const io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (!inView) { pts = []; branches = []; ctx.clearRect(0, 0, canvas.width, canvas.height); } });
+      const io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (!inView) { pts = []; branches = []; sparks = []; ctx.clearRect(0, 0, canvas.width, canvas.height); } });
       io.observe(zone);
+
+      // Quiebra un tramo A→B en zigzag con desvíos perpendiculares (re-sorteados cada pocos cuadros)
+      const zig = (ax, ay, bx, by, amp, n, seed) => {
+        const out = [];
+        const dx = bx - ax, dy = by - ay, len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
+        for (let s = 1; s < n; s++) {
+          const f = s / n, r = Math.sin(seed * 12.9898 + s * 78.233) * 43758.5453;
+          const off = ((r - Math.floor(r)) - 0.5) * 2 * amp * Math.sin(Math.PI * f);
+          out.push([ax + dx * f + nx * off, ay + dy * f + ny * off]);
+        }
+        out.push([bx, by]);
+        return out;
+      };
+      const strokePath = (path, width, color) => {
+        ctx.lineWidth = width; ctx.strokeStyle = color;
+        ctx.beginPath(); ctx.moveTo(path[0][0] * dpr, path[0][1] * dpr);
+        for (let i = 1; i < path.length; i++) ctx.lineTo(path[i][0] * dpr, path[i][1] * dpr);
+        ctx.stroke();
+      };
+      const makeBranch = (x, y, ang, len, t, depth) => {
+        const seg = [[x, y]]; let bx = x, by = y;
+        const n = 3 + ((Math.random() * 3) | 0);
+        for (let i = 0; i < n; i++) {
+          const l = (len / n) * (0.7 + Math.random() * 0.6), wob = (Math.random() - 0.5) * 1.1;
+          bx += Math.cos(ang + wob) * l; by += Math.sin(ang + wob) * l; seg.push([bx, by]);
+          // sub-ramificación ocasional
+          if (depth < 1 && Math.random() < 0.28 && branches.length < MAX_BRANCH) makeBranch(bx, by, ang + (Math.random() < 0.5 ? 1 : -1) * (0.5 + Math.random() * 0.6), len * 0.5, t, depth + 1);
+        }
+        branches.push({ p: seg, t, seed: Math.random() * 1000 });
+      };
 
       const draw = () => {
         const now = performance.now();
+        frame++;
         pts = pts.filter((p) => now - p.t < LIFE);
         branches = branches.filter((b) => now - b.t < BRANCH_LIFE);
+        sparks = sparks.filter((s) => now - s.t < SPARK_LIFE);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.lineCap = "round"; ctx.lineJoin = "round";
-        ctx.shadowColor = "rgba(70,105,255,.9)"; ctx.shadowBlur = 7 * dpr;
+        ctx.globalCompositeOperation = "lighter";
+        // el rayo se vuelve a quebrar cada 2 cuadros: chisporroteo
+        if (frame % 2 === 0) jitterSeed = pts.map(() => Math.random() * 1000);
+        const flicker = 0.72 + Math.random() * 0.28;
+
+        // Rayo principal: cada tramo con 3 capas (halo, cuerpo, núcleo)
         for (let i = 1; i < pts.length; i++) {
           const a = pts[i - 1], b = pts[i];
-          const life = 1 - (now - b.t) / LIFE;
-          const alpha = life * life * b.k;
-          ctx.strokeStyle = `rgba(110,140,255,${alpha.toFixed(3)})`;
-          ctx.lineWidth = (0.8 + 1.1 * life * b.k) * dpr;
-          ctx.beginPath(); ctx.moveTo(a.x * dpr, a.y * dpr); ctx.lineTo(b.x * dpr, b.y * dpr); ctx.stroke();
+          const life = 1 - (now - b.t) / LIFE, k = b.k;
+          const segLen = Math.hypot(b.x - a.x, b.y - a.y);
+          const path = [[a.x, a.y], ...zig(a.x, a.y, b.x, b.y, Math.min(9, 2 + segLen * 0.28) * (0.6 + k), segLen > 14 ? 3 : 2, jitterSeed[i] || i)];
+          const al = life * life * flicker;
+          strokePath(path, (9 + 8 * k) * life * dpr, `rgba(40,90,255,${(al * 0.26 * k).toFixed(3)})`);
+          strokePath(path, (2 + 2 * k) * life * dpr, `rgba(77,139,255,${(al * 0.95 * k).toFixed(3)})`);
+          strokePath(path, Math.max(0.7, 1.1 * life) * dpr, `rgba(235,242,255,${(al * k).toFixed(3)})`);
         }
+        // Ramificaciones: finas, también parpadean y se re-quiebran
         for (const br of branches) {
           const life = 1 - (now - br.t) / BRANCH_LIFE;
-          ctx.strokeStyle = `rgba(140,165,255,${(life * 0.7).toFixed(3)})`;
-          ctx.lineWidth = 0.8 * dpr;
-          ctx.beginPath(); ctx.moveTo(br.p[0][0] * dpr, br.p[0][1] * dpr);
-          for (let i = 1; i < br.p.length; i++) ctx.lineTo(br.p[i][0] * dpr, br.p[i][1] * dpr);
-          ctx.stroke();
+          if (Math.random() < 0.18) continue; // titileo
+          let path = [br.p[0]];
+          for (let i = 1; i < br.p.length; i++) path = path.concat(zig(br.p[i - 1][0], br.p[i - 1][1], br.p[i][0], br.p[i][1], 3, 2, br.seed + i + (frame >> 1)));
+          strokePath(path, 4 * life * dpr, `rgba(40,90,255,${(life * 0.14).toFixed(3)})`);
+          strokePath(path, 0.9 * dpr, `rgba(150,180,255,${(life * 0.8 * flicker).toFixed(3)})`);
         }
-        if (pts.length || branches.length) raf = requestAnimationFrame(draw);
+        // Chispas: pequeñas partículas que salen disparadas y se apagan
+        for (const s of sparks) {
+          const life = 1 - (now - s.t) / SPARK_LIFE, dt = (now - s.t) / 1000;
+          const x = s.x + s.vx * dt, y = s.y + s.vy * dt + 60 * dt * dt;
+          ctx.fillStyle = `rgba(77,139,255,${(life * 0.35).toFixed(3)})`;
+          ctx.beginPath(); ctx.arc(x * dpr, y * dpr, Math.max(1, 4 * life) * dpr, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = `rgba(225,235,255,${(life * flicker).toFixed(3)})`;
+          ctx.beginPath(); ctx.arc(x * dpr, y * dpr, Math.max(0.6, 1.6 * life) * dpr, 0, Math.PI * 2); ctx.fill();
+        }
+        // Destello en la punta
+        const head = pts[pts.length - 1];
+        if (head) {
+          const life = 1 - (now - head.t) / LIFE;
+          const r = (14 + 18 * head.k) * dpr * life;
+          if (r > 0.5) {
+            const g = ctx.createRadialGradient(head.x * dpr, head.y * dpr, 0, head.x * dpr, head.y * dpr, r);
+            g.addColorStop(0, `rgba(220,232,255,${(0.55 * life * flicker).toFixed(3)})`);
+            g.addColorStop(0.35, `rgba(77,139,255,${(0.3 * life).toFixed(3)})`);
+            g.addColorStop(1, "rgba(0,83,253,0)");
+            ctx.fillStyle = g; ctx.beginPath(); ctx.arc(head.x * dpr, head.y * dpr, r, 0, Math.PI * 2); ctx.fill();
+          }
+        }
+        ctx.globalCompositeOperation = "source-over";
+        if (pts.length || branches.length || sparks.length) raf = requestAnimationFrame(draw);
         else { active = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }
       };
 
@@ -506,21 +571,21 @@
         const x = e.clientX - r.left, y = e.clientY - r.top, t = performance.now();
         if (last) {
           const dx = x - last.x, dy = y - last.y, dist = Math.hypot(dx, dy);
+          if (dist < 3) return;
           const speed = dist / Math.max(1, t - last.t); // px/ms
-          if (dist < 2) return;
-          const k = clamp(0.25 + speed * 0.35, 0.25, 0.9);         // intensidad moderada
-          const j = Math.min(6, speed * 3);                          // quiebre eléctrico
-          const nx = -dy / dist, ny = dx / dist, off = (Math.random() - 0.5) * j;
-          pts.push({ x: x + nx * off, y: y + ny * off, t, k });
-          if (speed > 1.1 && Math.random() < 0.07 && branches.length < MAX_BRANCH) {
-            const ang = Math.atan2(dy, dx) + (Math.random() < 0.5 ? 1 : -1) * (0.6 + Math.random() * 0.7);
-            const seg = []; let bx = x, by = y; seg.push([bx, by]);
-            const n = 3 + ((Math.random() * 3) | 0);
-            for (let i = 0; i < n; i++) {
-              const l = 6 + Math.random() * 12, wob = (Math.random() - 0.5) * 0.9;
-              bx += Math.cos(ang + wob) * l; by += Math.sin(ang + wob) * l; seg.push([bx, by]);
+          const k = clamp(0.3 + speed * 0.35, 0.3, 1);  // intensidad según velocidad
+          pts.push({ x, y, t, k });
+          const ang = Math.atan2(dy, dx);
+          // ramificaciones: más probables cuanto más rápido
+          if (speed > 0.6 && Math.random() < 0.08 + speed * 0.06 && branches.length < MAX_BRANCH)
+            makeBranch(x, y, ang + Math.PI + (Math.random() < 0.5 ? 1 : -1) * (0.5 + Math.random() * 0.9), 26 + Math.random() * 30 * k, t, 0);
+          // chispas en movimientos rápidos
+          if (speed > 1 && sparks.length < MAX_SPARKS) {
+            const nSp = Math.min(3, (speed * 1.2) | 0);
+            for (let s = 0; s < nSp; s++) {
+              const a2 = ang + Math.PI + (Math.random() - 0.5) * 2.2, v = 60 + Math.random() * 140;
+              sparks.push({ x, y, vx: Math.cos(a2) * v, vy: Math.sin(a2) * v, t });
             }
-            branches.push({ p: seg, t });
           }
         } else pts.push({ x, y, t, k: 0.3 });
         last = { x, y, t };
