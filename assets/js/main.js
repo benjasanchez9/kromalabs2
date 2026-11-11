@@ -779,6 +779,25 @@
     Scroll.add(track, (p) => render(clamp((p - 0.12) / 0.62)), "center");
   }
 
+  function initChoose() {
+    const el = $(".choose");
+    if (!el) return;
+    const btns = $$(".choose__btn", el), opts = $$(".choose__opt", el), why = $(".choose__why", el);
+    // Recomendación ilustrativa: el criterio elegido pesa el doble
+    const pick = (w) => {
+      let best = null, top = -1;
+      opts.forEach((o) => {
+        const score = ["u", "c", "s"].reduce((a, k) => a + Number(o.dataset[k]) * (k === w ? 2 : 1), 0);
+        if (score > top) { top = score; best = o; }
+      });
+      el.dataset.prio = w;
+      btns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.w === w)));
+      opts.forEach((o) => o.classList.toggle("is-best", o === best));
+      if (why && best) why.textContent = best.dataset.why;
+    };
+    btns.forEach((b) => on(b, "click", () => pick(b.dataset.w)));
+  }
+
   function initIntegration() {
     const el = $(".integ");
     if (!el) return;
@@ -967,6 +986,7 @@
       initWebs();
       initAutomation();
       initIntegration();
+      initChoose();
       initIdentity();
       initForm();
       initPrefetch();

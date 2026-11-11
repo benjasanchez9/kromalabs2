@@ -73,6 +73,7 @@ const SERVICES = [
   { slug: "automatizaciones", n: "02", name: "Automatizaciones", img: "arq-escalera", short: "Menos trabajo manual. Más tiempo para lo importante." },
   { slug: "integraciones", n: "03", name: "Integraciones", img: "arq-voladizo", short: "Conectamos tus herramientas para que todo fluya." },
   { slug: "identidad-digital", n: "04", name: "Identidad digital", img: "arq-curva", short: "Una presencia digital sólida y coherente con tu negocio." },
+  { slug: "consultoria-tecnologica", n: "05", name: "Consultoría tecnológica", img: "arq-escalera-curva", short: "Primero entendemos tu negocio. Después elegimos la tecnología." },
 ];
 
 const PROJECTS = [
@@ -171,7 +172,7 @@ function header(active, tone) {
               </a></li>`).join("")}
             </ul>
             <div class="mega__side">
-              <span class="mega__label">Servicios · 04</span>
+              <span class="mega__label">Servicios · ${String(SERVICES.length).padStart(2, "0")}</span>
               <p>Elegimos la herramienta según tu operación, no al revés.</p>
               <a class="mega__all" href="/servicios">Ver todos los servicios ${arrowIcon()}</a>
               <a class="mega__cta" href="/contacto?servicio=no-se">¿No sabés por dónde empezar? <strong>Hablemos</strong></a>
@@ -546,7 +547,7 @@ ${closing({ theme: "blue", title: ["Empecemos por", "entender."], text: "Una pri
    ========================================================= */
 write("/servicios", page({
   path: "/servicios", title: "Servicios", active: "servicios", tone: "black",
-  desc: "Webs, automatizaciones, integraciones e identidad digital para empresas uruguayas.",
+  desc: "Webs, automatizaciones, integraciones, identidad digital y consultoría tecnológica para empresas uruguayas.",
   body: `
 <section class="page-hero svc-index-hero theme-black" data-theme="black" aria-labelledby="t">
   ${liveShape("wave", "svc-index-hero__shape", "color:var(--blue)", 7)}
@@ -684,9 +685,71 @@ const SVC_PAGES = {
       ["¿Cuántas instancias de revisión hay?", "Trabajamos por etapas, con revisiones acordadas al inicio para avanzar con decisiones claras."],
     ],
   },
+  "consultoria-tecnologica": {
+    tone: "black", heroTheme: "black",
+    title: ["La tecnología", "no es solo para", '<span class="accent">las grandes.</span>'],
+    cta: "Contanos tu caso",
+    lead: "Primero entendemos tu negocio. Después evaluamos opciones por utilidad, costo y complejidad, sin vender ninguna herramienta en particular.",
+    desc: "Consultoría tecnológica para empresas uruguayas: analizamos tu operación y te ayudamos a elegir herramientas útiles, accesibles y a la medida de tu negocio.",
+    problem: "A las empresas no les faltan herramientas: <em>les sobran opciones</em>. Lo difícil es saber cuál conviene, cuánto invertir y cómo hacer que funcione con lo que ya usan.",
+    includes: [
+      ["Diagnóstico de procesos", "Relevamos cómo trabaja tu equipo hoy, qué herramientas usa y dónde se pierde tiempo o información."],
+      ["Oportunidades de mejora", "Detectamos qué conviene digitalizar u optimizar primero y qué puede esperar."],
+      ["Evaluación de herramientas", "Comparamos opciones del mercado por utilidad, costo y complejidad de adopción. No representamos a ninguna marca."],
+      ["Hoja de ruta", "Una recomendación por etapas, con soluciones accesibles y escalables, que conecta lo que ya usás en lugar de sumar procesos aislados."],
+    ],
+    examples: [
+      ["Elegir un sistema de gestión", "Una empresa que factura y controla stock en planillas y quiere un sistema que le sirva sin pagar de más."],
+      ["Ordenar las consultas", "Pedidos que llegan por WhatsApp, mail y la web, sin un lugar común para seguirlos."],
+      ["Revisar lo que ya se paga", "Suscripciones que se superponen o que el equipo dejó de usar."],
+      ["Antes de invertir", "Una mirada independiente antes de contratar un software o un desarrollo a medida."],
+    ],
+    steps: [["Conversación inicial", "Qué hace tu negocio, qué te frena y qué querés resolver."], ["Relevamiento", "Procesos, herramientas actuales y lo que cuestan."], ["Evaluación", "Opciones comparadas con criterios claros."], ["Recomendación", "Hoja de ruta priorizada y acompañamiento si decidís implementarla."]],
+    faq: [
+      ["¿Venden o representan alguna herramienta?", "No. Recomendamos según lo que tu negocio necesita. Si algo que ya usás sirve, te lo vamos a decir."],
+      ["¿Necesito conocimientos técnicos?", "No. Explicamos cada opción en términos de costo, tiempo y uso diario, sin jerga."],
+      ["¿Qué recibo al final?", "Un diagnóstico y una recomendación por etapas: qué usar, en qué orden, una estimación de costos y qué implica adoptarlo."],
+      ["¿Después pueden implementarlo?", "Sí, si lo necesitás. Podemos encargarnos de webs, automatizaciones, integraciones o identidad digital, o acompañar a tu equipo o a otro proveedor."],
+    ],
+  },
 };
 
 function svcDemo(slug) {
+  if (slug === "consultoria-tecnologica") {
+    const PRIO = [["u", "Que resuelva más"], ["c", "Que cueste menos"], ["s", "Que sea fácil de adoptar"]];
+    const CRIT = [["u", "Utilidad"], ["c", "Costo accesible"], ["s", "Simplicidad"]];
+    const OPTS = [
+      { t: "Planilla compartida y formulario", u: 2, c: 3, s: 2, why: "Si el presupuesto manda, una planilla compartida con un formulario ordena las consultas casi sin costo. Alcanza para empezar y se puede escalar después." },
+      { t: "CRM liviano", u: 3, c: 2, s: 2, why: "Si lo que más pesa es resolver bien el problema, un CRM liviano reúne las consultas y su seguimiento en un solo lugar, con un costo mensual acotado." },
+      { t: "Conectar lo que ya usás", u: 2, c: 2, s: 3, why: "Si el equipo necesita adoptar el cambio rápido, conviene llevar los canales que ya usa a una bandeja común, sin aprender un sistema nuevo." },
+      { t: "Sistema a medida", u: 3, c: 1, s: 1, why: "" },
+      { t: "Suite corporativa (ERP)", u: 2, c: 1, s: 1, why: "" },
+    ];
+    const meter = (k, v) => `<span class="choose__m" data-k="${k}"><span class="choose__mk" aria-hidden="true">${CRIT.find((c) => c[0] === k)[1]}</span><span class="choose__bars" aria-hidden="true">${[1, 2, 3].map((n) => `<i${n <= v ? ' class="on"' : ""}></i>`).join("")}</span><span class="sr-only">${CRIT.find((c) => c[0] === k)[1]}: ${v} de 3.</span></span>`;
+    return `<section class="section theme-black choose" data-theme="black" data-prio="u" aria-labelledby="demo-t">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow" data-reveal="fade">Cómo se ve</p>${lines(["Un problema,", "varias respuestas."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" style="margin-top:20px" ')}</div>
+      <p class="muted" style="max-width:34ch">Ejemplo ilustrativo. Elegí qué pesa más y mirá cómo cambia la recomendación.</p>
+    </div>
+    <div class="choose__top">
+      <div class="choose__need"><p class="eyebrow">Necesidad</p><p class="h3">Ordenar las consultas que llegan por WhatsApp, mail y la web.</p></div>
+      <div class="choose__prio" role="group" aria-label="Qué priorizar">
+        <p class="eyebrow" aria-hidden="true">Priorizá</p>
+        ${PRIO.map(([k, l]) => `<button type="button" class="choose__btn" data-w="${k}" aria-pressed="${k === "u"}">${l}</button>`).join("")}
+      </div>
+    </div>
+    <div class="choose__table">
+      <div class="choose__head" aria-hidden="true"><span>Opción</span>${CRIT.map(([k, l]) => `<span data-k="${k}">${l}</span>`).join("")}<span></span></div>
+      <ol class="choose__list">
+        ${OPTS.map((o) => `<li class="choose__opt${o.t === "CRM liviano" ? " is-best" : ""}" data-u="${o.u}" data-c="${o.c}" data-s="${o.s}" data-why="${o.why}"><span class="choose__name">${o.t}</span>${meter("u", o.u)}${meter("c", o.c)}${meter("s", o.s)}<span class="choose__tag"><span>Recomendada</span></span></li>`).join("\n        ")}
+      </ol>
+    </div>
+    <p class="choose__why lead" aria-live="polite">${OPTS[1].why}</p>
+    <p class="choose__note muted">El sistema a medida y la suite corporativa también resolverían el problema, pero para esta necesidad son más grandes y costosos de lo necesario.</p>
+  </div>
+</section>`;
+  }
   if (slug === "automatizaciones") {
     const stages = [
       ["Pedido recibido", "Llega un pedido", "Un cliente completa el formulario de tu web."],
@@ -803,7 +866,7 @@ for (const s of SERVICES) {
     ${lines(d.title, "h1", "h1 svc-hero__title").replace("<h1 ", '<h1 id="t" ')}
     <div class="page-hero__aside svc-hero__aside" data-reveal="rise" style="--delay:380ms">
       <p class="lead">${d.lead}</p>
-      <a class="btn ${heroBtn}" href="/contacto?servicio=${s.slug}">Consultar por ${s.name.toLowerCase()} ${ARROW}</a>
+      <a class="btn ${heroBtn}" href="/contacto?servicio=${s.slug}">${d.cta || "Consultar por " + s.name.toLowerCase()} ${ARROW}</a>
     </div>
   </div>
   ${isWebs ? `<div class="wrap" style="margin-top:clamp(48px,7vw,96px)">${websHeroStage()}</div>` : ""}
@@ -874,7 +937,7 @@ write("/proyectos", page({
   <div class="wrap">
     <div class="pfilter" role="group" aria-label="Filtrar por servicio" data-reveal="fade">
       <button type="button" class="pfilter__chip" aria-pressed="true" data-filter="all">Todos <span>${String(PROJECTS.length).padStart(2, "0")}</span></button>
-      ${SERVICES.map((s) => `<button type="button" class="pfilter__chip" aria-pressed="false" data-filter="${s.slug}"><span class="pfilter__ico">${ICONS[s.slug]}</span>${s.name} <span>${String(PROJECTS.filter((p) => p.service === s.slug).length).padStart(2, "0")}</span></button>`).join("")}
+      ${SERVICES.filter((s) => PROJECTS.some((p) => p.service === s.slug)).map((s) => `<button type="button" class="pfilter__chip" aria-pressed="false" data-filter="${s.slug}"><span class="pfilter__ico">${ICONS[s.slug]}</span>${s.name} <span>${String(PROJECTS.filter((p) => p.service === s.slug).length).padStart(2, "0")}</span></button>`).join("")}
       <p class="pfilter__status num" aria-live="polite"><span data-count>${String(PROJECTS.length).padStart(2, "0")}</span> conceptos</p>
     </div>
     <ol class="stack">

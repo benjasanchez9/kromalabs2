@@ -33,6 +33,13 @@ export const ICONS = {
     <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
     <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
   </svg>`,
+  "consultoria-tecnologica": `<svg class="ico ico--consult" viewBox="0 0 48 48" aria-hidden="true">
+    <path class="s o" d="M11 8C19 8 19 24 25 24M11 18C19 18 19 24 25 24M11 30C19 30 19 24 25 24M11 40C19 40 19 24 25 24M25 24H36"/>
+    <path class="ico-pick" pathLength="1" d="M11 18C19 18 19 24 25 24H36"/>
+    <circle class="ico-opt x1" cx="7.5" cy="8" r="3.4"/><circle class="ico-opt k" cx="7.5" cy="18" r="3.4"/>
+    <circle class="ico-opt x2" cx="7.5" cy="30" r="3.4"/><circle class="ico-opt x3" cx="7.5" cy="40" r="3.4"/>
+    <rect class="ico-goal" x="36" y="18.5" width="9" height="11" rx="3"/>
+  </svg>`,
 };
 
 export const PREVIEWS = {
@@ -87,5 +94,17 @@ export const PREVIEWS = {
     <g class="pv-piece q2"><rect x="118" y="14" width="108" height="62" rx="10" fill="#e2572b"/><rect x="130" y="28" width="62" height="10" rx="5" fill="#f4ecdc"/><rect x="130" y="44" width="44" height="10" rx="5" fill="#f4ecdc"/></g>
     <g class="pv-piece q3"><rect x="118" y="84" width="50" height="62" rx="10" fill="#fff" stroke="#1e3a2c" stroke-opacity=".2"/><text x="128" y="128" font-family="Figtree, Arial, sans-serif" font-weight="800" font-size="26" fill="#1e3a2c">Aa</text></g>
     <g class="pv-piece q4"><rect x="176" y="84" width="50" height="62" rx="10" fill="#1e3a2c"/><rect x="176" y="84" width="50" height="20" rx="10" fill="#e2572b"/></g>
+  </svg>`,
+  "consultoria-tecnologica": `<svg class="pv pv--consult" viewBox="0 0 240 160" aria-hidden="true">
+    <rect width="240" height="160" fill="#070708"/>
+    <path d="M92 26C120 26 112 80 140 80M92 53C120 53 112 80 140 80M92 107C120 107 112 80 140 80M92 134C120 134 112 80 140 80M140 80H166" fill="none" stroke="#f5f1e8" stroke-opacity=".16" stroke-width="2"/>
+    <path class="pv-pick" pathLength="1" d="M92 80H166"/>
+    <g class="pv-opt x1"><rect x="16" y="16" width="76" height="20" rx="10" fill="#f5f1e8" fill-opacity=".08" stroke="#f5f1e8" stroke-opacity=".22"/><rect x="28" y="23.5" width="40" height="5" rx="2.5" fill="#f5f1e8" fill-opacity=".55"/></g>
+    <g class="pv-opt x2"><rect x="16" y="43" width="76" height="20" rx="10" fill="#f5f1e8" fill-opacity=".08" stroke="#f5f1e8" stroke-opacity=".22"/><rect x="28" y="50.5" width="30" height="5" rx="2.5" fill="#f5f1e8" fill-opacity=".55"/></g>
+    <g class="pv-opt k"><rect class="pv-k" x="16" y="70" width="76" height="20" rx="10" fill="#f5f1e8" fill-opacity=".08" stroke="#f5f1e8" stroke-opacity=".22"/><rect x="28" y="77.5" width="46" height="5" rx="2.5" fill="#f5f1e8" fill-opacity=".8"/></g>
+    <g class="pv-opt x3"><rect x="16" y="97" width="76" height="20" rx="10" fill="#f5f1e8" fill-opacity=".08" stroke="#f5f1e8" stroke-opacity=".22"/><rect x="28" y="104.5" width="36" height="5" rx="2.5" fill="#f5f1e8" fill-opacity=".55"/></g>
+    <g class="pv-opt x4"><rect x="16" y="124" width="76" height="20" rx="10" fill="#f5f1e8" fill-opacity=".08" stroke="#f5f1e8" stroke-opacity=".22"/><rect x="28" y="131.5" width="26" height="5" rx="2.5" fill="#f5f1e8" fill-opacity=".55"/></g>
+    <g class="pv-crit"><rect x="128" y="18" width="12" height="4" rx="2" fill="#4d8bff"/><rect x="144" y="18" width="12" height="4" rx="2" fill="#4d8bff" fill-opacity=".6"/><rect x="160" y="18" width="12" height="4" rx="2" fill="#4d8bff" fill-opacity=".35"/></g>
+    <g class="pv-goal"><rect x="166" y="50" width="60" height="60" rx="14" fill="#f5f1e8"/><rect x="178" y="88" width="36" height="5" rx="2.5" fill="#070708" fill-opacity=".35"/><path class="pv-check" d="M184 72l7 7 13-14" fill="none" stroke="#0053fd" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
   </svg>`,
 };
