@@ -387,6 +387,11 @@ html.is-entering .curtain__mark { opacity: 1; animation: fade-out 160ms var(--ea
    Revelados al entrar en pantalla (sólo con JS activo)
    ========================================================= */
 .js [data-reveal] { transition: opacity var(--d-reveal) var(--ease-out), transform var(--d-reveal) var(--ease-out), clip-path var(--d-reveal) var(--ease-out); transition-delay: var(--delay, 0ms); }
+/* En celular el subtítulo del hero es el elemento LCP: entra antes para no demorar la carga percibida */
+@media (max-width: 820px) {
+  .hero__meta[data-reveal] { --delay: 120ms !important; }
+  .js .hero__meta[data-reveal="fade"]:not(.is-in) { opacity: 1; transform: translateY(14px); }
+}
 .js [data-reveal="rise"]:not(.is-in)  { opacity: 0; transform: translateY(28px); }
 .js [data-reveal="fade"]:not(.is-in)  { opacity: 0; }
 .js [data-reveal="clip"]:not(.is-in)  { clip-path: inset(0 0 100% 0); }

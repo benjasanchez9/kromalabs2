@@ -1133,6 +1133,28 @@ fs.writeFileSync(path.join(OUT, "sitemap.xml"), `<?xml version="1.0" encoding="U
 ${PAGES.filter((u) => u !== "/404").map((u) => `  <url><loc>${SITE_URL}${u === "/" ? "/" : u}</loc><lastmod>${today}</lastmod></url>`).join("\n")}
 </urlset>
 `);
+// llms.txt: resumen del sitio para asistentes de IA (llmstxt.org)
+fs.writeFileSync(path.join(OUT, "llms.txt"), `# KROMA
+
+> KROMA es una consultora tecnológica para empresas uruguayas, con base en Montevideo. Ayuda a elegir herramientas tecnológicas y a aprovecharlas de forma eficiente. Su propósito es democratizar la digitalización de las empresas uruguayas. No vende ni representa ninguna herramienta en particular.
+
+Contacto: ${EMAIL} · Instagram: ${IG_URL}
+
+## Servicios
+
+${SERVICES.map((s) => `- [${s.name}](${SITE_URL}/servicios/${s.slug}): ${SVC_PAGES[s.slug].desc}`).join("\n")}
+
+## Sobre KROMA
+
+- [Nosotros](${SITE_URL}/nosotros): propósito y forma de trabajo (Entendemos, Priorizamos, Desarrollamos, Acompañamos).
+- [Contacto](${SITE_URL}/contacto): formulario para consultas.
+
+## Proyectos
+
+Los proyectos publicados son conceptos ilustrativos, no clientes reales.
+
+${PROJECTS.map((pr) => `- [${pr.title}](${SITE_URL}/proyectos/${pr.slug})`).join("\n")}
+`);
 fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 
 // favicon

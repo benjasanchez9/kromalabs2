@@ -91,7 +91,7 @@
     });
     cleanups.push(() => io.disconnect());
     // El hero arranca enseguida, sin esperar al observer
-    requestAnimationFrame(() => $$(".hero .lines, .hero__media, .hero__ivory, .hero__mark-in, .page-hero .lines").forEach((el) => el.classList.add("is-in")));
+    requestAnimationFrame(() => $$(".hero .lines, .hero__meta, .hero__media, .hero__ivory, .hero__mark-in, .page-hero .lines").forEach((el) => el.classList.add("is-in")));
   }
 
   /* =======================================================

@@ -1,0 +1,27 @@
+# KROMA
+
+> KROMA es una consultora tecnológica para empresas uruguayas, con base en Montevideo. Ayuda a elegir herramientas tecnológicas y a aprovecharlas de forma eficiente. Su propósito es democratizar la digitalización de las empresas uruguayas. No vende ni representa ninguna herramienta en particular.
+
+Contacto: somoskroma@gmail.com · Instagram: https://www.instagram.com/_kromalabs/
+
+## Servicios
+
+- [Webs](https://kromalabs2.vercel.app/servicios/webs): Diseño y desarrollo de sitios web claros, rápidos y fáciles de actualizar para empresas uruguayas.
+- [Automatizaciones](https://kromalabs2.vercel.app/servicios/automatizaciones): Automatización de tareas repetitivas para empresas: pedidos, avisos, reportes y flujos de trabajo.
+- [Integraciones](https://kromalabs2.vercel.app/servicios/integraciones): Integración de sistemas para empresas: tienda online, gestión, facturación, CRM y reportes conectados.
+- [Identidad digital](https://kromalabs2.vercel.app/servicios/identidad-digital): Identidad visual y diseño de material para redes y otros puntos de contacto, con un sistema coherente.
+- [Consultoría tecnológica](https://kromalabs2.vercel.app/servicios/consultoria-tecnologica): Consultoría tecnológica para empresas uruguayas: analizamos tu operación y te ayudamos a elegir herramientas útiles, accesibles y a la medida de tu negocio.
+
+## Sobre KROMA
+
+- [Nosotros](https://kromalabs2.vercel.app/nosotros): propósito y forma de trabajo (Entendemos, Priorizamos, Desarrollamos, Acompañamos).
+- [Contacto](https://kromalabs2.vercel.app/contacto): formulario para consultas.
+
+## Proyectos
+
+Los proyectos publicados son conceptos ilustrativos, no clientes reales.
+
+- [Web para un estudio profesional](https://kromalabs2.vercel.app/proyectos/web-estudio-profesional)
+- [Automatización de pedidos para una distribuidora](https://kromalabs2.vercel.app/proyectos/automatizacion-pedidos)
+- [Integración entre tienda online y stock](https://kromalabs2.vercel.app/proyectos/integracion-tienda-stock)
+- [Identidad digital para una cafetería de barrio](https://kromalabs2.vercel.app/proyectos/identidad-cafeteria)
