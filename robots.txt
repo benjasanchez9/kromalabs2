@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://kromalabs2.vercel.app/sitemap.xml

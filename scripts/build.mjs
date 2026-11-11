@@ -48,7 +48,8 @@ const band = (fromColor, toTheme, rev = false) => `
 /* ---------------- datos ---------------- */
 // Dominio público del sitio. Si Vercel te asigna otro (o usás dominio propio), cambialo y regenerá.
 // Se usa para la imagen que aparece al compartir el link (WhatsApp, LinkedIn, etc.).
-const SITE_URL = "https://kroma-web.vercel.app";
+// Dominio público del sitio. Si se conecta un dominio propio, cambiarlo acá y reconstruir.
+const SITE_URL = "https://kromalabs2.vercel.app";
 const EMAIL = "somoskroma@gmail.com";
 const IG = "@_kromalabs";
 const IG_URL = "https://www.instagram.com/_kromalabs/";
@@ -111,19 +112,37 @@ const PROJECTS = [
   },
 ];
 
+/* ---------------- SEO ---------------- */
+const PAGES = [];
+const clip = (t, n) => (t.length <= n ? t : t.slice(0, t.lastIndexOf(" ", n - 1)).replace(/[,.;:]$/, "") + "…");
+const ORG_LD = {
+  "@type": "ProfessionalService", "@id": SITE_URL + "/#kroma", name: "KROMA", url: SITE_URL + "/",
+  description: "Consultoría tecnológica para empresas uruguayas: webs, automatizaciones, integraciones, identidad digital y consultoría tecnológica.",
+  logo: SITE_URL + "/assets/img/apple-touch-icon.png", image: SITE_URL + "/assets/img/og-kroma.jpg",
+  email: EMAIL, sameAs: [IG_URL], areaServed: { "@type": "Country", name: "Uruguay" },
+  address: { "@type": "PostalAddress", addressLocality: "Montevideo", addressCountry: "UY" },
+};
+const crumbs = (items) => ({
+  "@type": "BreadcrumbList",
+  itemListElement: [["Inicio", "/"], ...items].map(([name, u], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE_URL + u })),
+});
+
 /* ---------------- layout ---------------- */
-function head({ title, desc, path: p }) {
-  const full = p === "/" ? "KROMA — Consultoría tecnológica para empresas" : `${title} — KROMA`;
+function head({ title, seo, desc, path: p, ld = [] }) {
+  const full = p === "/" ? "KROMA — Consultoría tecnológica para empresas en Uruguay" : `${seo || title} — KROMA`;
+  const url = SITE_URL + (p === "/" ? "/" : p);
+  const is404 = p === "/404";
+  const graph = is404 ? [] : [ORG_LD, ...ld];
   return `<!DOCTYPE html>
 <html lang="es-UY">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${full}</title>
-<meta name="description" content="${desc}">
+<meta name="description" content="${desc}">${is404 ? '\n<meta name="robots" content="noindex">' : `\n<link rel="canonical" href="${url}">`}
 <meta name="theme-color" content="#0053fd">
 <meta name="color-scheme" content="light">
-<meta property="og:type" content="website">
+<meta property="og:type" content="website">${is404 ? "" : `\n<meta property="og:url" content="${url}">`}
 <meta property="og:title" content="${full}">
 <meta property="og:description" content="${desc}">
 <meta property="og:locale" content="es_UY">
@@ -131,7 +150,7 @@ function head({ title, desc, path: p }) {
 <meta property="og:image" content="${SITE_URL}/assets/img/og-kroma.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary_large_image">${graph.length ? `\n<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>` : ""}
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
@@ -232,8 +251,9 @@ const footer = `
 </footer>
 <div class="curtain" aria-hidden="true"><div class="curtain__body"></div>${iso("curtain__mark")}</div>`;
 
-function page({ path: p, title, desc, active, tone, body }) {
-  return `${head({ title, desc, path: p })}
+function page({ path: p, title, seo, desc, active, tone, body, ld }) {
+  PAGES.push(p);
+  return `${head({ title, seo, desc, path: p, ld })}
 <body>
 ${sprite}
 ${header(active, tone)}
@@ -440,7 +460,7 @@ const dialNode = (i) => {
 };
 
 write("/nosotros", page({
-  path: "/nosotros", title: "Nosotros", active: "nosotros", tone: "ivory",
+  path: "/nosotros", title: "Nosotros", seo: "Nosotros: consultora tecnológica en Uruguay", active: "nosotros", tone: "ivory",
   desc: "KROMA nace para democratizar la digitalización de las empresas uruguayas: elegir bien las herramientas e implementarlas con criterio.",
   body: `
 <section class="page-hero about-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
@@ -546,7 +566,7 @@ ${closing({ theme: "blue", title: ["Empecemos por", "entender."], text: "Una pri
    SERVICIOS (índice)
    ========================================================= */
 write("/servicios", page({
-  path: "/servicios", title: "Servicios", active: "servicios", tone: "black",
+  path: "/servicios", title: "Servicios", seo: "Servicios de tecnología para empresas", ld: [crumbs([["Servicios", "/servicios"]])], active: "servicios", tone: "black",
   desc: "Webs, automatizaciones, integraciones, identidad digital y consultoría tecnológica para empresas uruguayas.",
   body: `
 <section class="page-hero svc-index-hero theme-black" data-theme="black" aria-labelledby="t">
@@ -582,6 +602,7 @@ ${band("var(--black)", "ivory")}
    ========================================================= */
 const SVC_PAGES = {
   webs: {
+    seo: "Diseño web para empresas en Uruguay",
     tone: "blue", heroTheme: "blue",
     title: ["Una web que", "trabaja para", "tu negocio."],
     lead: "Diseñamos y desarrollamos sitios claros, rápidos y fáciles de actualizar, pensados para que tus clientes entiendan qué hacés y cómo contactarte.",
@@ -608,6 +629,7 @@ const SVC_PAGES = {
     ],
   },
   automatizaciones: {
+    seo: "Automatización de procesos para empresas",
     tone: "black", heroTheme: "black",
     title: ["Menos tareas", "repetidas.", '<span class="accent">Más tiempo útil.</span>'],
     lead: "Identificamos tareas manuales que se repiten todos los días y las resolvemos con herramientas que ya usás o que conviene sumar.",
@@ -634,6 +656,7 @@ const SVC_PAGES = {
     ],
   },
   integraciones: {
+    seo: "Integración de sistemas y herramientas",
     tone: "ivory", heroTheme: "ivory",
     title: ["Tus herramientas,", "hablando", "entre sí."],
     lead: "Conectamos los sistemas que ya usás para que la información viaje sola y no haya que cargarla dos veces.",
@@ -660,6 +683,7 @@ const SVC_PAGES = {
     ],
   },
   "identidad-digital": {
+    seo: "Identidad visual y diseño para redes",
     tone: "blue", heroTheme: "blue",
     title: ["Una marca", "que se reconoce", "en todos lados."],
     lead: "Creamos o actualizamos tu identidad visual y diseñamos las piezas que la llevan a redes, web y otros puntos de contacto.",
@@ -686,6 +710,7 @@ const SVC_PAGES = {
     ],
   },
   "consultoria-tecnologica": {
+    seo: "Consultoría tecnológica para empresas",
     tone: "black", heroTheme: "black",
     title: ["La tecnología", "no es solo para", '<span class="accent">las grandes.</span>'],
     cta: "Contanos tu caso",
@@ -912,14 +937,17 @@ ${svcDemo(s.slug)}
 </section>
 ${closing({ theme: "black", size: "h1", title: ["Hablemos de", s.name.toLowerCase() + "."], text: `Contanos qué necesitás y te decimos cómo lo encararíamos. ¿Te interesa otro frente? Seguí por <a href="/servicios/${next.slug}">${next.name}</a>.`, href: `/contacto?servicio=${s.slug}` })}
 `;
-  write(`/servicios/${s.slug}`, page({ path: `/servicios/${s.slug}`, title: s.name, active: "servicios/" + s.slug, tone: d.tone, desc: d.desc, body }));
+  write(`/servicios/${s.slug}`, page({ path: `/servicios/${s.slug}`, title: s.name, seo: d.seo, active: "servicios/" + s.slug, tone: d.tone, desc: d.desc, body, ld: [
+    { "@type": "Service", name: s.name, serviceType: d.seo, description: d.desc, url: `${SITE_URL}/servicios/${s.slug}`, provider: { "@id": SITE_URL + "/#kroma" }, areaServed: { "@type": "Country", name: "Uruguay" } },
+    crumbs([["Servicios", "/servicios"], [s.name, `/servicios/${s.slug}`]]),
+  ] }));
 }
 
 /* =========================================================
    PROYECTOS
    ========================================================= */
 write("/proyectos", page({
-  path: "/proyectos", title: "Proyectos", active: "proyectos", tone: "black",
+  path: "/proyectos", title: "Proyectos", seo: "Proyectos conceptuales", ld: [crumbs([["Proyectos", "/proyectos"]])], active: "proyectos", tone: "black",
   desc: "Proyectos conceptuales de KROMA: ejemplos de cómo abordamos webs, automatizaciones, integraciones e identidad digital.",
   body: `
 <section class="page-hero theme-black" data-theme="black" aria-labelledby="t">
@@ -968,7 +996,8 @@ PROJECTS.forEach((pr, i) => {
   const next = PROJECTS[(i + 1) % PROJECTS.length];
   write(`/proyectos/${pr.slug}`, page({
     path: `/proyectos/${pr.slug}`, title: pr.title, active: "proyectos", tone: "ivory",
-    desc: `Proyecto conceptual de KROMA: ${pr.title.toLowerCase()}.`,
+    desc: clip(`Proyecto conceptual de KROMA: ${pr.title.toLowerCase()}. ${pr.context}`, 158),
+    ld: [crumbs([["Proyectos", "/proyectos"], [pr.title, `/proyectos/${pr.slug}`]])],
     body: `
 <section class="page-hero theme-ivory case-hero" data-theme="ivory" aria-labelledby="t" style="padding-bottom:0">
   ${liveShape("orb", "case-hero__live", "color:var(--blue)", 7)}
@@ -1009,8 +1038,8 @@ ${closing({ theme: "blue", title: ["¿Algo", "parecido?"], text: "Si tu empresa 
    CONTACTO
    ========================================================= */
 write("/contacto", page({
-  path: "/contacto", title: "Hablemos", active: "contacto", tone: "ivory",
-  desc: "Contale a KROMA qué querés mejorar en tu empresa: webs, automatizaciones, integraciones o identidad digital.",
+  path: "/contacto", title: "Hablemos", seo: "Contacto: contanos qué querés mejorar", active: "contacto", tone: "ivory",
+  desc: "Contale a KROMA qué querés mejorar en tu empresa: webs, automatizaciones, integraciones, identidad digital o consultoría tecnológica.",
   body: `
 <section class="page-hero theme-ivory contact-hero" data-theme="ivory" aria-labelledby="t">
   ${liveShape("drop", "contact-hero__live", "color:var(--blue)", 7)}
@@ -1096,6 +1125,15 @@ write("/404", page({
   </div>
 </section>`,
 }));
+
+// sitemap y robots
+const today = new Date().toISOString().slice(0, 10);
+fs.writeFileSync(path.join(OUT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${PAGES.filter((u) => u !== "/404").map((u) => `  <url><loc>${SITE_URL}${u === "/" ? "/" : u}</loc><lastmod>${today}</lastmod></url>`).join("\n")}
+</urlset>
+`);
+fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 
 // favicon
 fs.writeFileSync(path.join(OUT, "assets/img/favicon.svg"),
