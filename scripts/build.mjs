@@ -119,7 +119,7 @@ const clip = (t, n) => (t.length <= n ? t : t.slice(0, t.lastIndexOf(" ", n - 1)
 const ORG_LD = {
   "@type": "ProfessionalService", "@id": SITE_URL + "/#kroma", name: "KROMA", url: SITE_URL + "/",
   description: "Consultoría tecnológica para empresas uruguayas: webs, automatizaciones, integraciones, identidad digital y consultoría tecnológica.",
-  logo: SITE_URL + "/assets/img/apple-touch-icon.png", image: SITE_URL + "/assets/img/og-kroma.jpg",
+  logo: SITE_URL + "/assets/img/logo-512.png", image: SITE_URL + "/assets/img/og-kroma.jpg",
   email: EMAIL, sameAs: [IG_URL], areaServed: { "@type": "Country", name: "Uruguay" },
   address: { "@type": "PostalAddress", addressLocality: "Montevideo", addressCountry: "UY" },
 };
@@ -373,7 +373,7 @@ const heroPhotoD = (s) => { const top = s.photo[s.photo.length - 1]; return `M${
 
 write("/", page({
   path: "/", title: "Inicio", active: "inicio", tone: "blue",
-  desc: "KROMA es una consultora tecnológica para empresas uruguayas: webs, automatizaciones, integraciones e identidad digital, elegidas e implementadas con criterio.",
+  desc: "Consultora tecnológica para empresas uruguayas: te ayudamos a elegir y aprovechar webs, automatizaciones, integraciones, identidad digital y más.",
   body: `
 <section class="hero theme-blue" data-theme="blue" aria-labelledby="hero-titulo" data-shape='${JSON.stringify(HERO_SHAPE)}'>
   <div class="hero__stage">
@@ -588,7 +588,7 @@ write("/servicios", page({
   <div class="wrap page-hero__grid">
     <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/">Inicio</a></li><li aria-current="page">Servicios</li></ol></nav>
     ${lines(["Herramientas que", "mueven tu negocio."], "h1", "display svc-index-hero__title").replace("<h1 ", '<h1 id="t" ')}
-    <p class="lead svc-index-hero__sub" data-reveal="rise" style="--delay:350ms">Soluciones tecnológicas a medida<br>para empresas que quieren más.</p>
+    <p class="lead svc-index-hero__sub" data-reveal="rise" style="--delay:350ms">Elegimos, construimos y conectamos<br>la tecnología que tu empresa necesita.</p>
   </div>
 </section>
 <section class="section theme-black trail-zone" data-theme="black" data-trail aria-label="Lista de servicios" style="padding-top:0;padding-bottom:clamp(32px,5vw,72px)">

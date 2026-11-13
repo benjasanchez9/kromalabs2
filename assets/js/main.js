@@ -245,7 +245,7 @@
   function placeShapes() {
     const shapes = $$(".page-hero > .live:not(.svc-index-hero__shape)");
     if (!shapes.length) return;
-    const OBST = "h1, h2, p, li, a, button, nav, label, input, select, textarea, img, .btn, .eyebrow, .tag-concept, .frame, .case-hero__media";
+    const OBST = "h1, h2, p, li, a, button, label, input, select, textarea, img, .btn, .eyebrow, .tag-concept, .frame, .case-hero__media";
     const place = () => shapes.forEach((el) => {
       const hero = el.parentElement;
       if (el.dataset.base == null) el.dataset.base = el.getAttribute("style") || "";
