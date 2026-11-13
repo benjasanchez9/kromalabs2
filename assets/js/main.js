@@ -921,6 +921,9 @@
       const opt = Array.from(form.servicio.options).find((o) => o.value === pre);
       if (opt) form.servicio.value = pre;
     }
+    // lo escrito en el cierre de cualquier página llega como primer borrador del mensaje
+    const msg = (params.get("mensaje") || "").trim();
+    if (msg && form.mensaje && !form.mensaje.value) form.mensaje.value = msg.slice(0, 1000);
     const rules = {
       nombre: (v) => (v.trim().length >= 2 ? "" : "Contanos tu nombre."),
       contacto: (v) => {

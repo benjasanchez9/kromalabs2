@@ -4,6 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ICONS, PREVIEWS } from "./icons.mjs";
+import { PROJECT_ART } from "./art.mjs";
 
 const OUT = process.argv[2];
 const svgFile = fs.readFileSync(path.join(OUT, "assets/img/kroma-isotipo.svg"), "utf8");
@@ -38,7 +39,7 @@ const liveShape = (kind, cls, style = "", amp = 3.2) =>
 const decoBlob = (d = BLOB_1) => `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${d}" fill="currentColor"/></svg>`;
 
 const lines = (arr, tag = "h1", cls = "", base = 0) =>
-  `<${tag} class="lines ${cls}" data-lines>${arr.map((l, i) => `<span class="ln"><span style="--i:${i};--base:${base}ms">${l}</span></span>`).join("")}</${tag}>`;
+  `<${tag} class="lines ${cls}"${tag === "h1" ? " data-lines" : ""}>${arr.map((l, i) => `<span class="ln"><span style="--i:${i};--base:${base}ms">${l}</span></span>`).join("")}</${tag}>`;
 
 const band = (fromColor, toTheme, rev = false) => `
 <div class="band theme-${toTheme}" data-band${rev ? '="rev"' : ""} aria-hidden="true">
@@ -300,11 +301,11 @@ function svcRows() {
 }
 
 function projCard(pr, variant, i = 0, hTag = "h3", eager = false) {
-  return `<article class="proj proj--${variant}" data-reveal="rise" style="--delay:${i * 80}ms">
+  return `<article class="proj proj--${variant}">
   <a class="proj__link" href="/proyectos/${pr.slug}">
     <div class="proj__media">
       <div class="proj__para" data-parallax="0.07">
-        <picture><source srcset="/assets/img/${pr.img}-900.webp 900w, /assets/img/${pr.img}.webp 1536w" sizes="(max-width: 920px) 100vw, 60vw" type="image/webp"><img src="/assets/img/${pr.img}.jpg" srcset="/assets/img/${pr.img}-900.jpg 900w, /assets/img/${pr.img}.jpg 1536w" sizes="(max-width: 920px) 100vw, 60vw" alt="" width="1536" height="1024" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture>
+        ${variant === "b" ? PROJECT_ART[pr.slug].replace('viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice"', 'viewBox="282 140 646 524" preserveAspectRatio="xMidYMid meet"') : PROJECT_ART[pr.slug]}
       </div>
       <span class="proj__cta">Ver caso ${arrowIcon()}</span>
     </div>
@@ -316,16 +317,34 @@ function projCard(pr, variant, i = 0, hTag = "h3", eager = false) {
 </article>`;
 }
 
-function closing({ theme = "black", title, text, trail = false, cta = "Hablemos", href = "/contacto", size = "display" }) {
-  const btn = theme === "blue" ? "" : theme === "ivory" ? "" : "btn--ivory";
-  return `<section class="section closing theme-${theme}${trail ? " trail-zone" : ""}" data-theme="${theme}"${trail ? " data-trail" : ""} aria-labelledby="cierre-titulo">
+// Cierre de página: una frase propia de cada página y el primer paso del contacto ya a mano.
+// Es un formulario GET real hacia /contacto: funciona sin JavaScript y lleva lo escrito al campo Mensaje.
+const EXAMPLES = {
+  webs: "renovar la web de la empresa",
+  automatizaciones: "dejar de cargar pedidos a mano",
+  integraciones: "conectar la tienda con el stock",
+  "identidad-digital": "publicar sin depender de nadie",
+  "consultoria-tecnologica": "elegir un sistema de gestión",
+};
+let closingN = 0;
+function closing({ theme = "black", title, text, trail = false, servicio = "", example = "" }) {
+  const id = `cierre-${++closingN}`;
+  const btn = theme === "black" ? "btn--ivory" : "";
+  const ej = example || EXAMPLES[servicio] || "ordenar los pedidos de WhatsApp";
+  return `<section class="section closing theme-${theme}${trail ? " trail-zone" : ""}" data-theme="${theme}"${trail ? " data-trail" : ""} aria-labelledby="${id}-t">
   <div class="wrap closing__inner">
-    ${lines(title, "h2", size + " closing__title").replace("<h2 ", '<h2 id="cierre-titulo" ')}
-    <div class="closing__side" data-reveal="rise" style="--delay:200ms">
-      <p class="lead">${text}</p>
-      <a class="btn ${btn}" href="${href}">${cta} ${ARROW}</a>
-    </div>
+    ${lines(title, "h2", "h1 closing__title").replace("<h2 ", `<h2 id="${id}-t" `)}
+    <p class="lead closing__text">${text}</p>
+    <form class="closing__form" action="/contacto" method="get">
+      <label class="closing__label" for="${id}-m">En una línea, ¿qué querés mejorar?</label>
+      <div class="closing__field">
+        <input id="${id}-m" name="mensaje" type="text" maxlength="300" autocomplete="off" placeholder="Por ejemplo: ${ej}">
+        ${servicio ? `<input type="hidden" name="servicio" value="${servicio}">` : ""}
+        <button class="btn ${btn}" type="submit">Seguir en el formulario ${ARROW}</button>
+      </div>
+    </form>
   </div>
+  <svg class="closing__mark" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg>
 </section>`;
 }
 
@@ -383,17 +402,17 @@ write("/", page({
 <section class="section statement theme-ivory" data-theme="ivory" aria-labelledby="criterio-titulo">
   <div class="wrap grid12">
     <div class="statement__title">
-      ${lines(["Tecnología", "con criterio."], "h2", "h1").replace("<h2 ", '<h2 id="criterio-titulo" ')}
+      ${lines(["Tecnología", "con criterio."], "h2", "h2").replace("<h2 ", '<h2 id="criterio-titulo" ')}
     </div>
-    <div class="statement__body" data-reveal="rise" style="--delay:160ms">
+    <div class="statement__body">
       <p class="lead">Estrategia, desarrollo e integración para que tu negocio avance con sentido.</p>
       <p class="muted">Hoy existe una herramienta para casi todo. El desafío ya no es encontrarla: es saber cuál conviene, cómo implementarla y lograr que tu equipo la use.</p>
     </div>
     <span class="statement__rule" data-reveal="draw" aria-hidden="true"></span>
     <ul class="values">
-      <li data-reveal="rise"><span class="num">01</span><h3>Primero entendemos tu operación</h3><p class="muted">Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
-      <li data-reveal="rise" style="--delay:120ms"><span class="num">02</span><h3>Elegimos lo que tiene sentido</h3><p class="muted">Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
-      <li data-reveal="rise" style="--delay:240ms"><span class="num">03</span><h3>Lo dejamos funcionando</h3><p class="muted">Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
+      <li><span class="num">01</span><h3>Primero entendemos tu operación</h3><p class="muted">Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
+      <li><span class="num">02</span><h3>Elegimos lo que tiene sentido</h3><p class="muted">Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
+      <li><span class="num">03</span><h3>Lo dejamos funcionando</h3><p class="muted">Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
     </ul>
   </div>
 </section>
@@ -490,7 +509,7 @@ write("/nosotros", page({
       <figure class="manifesto__figure" data-reveal="wipe">
         <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/arq-escalera-900.webp 900w, /assets/img/arq-escalera.webp 1536w" sizes="(max-width: 920px) 100vw, 50vw" type="image/webp"><img src="/assets/img/arq-escalera.jpg" srcset="/assets/img/arq-escalera-900.jpg 900w, /assets/img/arq-escalera.jpg 1536w" sizes="(max-width: 920px) 100vw, 50vw" alt="Escalera recta entre volúmenes de hormigón, en blanco y negro" width="1536" height="1024" loading="lazy" decoding="async"></picture></div></div>
       </figure>
-      <div class="manifesto__text" data-reveal="rise" style="--delay:120ms">
+      <div class="manifesto__text">
         <p>Para muchas empresas, digitalizarse se volvió una lista de suscripciones que nadie termina de usar. El valor no está en sumar tecnología, sino en elegirla bien e implementarla con criterio.</p>
         <p>Democratizar la digitalización es eso: que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala.</p>
         <blockquote class="manifesto__quote">Tecnología que se entiende, se usa y se puede mantener. Ese es nuestro criterio.</blockquote>
@@ -504,7 +523,7 @@ write("/nosotros", page({
       <div>
         ${lines(["Cómo trabajamos."], "h2", "h2").replace("<h2 ", '<h2 id="proceso-t" ')}
       </div>
-      <p class="muted flow__lede" data-reveal="fade">Cuatro etapas claras. En cada momento sabés en qué punto estamos y qué viene después.</p>
+      <p class="muted flow__lede">Cuatro etapas claras. En cada momento sabés en qué punto estamos y qué viene después.</p>
     </div>
   </div>
   <div class="flow__track">
@@ -549,7 +568,7 @@ write("/nosotros", page({
       </div>
     </div>
     <ol class="principles__list">
-      ${PRINCIPLES.map(([t, d], i) => `<li class="principles__row" data-reveal="rise" style="--delay:${i * 90}ms"><span class="principles__word">${t}</span><p class="principles__desc">${d}</p></li>`).join("")}
+      ${PRINCIPLES.map(([t, d], i) => `<li class="principles__row"><span class="principles__word">${t}</span><p class="principles__desc">${d}</p></li>`).join("")}
     </ol>
   </div>
 </section>
@@ -582,7 +601,7 @@ ${band("var(--black)", "ivory")}
       ${lines(["Elegimos lo que", "necesitás."], "h2", "h2").replace("<h2 ", '<h2 id="eleccion" ')}
       <p class="lead" data-reveal="fade">Tecnología útil. Sin ruido. Con impacto real.</p>
     </div>
-    <div class="split__body split__body--narrow" data-reveal="rise">
+    <div class="split__body split__body--narrow">
       <p style="margin-bottom:18px">Muchas veces la necesidad no encaja en un solo servicio: una web que debería cargar pedidos, una planilla que debería hablar con la facturación, una marca que necesita piezas nuevas.</p>
       <p class="muted" style="margin-bottom:32px">En la primera conversación ordenamos el problema y te decimos qué combinación tiene sentido, o si conviene esperar.</p>
       <a class="btn" href="/contacto?servicio=no-se">Contanos tu caso ${ARROW}</a>
@@ -902,15 +921,15 @@ ${svcDemo(s.slug)}
   <div class="wrap">
     <div class="sec-head"><div>${lines(["Lo que", "hacemos."], "h2", "h2").replace("<h2 ", '<h2 id="incluye" ')}</div></div>
     <ul class="includes">
-      ${d.includes.map(([t, x], i) => `<li data-reveal="rise" style="--delay:${(i % 2) * 100}ms"><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
+      ${d.includes.map(([t, x], i) => `<li><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
     </ul>
   </div>
 </section>
 <section class="section theme-ivory" data-theme="ivory" aria-labelledby="ejemplos" style="padding-top:0">
   <div class="wrap split">
-    <div class="split__head split__head--sticky"><h2 id="ejemplos" class="h3" data-reveal="rise">Situaciones en las que suele aplicarse.</h2></div>
+    <div class="split__head split__head--sticky"><h2 id="ejemplos" class="h3">Situaciones en las que suele aplicarse.</h2></div>
     <ol class="split__body examples">
-      ${d.examples.map(([t, x]) => `<li data-reveal="fade"><strong>${t}</strong><p class="muted">${x}</p></li>`).join("\n      ")}
+      ${d.examples.map(([t, x]) => `<li><strong>${t}</strong><p class="muted">${x}</p></li>`).join("\n      ")}
     </ol>
   </div>
 </section>
@@ -918,19 +937,19 @@ ${svcDemo(s.slug)}
   <div class="wrap">
     <div class="sec-head"><div>${lines(["Paso", "a paso."], "h2", "h2").replace("<h2 ", '<h2 id="como" ')}</div><a class="link-arrow" href="/nosotros">Nuestro proceso ${arrowIcon()}</a></div>
     <ol class="steps-inline">
-      ${d.steps.map(([t, x], i) => `<li data-reveal="rise" style="--delay:${i * 110}ms"><span class="num">0${i + 1}</span><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
+      ${d.steps.map(([t, x], i) => `<li><span class="num">0${i + 1}</span><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
     </ol>
   </div>
 </section>
 <section class="section theme-ivory" data-theme="ivory" aria-labelledby="faq">
   <div class="wrap split">
-    <div class="split__head"><h2 id="faq" class="h2" data-reveal="rise">Dudas habituales.</h2></div>
+    <div class="split__head"><h2 id="faq" class="h2">Dudas habituales.</h2></div>
     <div class="split__body faq">
       ${d.faq.map(([q, a]) => `<details><summary>${q}<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">${a}</p></div></details>`).join("\n      ")}
     </div>
   </div>
 </section>
-${closing({ theme: "black", size: "h1", title: ["Hablemos de", s.name.toLowerCase() + "."], text: `Contanos qué necesitás y te decimos cómo lo encararíamos. ¿Te interesa otro frente? Seguí por <a href="/servicios/${next.slug}">${next.name}</a>.`, href: `/contacto?servicio=${s.slug}` })}
+${closing({ theme: "black", servicio: s.slug, title: ["Hablemos de", s.name.toLowerCase() + "."], text: `Contanos qué necesitás y te decimos cómo lo encararíamos. ¿Te interesa otro frente? Seguí por <a href="/servicios/${next.slug}">${next.name}</a>.`, href: `/contacto?servicio=${s.slug}` })}
 `;
   write(`/servicios/${s.slug}`, page({ path: `/servicios/${s.slug}`, title: s.name, seo: d.seo, active: "servicios/" + s.slug, tone: d.tone, desc: d.desc, body, ld: [
     { "@type": "Service", name: s.name, serviceType: d.seo, description: d.desc, url: `${SITE_URL}/servicios/${s.slug}`, provider: { "@id": SITE_URL + "/#kroma" }, areaServed: { "@type": "Country", name: "Uruguay" } },
@@ -958,7 +977,7 @@ write("/proyectos", page({
 </section>
 <section class="section theme-black stack-section" data-theme="black" aria-label="Lista de proyectos" style="padding-top:0">
   <div class="wrap">
-    <div class="pfilter" role="group" aria-label="Filtrar por servicio" data-reveal="fade">
+    <div class="pfilter" role="group" aria-label="Filtrar por servicio">
       <button type="button" class="pfilter__chip" aria-pressed="true" data-filter="all">Todos <span>${String(PROJECTS.length).padStart(2, "0")}</span></button>
       ${SERVICES.filter((s) => PROJECTS.some((p) => p.service === s.slug)).map((s) => `<button type="button" class="pfilter__chip" aria-pressed="false" data-filter="${s.slug}"><span class="pfilter__ico">${ICONS[s.slug]}</span>${s.name} <span>${String(PROJECTS.filter((p) => p.service === s.slug).length).padStart(2, "0")}</span></button>`).join("")}
       <p class="pfilter__status num" aria-live="polite"><span data-count>${String(PROJECTS.length).padStart(2, "0")}</span> conceptos</p>
@@ -967,7 +986,7 @@ write("/proyectos", page({
       ${PROJECTS.map((pr, i) => `<li class="stack__item" data-service="${pr.service}" style="--i:${i}">
         <article class="pcard pcard--${["blue", "ivory", "ink", "sand"][i % 4]}" aria-labelledby="pc-${i}">
           <div class="pcard__media">
-            <div class="pcard__para"><picture><source srcset="/assets/img/${pr.img}-900.webp 900w, /assets/img/${pr.img}.webp 1536w" sizes="(max-width: 920px) 100vw, 56vw" type="image/webp"><img src="/assets/img/${pr.img}.jpg" srcset="/assets/img/${pr.img}-900.jpg 900w, /assets/img/${pr.img}.jpg 1536w" sizes="(max-width: 920px) 100vw, 56vw" alt="" width="1536" height="1024" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture></div>
+            <div class="pcard__para">${PROJECT_ART[pr.slug]}</div>
             
           </div>
           <div class="pcard__body">
@@ -1005,17 +1024,17 @@ PROJECTS.forEach((pr, i) => {
     </div>
   </div>
   <div class="wrap case-hero__media" data-reveal="wipe">
-    <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/${pr.img}-900.webp 900w, /assets/img/${pr.img}.webp 1536w" sizes="(max-width: 920px) 100vw, 60vw" type="image/webp"><img src="/assets/img/${pr.img}.jpg" srcset="/assets/img/${pr.img}-900.jpg 900w, /assets/img/${pr.img}.jpg 1536w" sizes="(max-width: 920px) 100vw, 60vw" alt="" width="1800" height="1200" decoding="async" fetchpriority="high"></picture></div></div>
+    <div class="proj__media"><div class="proj__para" data-parallax="0.06">${PROJECT_ART[pr.slug]}</div></div>
   </div>
 </section>
 <section class="section theme-ivory" data-theme="ivory" aria-label="Detalle del caso">
   <div class="wrap case-body">
     <div class="case-notice"><strong>Proyecto conceptual.</strong><span>Es un ejemplo de cómo abordaríamos esta necesidad. No corresponde a un cliente real ni fue implementado.</span></div>
-    <div class="case-row" data-reveal="rise"><h2>Contexto</h2><div><p class="lead">${pr.context}</p></div></div>
-    <div class="case-row" data-reveal="rise"><h2>Necesidad</h2><div><p class="lead">${pr.need}</p></div></div>
-    <div class="case-row" data-reveal="rise"><h2>Solución</h2><div><p class="lead">${pr.solution}</p></div></div>
-    <div class="case-row" data-reveal="rise"><h2>Entregables</h2><div><ul>${pr.deliverables.map((x) => `<li>${x}</li>`).join("")}</ul></div></div>
-    <div class="case-row" data-reveal="rise"><h2>Resultado</h2><div><p class="muted">No aplica: al ser un concepto, no hay resultados documentados para informar.</p></div></div>
+    <div class="case-row"><h2>Contexto</h2><div><p class="lead">${pr.context}</p></div></div>
+    <div class="case-row"><h2>Necesidad</h2><div><p class="lead">${pr.need}</p></div></div>
+    <div class="case-row"><h2>Solución</h2><div><p class="lead">${pr.solution}</p></div></div>
+    <div class="case-row"><h2>Entregables</h2><div><ul>${pr.deliverables.map((x) => `<li>${x}</li>`).join("")}</ul></div></div>
+    <div class="case-row"><h2>Resultado</h2><div><p class="muted">No aplica: al ser un concepto, no hay resultados documentados para informar.</p></div></div>
   </div>
 </section>
 <section class="section section--tight theme-black" data-theme="black" aria-label="Siguiente proyecto">
@@ -1024,7 +1043,7 @@ PROJECTS.forEach((pr, i) => {
     <a class="btn btn--ivory" href="/proyectos/${next.slug}">Ver caso ${ARROW}</a>
   </div>
 </section>
-${closing({ theme: "blue", title: ["¿Algo", "parecido?"], text: "Si tu empresa tiene una necesidad similar, contanos y lo vemos.", href: `/contacto?servicio=${pr.service}` })}
+${closing({ theme: "blue", title: ["¿Algo", "parecido?"], text: "Si tu empresa tiene una necesidad similar, contanos y lo vemos.", servicio: pr.service })}
 `,
   }));
 });

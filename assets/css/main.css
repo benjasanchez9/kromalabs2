@@ -57,7 +57,7 @@
   --f-mono: var(--f-sans); /* una sola familia: Figtree */
   --fs-display: clamp(2.7rem, 1rem + 6.4vw, 8.4rem);
   --fs-h1: clamp(2.6rem, 1.2rem + 6vw, 7.2rem);
-  --fs-h2: clamp(2.1rem, 1.1rem + 3.8vw, 5rem);
+  --fs-h2: clamp(2rem, 1.15rem + 2.5vw, 4rem); /* secciones: el tamaño gigante queda para el hero */
   --fs-h3: clamp(1.35rem, 1.05rem + 1.2vw, 2.1rem);
   --fs-lead: clamp(1.15rem, 1rem + .6vw, 1.55rem);
   --fs-body: clamp(1rem, .96rem + .2vw, 1.125rem);
@@ -394,7 +394,7 @@ html.is-entering .curtain__mark { opacity: 1; animation: fade-out 160ms var(--ea
 .lines { display: block; }
 .lines .ln { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
 .lines .ln > span { display: inline-block; transition: transform 900ms var(--ease-out); transition-delay: calc(var(--i, 0) * 90ms + var(--base, 0ms)); }
-.js .lines:not(.is-in) .ln > span { transform: translateY(108%); }
+.js .lines[data-lines]:not(.is-in) .ln > span { transform: translateY(108%); }
 
 /* =========================================================
    Hero de Inicio — composición del mockup
@@ -552,7 +552,7 @@ html.is-entering .curtain__mark { opacity: 1; animation: fade-out 160ms var(--ea
 .proj--b .proj__media { --ar: 4 / 5; }
 .proj--c .proj__media { --ar: 1 / 1; }
 .proj__para { position: absolute; inset: -9% 0; will-change: transform; }
-.proj__para img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
+.proj__para img, .proj__para .art { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
 .proj__cta {
   position: absolute; left: 20px; bottom: 20px; z-index: 2;
   display: inline-flex; align-items: center; gap: .6em; padding: .8em 1.15em; border-radius: 999px;
@@ -579,12 +579,39 @@ html.is-entering .curtain__mark { opacity: 1; animation: fade-out 160ms var(--ea
 /* =========================================================
    Cierre / CTA
    ========================================================= */
-.closing { overflow: hidden; }
-.closing__inner { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 36px; align-items: end; }
-.closing__title { grid-column: 1 / span 9; }
+/* Cierre: frase propia + primer paso del contacto. El isotipo asoma desde el borde y reacciona al escribir. */
+.closing { position: relative; overflow: hidden; isolation: isolate; padding-bottom: clamp(140px, 17vw, 300px); }
+.closing__inner { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: clamp(28px, 3.5vw, 48px); align-items: end; }
+.closing__title { grid-column: 1 / span 8; }
 .closing__title.h1 { font-size: clamp(2.4rem, 1rem + 5vw, 6.4rem); }
-.closing__side { grid-column: 10 / span 3; display: grid; gap: 24px; justify-items: start; }
-@media (max-width: 920px) { .closing__title, .closing__side { grid-column: 1 / -1; } }
+.closing__text { grid-column: 9 / span 4; max-width: 26ch; }
+.closing__form { grid-column: 1 / span 8; display: grid; gap: 14px; }
+.closing__label { font-weight: 600; font-size: 1rem; }
+.closing__field { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.closing__field input[type="text"] {
+  flex: 1 1 320px; min-width: 0; font: inherit; font-size: var(--fs-lead); color: inherit; background: transparent;
+  border: 0; border-bottom: 2px solid currentColor; border-radius: 0; padding: 10px 0 12px;
+  transition: border-color var(--d-micro) var(--ease-out);
+}
+.closing__field input[type="text"]::placeholder { color: currentColor; opacity: .55; }
+.closing__field input[type="text"]:focus { outline: none; border-bottom-color: var(--blue-glow); }
+.theme-blue .closing__field input[type="text"]:focus { border-bottom-color: var(--black); }
+.closing__field input[type="text"]:focus-visible { box-shadow: 0 6px 0 -3px currentColor; }
+.closing__mark {
+  position: absolute; z-index: -1; right: clamp(-60px, -2.5vw, -16px); bottom: clamp(-70px, -3.5vw, -24px);
+  width: clamp(200px, 26vw, 460px); height: auto; color: var(--blue); pointer-events: none;
+  transform: rotate(-8deg); transition: transform 700ms var(--ease-out);
+}
+.theme-blue .closing__mark { color: var(--black); }
+.closing:focus-within .closing__mark { transform: rotate(0deg) translateY(-14px) scale(1.04); }
+@media (max-width: 920px) {
+  .closing__title, .closing__text, .closing__form { grid-column: 1 / -1; }
+  .closing { padding-bottom: clamp(150px, 40vw, 210px); }
+  .closing__mark { width: clamp(140px, 38vw, 220px); bottom: -22px; right: -18px; }
+  .closing__field .btn { width: 100%; justify-content: center; }
+  .closing__field input[type="text"] { font-size: 1.05rem; flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .closing__mark { transition: none; } .closing:focus-within .closing__mark { transform: rotate(-8deg); } }
 
 /* =========================================================
    Footer
@@ -1011,7 +1038,7 @@ html, body { overflow-x: clip; }                       /* red de seguridad: nunc
 .case-hero__aside { grid-column: 10 / span 3; align-self: end; }
 .page-hero__title { grid-column: 1 / span 9; }
 .ident { overflow-x: clip; }
-.closing__title.h1 { font-size: clamp(1.55rem, 8.2vw, 6.4rem); }
+.closing__title.h1 { font-size: clamp(2.1rem, 9vw, 6.4rem); }
 h1, h2, h3 { overflow-wrap: break-word; }
 @media (max-width: 920px) {
   .split__head--wide, .split__body--narrow, .case-hero__aside, .page-hero__title { grid-column: 1 / -1; }
@@ -1213,8 +1240,8 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .pcard::after { content: ""; position: absolute; inset: 0; background: #000; opacity: var(--dim, 0); pointer-events: none; transition: opacity 120ms linear; }
 .pcard__media { position: relative; overflow: hidden; margin: 10px; border-radius: 14px; background: #1b1b1e; }
 .pcard__para { position: absolute; inset: -8% 0; will-change: transform; }
-.pcard__para img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease-out); }
-.pcard:hover .pcard__para img { transform: scale(1.04); }
+.pcard__para img, .pcard__para .art { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease-out); }
+.pcard:hover .pcard__para img, .pcard:hover .pcard__para .art { transform: scale(1.04); }
 .pcard__index { position: absolute; left: 14px; bottom: 14px; display: inline-flex; align-items: baseline; padding: 10px 14px 8px; border-radius: 10px; background: var(--black); color: var(--ivory); font-weight: 900; font-size: clamp(1.8rem, 1.2rem + 1.6vw, 2.8rem); line-height: 1; letter-spacing: -.03em; }
 .pcard__index small { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-size: .36em; letter-spacing: 0; font-weight: 400; margin-left: 6px; opacity: .6; }
 .pcard__body { display: flex; flex-direction: column; gap: 18px; padding: clamp(24px, 3vw, 44px) clamp(22px, 3vw, 44px) clamp(24px, 3vw, 40px) clamp(14px, 1.6vw, 24px); }
@@ -1434,3 +1461,7 @@ main p.lead { max-width: min(100%, 30em); }
 
 /* En tablet y celular el titular ocupa todo el ancho: la banda decorativa del índice de servicios no tiene lugar */
 @media (max-width: 920px) { .svc-index-hero__shape.live { display: none; } }
+
+/* Ilustraciones de entregables (proyectos conceptuales) */
+.art { display: block; width: 100%; height: 100%; }
+.art text { font-family: var(--f-sans); }
