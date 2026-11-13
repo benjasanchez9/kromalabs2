@@ -241,6 +241,53 @@
 
   /* Formas vivas de los heros internos: cada punto del contorno respira con ruido orgánico,
      y la forma entera deriva y reacciona levemente al puntero. Se pausa fuera de pantalla. */
+  /* Formas flotantes de los heros: buscan un rincón libre de texto según el tamaño de pantalla */
+  function placeShapes() {
+    const shapes = $$(".page-hero > .live:not(.svc-index-hero__shape)");
+    if (!shapes.length) return;
+    const OBST = "h1, h2, p, li, a, button, nav, label, input, select, textarea, img, .btn, .eyebrow, .tag-concept, .frame, .case-hero__media";
+    const place = () => shapes.forEach((el) => {
+      const hero = el.parentElement;
+      if (el.dataset.base == null) el.dataset.base = el.getAttribute("style") || "";
+      el.setAttribute("style", el.dataset.base);
+      el.hidden = false;
+      const hr = hero.getBoundingClientRect(), br = el.getBoundingClientRect();
+      const W = hr.width, H = hr.height, size0 = br.width;
+      if (!size0) return;
+      const pref = { x: br.left - hr.left, y: br.top - hr.top };
+      const rel = (r) => ({ l: r.left - hr.left, t: r.top - hr.top, r: r.right - hr.left, b: r.bottom - hr.top });
+      const obs = [...hero.querySelectorAll(OBST)].filter((e) => !e.closest(".live"))
+        .concat($$(".site-header .brand, .site-header .nav__list, .site-header .nav__cta, .site-header .menu-toggle"))
+        .map((e) => e.getBoundingClientRect()).filter((r) => r.width && r.height).map(rel);
+      const side = pref.x + size0 / 2 > W / 2 ? 1 : -1; // se queda del lado donde la ubicó el diseño
+      for (const k of [1, 0.85, 0.7, 0.55, 0.45]) {
+        const s = size0 * k, m = 40 + s * 0.08; // margen: flotación, reacción al puntero y giro
+        let best = null, bd = Infinity;
+        for (const fx of [0.55, 0.4, 0.62, 0.3]) {
+          const x = side > 0 ? W - s * (1 - fx) : -s * fx;
+          for (let y = -s * 0.3; y <= H - s - 8; y += 6) { // entera dentro del hero: nada de astillas cortadas
+            const a = { l: x - m, t: y - m, r: x + s + m, b: y + s + m };
+            if (obs.some((o) => a.l < o.r && a.r > o.l && a.t < o.b && a.b > o.t)) continue;
+            const d = Math.hypot(x - pref.x, (y - pref.y) * 1.4);
+            if (d < bd) { bd = d; best = { x, y }; }
+          }
+        }
+        if (best) {
+          Object.assign(el.style, { left: `${best.x}px`, top: `${best.y}px`, right: "auto", bottom: "auto", width: `${s}px`, height: `${s}px` });
+          return;
+        }
+      }
+      el.hidden = true; // sin lugar libre: mejor no mostrarla que tapar texto
+    });
+    let tid = 0;
+    const later = () => { clearTimeout(tid); tid = setTimeout(place, 150); };
+    place();
+    if (document.fonts) document.fonts.ready.then(place);
+    setTimeout(place, 1400); // tras la entrada del hero
+    on(window, "resize", later);
+    cleanups.push(() => clearTimeout(tid));
+  }
+
   function initLiveShapes() {
     const paths = $$("path[data-live]");
     if (!paths.length || reduce()) return;
@@ -976,6 +1023,7 @@
       initHeader();
       initReveals();
       initHero();
+      placeShapes();
       initLiveShapes();
       initProjects();
       initParallax();

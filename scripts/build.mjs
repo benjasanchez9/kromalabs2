@@ -191,7 +191,7 @@ function header(active, tone) {
               </a></li>`).join("")}
             </ul>
             <div class="mega__side">
-              <span class="mega__label">Servicios · ${String(SERVICES.length).padStart(2, "0")}</span>
+              <span class="mega__label">Servicios</span>
               <p>Elegimos la herramienta según tu operación, no al revés.</p>
               <a class="mega__all" href="/servicios">Ver todos los servicios ${arrowIcon()}</a>
               <a class="mega__cta" href="/contacto?servicio=no-se">¿No sabés por dónde empezar? <strong>Hablemos</strong></a>
@@ -310,7 +310,7 @@ function projCard(pr, variant, i = 0, hTag = "h3", eager = false) {
     </div>
     <div class="proj__info">
       <${hTag} class="proj__title">${pr.title}</${hTag}>
-      <span class="proj__kind">Concepto · ${pr.serviceName}</span>
+      <span class="proj__kind">Concepto de ${pr.serviceName.toLowerCase()}</span>
     </div>
   </a>
 </article>`;
@@ -391,9 +391,9 @@ write("/", page({
     </div>
     <span class="statement__rule" data-reveal="draw" aria-hidden="true"></span>
     <ul class="values">
-      <li data-reveal="rise"><span class="num accent">01</span><h3>Primero entendemos tu operación</h3><p class="muted">Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
-      <li data-reveal="rise" style="--delay:120ms"><span class="num accent">02</span><h3>Elegimos lo que tiene sentido</h3><p class="muted">Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
-      <li data-reveal="rise" style="--delay:240ms"><span class="num accent">03</span><h3>Lo dejamos funcionando</h3><p class="muted">Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
+      <li data-reveal="rise"><span class="num">01</span><h3>Primero entendemos tu operación</h3><p class="muted">Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
+      <li data-reveal="rise" style="--delay:120ms"><span class="num">02</span><h3>Elegimos lo que tiene sentido</h3><p class="muted">Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
+      <li data-reveal="rise" style="--delay:240ms"><span class="num">03</span><h3>Lo dejamos funcionando</h3><p class="muted">Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
     </ul>
   </div>
 </section>
@@ -412,8 +412,7 @@ ${band("var(--black)", "ivory", true)}
   <div class="wrap">
     <div class="sec-head">
       <div>
-        <p class="eyebrow" data-reveal="fade">Proyectos</p>
-        ${lines(["Así lo", "resolveríamos."], "h2", "h2").replace("<h2 ", '<h2 id="proyectos-titulo" style="margin-top:20px" ')}
+        ${lines(["Así lo", "resolveríamos."], "h2", "h2").replace("<h2 ", '<h2 id="proyectos-titulo" ')}
       </div>
       <p class="muted" style="max-width:38ch">Casos conceptuales: ejemplos de cómo abordamos necesidades frecuentes. No corresponden a clientes reales.</p>
     </div>
@@ -466,7 +465,6 @@ write("/nosotros", page({
 <section class="page-hero about-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
   <div class="wrap about-hero__grid">
     <div class="about-hero__text">
-      <p class="eyebrow" data-reveal="fade">Nosotros</p>
       ${lines(["Digitalizar", "también es", "elegir bien."], "h1", "display about-hero__title").replace("<h1 ", '<h1 id="t" ')}
       <div class="about-hero__intro" data-reveal="rise" style="--delay:400ms">
         <p class="lead">Somos una consultora tecnológica uruguaya. Nuestro propósito es democratizar la digitalización de las empresas.</p>
@@ -487,7 +485,6 @@ write("/nosotros", page({
 </div>
 <section class="section theme-black manifesto" data-theme="black" aria-labelledby="proposito">
   <div class="wrap">
-    <p class="eyebrow" data-reveal="fade">Propósito</p>
     <h2 id="proposito" class="manifesto__big" data-words>${words("Nunca hubo tantas herramientas disponibles. Pero más opciones no siempre significan mejores decisiones.")}</h2>
     <div class="manifesto__grid">
       <figure class="manifesto__figure" data-reveal="wipe">
@@ -496,7 +493,7 @@ write("/nosotros", page({
       <div class="manifesto__text" data-reveal="rise" style="--delay:120ms">
         <p>Para muchas empresas, digitalizarse se volvió una lista de suscripciones que nadie termina de usar. El valor no está en sumar tecnología, sino en elegirla bien e implementarla con criterio.</p>
         <p>Democratizar la digitalización es eso: que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala.</p>
-        <blockquote class="manifesto__quote">Tecnología que se entiende, se usa y se puede mantener. <span>Ese es nuestro criterio.</span></blockquote>
+        <blockquote class="manifesto__quote">Tecnología que se entiende, se usa y se puede mantener. Ese es nuestro criterio.</blockquote>
       </div>
     </div>
   </div>
@@ -505,8 +502,7 @@ write("/nosotros", page({
   <div class="wrap">
     <div class="sec-head flow__head">
       <div>
-        <p class="eyebrow" data-reveal="fade">Proceso</p>
-        ${lines(["Cómo trabajamos."], "h2", "h2").replace("<h2 ", '<h2 id="proceso-t" style="margin-top:18px" ')}
+        ${lines(["Cómo trabajamos."], "h2", "h2").replace("<h2 ", '<h2 id="proceso-t" ')}
       </div>
       <p class="muted flow__lede" data-reveal="fade">Cuatro etapas claras. En cada momento sabés en qué punto estamos y qué viene después.</p>
     </div>
@@ -549,12 +545,11 @@ write("/nosotros", page({
   <div class="wrap">
     <div class="sec-head">
       <div>
-        <p class="eyebrow" data-reveal="fade">Principios</p>
-        ${lines(["Lo que nos guía."], "h2", "h2").replace("<h2 ", '<h2 id="principios" style="margin-top:18px" ')}
+        ${lines(["Lo que nos guía."], "h2", "h2").replace("<h2 ", '<h2 id="principios" ')}
       </div>
     </div>
     <ol class="principles__list">
-      ${PRINCIPLES.map(([t, d], i) => `<li class="principles__row" data-reveal="rise" style="--delay:${i * 90}ms"><span class="principles__num num">0${i + 1}</span><span class="principles__word">${t}</span><p class="principles__desc">${d}</p></li>`).join("")}
+      ${PRINCIPLES.map(([t, d], i) => `<li class="principles__row" data-reveal="rise" style="--delay:${i * 90}ms"><span class="principles__word">${t}</span><p class="principles__desc">${d}</p></li>`).join("")}
     </ol>
   </div>
 </section>
@@ -585,7 +580,7 @@ ${band("var(--black)", "ivory")}
   <div class="wrap split">
     <div class="split__head split__head--wide">
       ${lines(["Elegimos lo que", "necesitás."], "h2", "h2").replace("<h2 ", '<h2 id="eleccion" ')}
-      <p class="lead" style="margin-top:18px" data-reveal="fade">Tecnología útil. Sin ruido. Con impacto real.</p>
+      <p class="lead" data-reveal="fade">Tecnología útil. Sin ruido. Con impacto real.</p>
     </div>
     <div class="split__body split__body--narrow" data-reveal="rise">
       <p style="margin-bottom:18px">Muchas veces la necesidad no encaja en un solo servicio: una web que debería cargar pedidos, una planilla que debería hablar con la facturación, una marca que necesita piezas nuevas.</p>
@@ -631,7 +626,7 @@ const SVC_PAGES = {
   automatizaciones: {
     seo: "Automatización de procesos para empresas",
     tone: "black", heroTheme: "black",
-    title: ["Menos tareas", "repetidas.", '<span class="accent">Más tiempo útil.</span>'],
+    title: ["Menos tareas", "repetidas.", "Más tiempo útil."],
     lead: "Identificamos tareas manuales que se repiten todos los días y las resolvemos con herramientas que ya usás o que conviene sumar.",
     desc: "Automatización de tareas repetitivas para empresas: pedidos, avisos, reportes y flujos de trabajo.",
     problem: "Copiar datos de un email a una planilla, mandar el mismo aviso diez veces, armar un reporte a mano cada lunes: <em>son tareas necesarias, pero no deberían ocupar a una persona</em>.",
@@ -712,7 +707,7 @@ const SVC_PAGES = {
   "consultoria-tecnologica": {
     seo: "Consultoría tecnológica para empresas",
     tone: "black", heroTheme: "black",
-    title: ["La tecnología", "no es solo para", '<span class="accent">las grandes.</span>'],
+    title: ["La tecnología", "no es solo para", "las grandes."],
     cta: "Contanos tu caso",
     lead: "Primero entendemos tu negocio. Después evaluamos opciones por utilidad, costo y complejidad, sin vender ninguna herramienta en particular.",
     desc: "Consultoría tecnológica para empresas uruguayas: analizamos tu operación y te ayudamos a elegir herramientas útiles, accesibles y a la medida de tu negocio.",
@@ -754,7 +749,7 @@ function svcDemo(slug) {
     return `<section class="section theme-black choose" data-theme="black" data-prio="u" aria-labelledby="demo-t">
   <div class="wrap">
     <div class="sec-head">
-      <div><p class="eyebrow" data-reveal="fade">Cómo se ve</p>${lines(["Un problema,", "varias respuestas."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" style="margin-top:20px" ')}</div>
+      <div>${lines(["Un problema,", "varias respuestas."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" ')}</div>
       <p class="muted" style="max-width:34ch">Ejemplo ilustrativo. Elegí qué pesa más y mirá cómo cambia la recomendación.</p>
     </div>
     <div class="choose__top">
@@ -785,7 +780,7 @@ function svcDemo(slug) {
     return `<section class="section theme-black auto" data-theme="black" aria-labelledby="demo-t">
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:0">
-      <div><p class="eyebrow" data-reveal="fade">Cómo se ve</p>${lines(["Una tarea,", "de punta a punta."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" style="margin-top:20px" ')}</div>
+      <div>${lines(["Una tarea,", "de punta a punta."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" ')}</div>
       <p class="muted" style="max-width:34ch">Ejemplo ilustrativo. Cada flujo se diseña según tu operación y las herramientas que usás.</p>
     </div>
     <div class="auto__track">
@@ -811,7 +806,7 @@ function svcDemo(slug) {
     return `<section class="section theme-black" data-theme="black" aria-labelledby="demo-t">
   <div class="wrap integ" data-route="p1,p2,p3,p4">
     <div class="sec-head">
-      <div><p class="eyebrow" data-reveal="fade">Cómo se ve</p>${lines(["Un dato,", "un solo viaje."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" style="margin-top:20px" ')}</div>
+      <div>${lines(["Un dato,", "un solo viaje."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" ')}</div>
       <p class="muted" style="max-width:34ch">Ejemplo ilustrativo. Pasá el cursor o navegá con el teclado por cada herramienta para ver qué hace.</p>
     </div>
     <div class="integ__scroll" tabindex="-1">
@@ -840,7 +835,7 @@ function svcDemo(slug) {
     return `<section class="section theme-ivory ident" data-theme="ivory" aria-labelledby="demo-t">
   <div class="wrap">
     <div class="sec-head">
-      <div><p class="eyebrow" data-reveal="fade">Cómo se ve</p>${lines(["De piezas sueltas", "a un sistema."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" style="margin-top:20px" ')}</div>
+      <div>${lines(["De piezas sueltas", "a un sistema."], "h2", "h2").replace("<h2 ", '<h2 id="demo-t" ')}</div>
       <p class="muted" style="max-width:34ch">Ejemplo con una marca ficticia, “Almacén Norte”. Al avanzar, cada pieza encuentra su lugar dentro del mismo sistema.</p>
     </div>
     <div class="ident__board" role="img" aria-label="Sistema visual de ejemplo: logo, paleta, tipografía, publicación para redes, tarjeta, cartel y perfil en redes de una marca ficticia">
@@ -905,15 +900,15 @@ for (const s of SERVICES) {
 ${svcDemo(s.slug)}
 <section class="section theme-ivory" data-theme="ivory" aria-labelledby="incluye">
   <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow" data-reveal="fade">Qué incluye</p>${lines(["Lo que", "hacemos."], "h2", "h2").replace("<h2 ", '<h2 id="incluye" style="margin-top:20px" ')}</div></div>
+    <div class="sec-head"><div>${lines(["Lo que", "hacemos."], "h2", "h2").replace("<h2 ", '<h2 id="incluye" ')}</div></div>
     <ul class="includes">
-      ${d.includes.map(([t, x], i) => `<li data-reveal="rise" style="--delay:${(i % 2) * 100}ms"><span class="num accent">0${i + 1}</span><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
+      ${d.includes.map(([t, x], i) => `<li data-reveal="rise" style="--delay:${(i % 2) * 100}ms"><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
     </ul>
   </div>
 </section>
 <section class="section theme-ivory" data-theme="ivory" aria-labelledby="ejemplos" style="padding-top:0">
   <div class="wrap split">
-    <div class="split__head split__head--sticky"><p class="eyebrow" data-reveal="fade">Ejemplos de aplicación</p><h2 id="ejemplos" class="h3" style="margin-top:20px" data-reveal="rise">Situaciones en las que suele aplicarse.</h2></div>
+    <div class="split__head split__head--sticky"><h2 id="ejemplos" class="h3" data-reveal="rise">Situaciones en las que suele aplicarse.</h2></div>
     <ol class="split__body examples">
       ${d.examples.map(([t, x]) => `<li data-reveal="fade"><strong>${t}</strong><p class="muted">${x}</p></li>`).join("\n      ")}
     </ol>
@@ -921,7 +916,7 @@ ${svcDemo(s.slug)}
 </section>
 <section class="section theme-blue" data-theme="blue" aria-labelledby="como">
   <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow" data-reveal="fade">Cómo trabajamos</p>${lines(["Paso", "a paso."], "h2", "h2").replace("<h2 ", '<h2 id="como" style="margin-top:20px" ')}</div><a class="link-arrow" href="/nosotros">Nuestro proceso ${arrowIcon()}</a></div>
+    <div class="sec-head"><div>${lines(["Paso", "a paso."], "h2", "h2").replace("<h2 ", '<h2 id="como" ')}</div><a class="link-arrow" href="/nosotros">Nuestro proceso ${arrowIcon()}</a></div>
     <ol class="steps-inline">
       ${d.steps.map(([t, x], i) => `<li data-reveal="rise" style="--delay:${i * 110}ms"><span class="num">0${i + 1}</span><h3>${t}</h3><p class="muted">${x}</p></li>`).join("\n      ")}
     </ol>
@@ -929,7 +924,7 @@ ${svcDemo(s.slug)}
 </section>
 <section class="section theme-ivory" data-theme="ivory" aria-labelledby="faq">
   <div class="wrap split">
-    <div class="split__head"><p class="eyebrow" data-reveal="fade">Preguntas frecuentes</p><h2 id="faq" class="h2" style="margin-top:20px" data-reveal="rise">Dudas habituales.</h2></div>
+    <div class="split__head"><h2 id="faq" class="h2" data-reveal="rise">Dudas habituales.</h2></div>
     <div class="split__body faq">
       ${d.faq.map(([q, a]) => `<details><summary>${q}<span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p class="muted">${a}</p></div></details>`).join("\n      ")}
     </div>
@@ -953,7 +948,7 @@ write("/proyectos", page({
 <section class="page-hero theme-black" data-theme="black" aria-labelledby="t">
   ${liveShape("orb", "proj-hero__live", "color:var(--blue)", 7)}
   <div class="wrap page-hero__grid">
-    <p class="eyebrow page-hero__eyebrow" data-reveal="fade">Proyectos</p>
+    <nav class="page-hero__eyebrow" aria-label="Ruta"><ol class="breadcrumb"><li><a href="/">Inicio</a></li><li aria-current="page">Proyectos</li></ol></nav>
     ${lines(["Casos", "de ejemplo."], "h1", "display").replace("<h1 ", '<h1 id="t" ').replace('class="lines display"', 'class="lines display page-hero__title"')}
     <div class="page-hero__aside" data-reveal="rise" style="--delay:300ms">
       <span class="tag-concept">Conceptos</span>
@@ -973,7 +968,7 @@ write("/proyectos", page({
         <article class="pcard pcard--${["blue", "ivory", "ink", "sand"][i % 4]}" aria-labelledby="pc-${i}">
           <div class="pcard__media">
             <div class="pcard__para"><picture><source srcset="/assets/img/${pr.img}-900.webp 900w, /assets/img/${pr.img}.webp 1536w" sizes="(max-width: 920px) 100vw, 56vw" type="image/webp"><img src="/assets/img/${pr.img}.jpg" srcset="/assets/img/${pr.img}-900.jpg 900w, /assets/img/${pr.img}.jpg 1536w" sizes="(max-width: 920px) 100vw, 56vw" alt="" width="1536" height="1024" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture></div>
-            <span class="pcard__index" aria-hidden="true">${String(i + 1).padStart(2, "0")}<small>/${String(PROJECTS.length).padStart(2, "0")}</small></span>
+            
           </div>
           <div class="pcard__body">
             <div class="pcard__meta"><span class="tag-concept">Concepto</span><span class="pcard__svc"><span class="pcard__svc-ico">${ICONS[pr.service]}</span>${pr.serviceName}</span></div>
@@ -1045,7 +1040,6 @@ write("/contacto", page({
   ${liveShape("drop", "contact-hero__live", "color:var(--blue)", 7)}
   <div class="wrap contact">
     <div class="contact__intro">
-      <p class="eyebrow" data-reveal="fade">Hablemos</p>
       ${lines(["Contanos", "en qué estás."], "h1", "h1").replace("<h1 ", '<h1 id="t" ')}
       <p class="lead" data-reveal="rise" style="--delay:300ms">Escribinos sobre tu empresa y lo que querés resolver. Con esa información preparamos la primera conversación.</p>
       <div data-reveal="rise" style="--delay:400ms">
