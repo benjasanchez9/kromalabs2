@@ -1,6 +1,7 @@
 // Uso: node scripts/build.mjs .   (desde la carpeta raíz del proyecto)
 // Genera todas las páginas HTML estáticas de KROMA. Los textos y las páginas se editan acá.
 // Sistema visual: "Digital Matter" con la paleta de KROMA (negro, cobalto y marfil).
+import { PREVIEWS } from "./previews.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { PROJECT_ART } from "./art.mjs";
@@ -190,7 +191,7 @@ const crumb = (items) => `<nav class="crumb mono" aria-label="Ruta"><ol>${items.
 // Filas editoriales de servicios: toda la fila es el enlace. Relleno cobalto direccional y vista previa de la forma.
 function svcRows({ numbered = true } = {}) {
   return `<ul class="rows${numbered ? "" : " rows--plain"}">
-  ${SERVICES.map((s) => `<li class="row" data-pv="/assets/img/form/${s.slug}.webp">
+  ${SERVICES.map((s) => `<li class="row" data-pv="${s.slug}">
     <a href="/servicios/${s.slug}">
       ${numbered ? `<span class="row__n mono">${s.n}</span>` : ""}
       <span class="row__nm">${s.name}</span>
@@ -199,7 +200,7 @@ function svcRows({ numbered = true } = {}) {
     </a>
   </li>`).join("\n  ")}
 </ul>
-<div class="row-pv" aria-hidden="true"><img src="/assets/img/form/webs.webp" alt="" width="480" height="360" loading="lazy" decoding="async"></div>`;
+<div class="row-pv" aria-hidden="true">${SERVICES.map((s) => `<span class="pv-w" data-k="${s.slug}">${PREVIEWS[s.slug]}</span>`).join("")}</div>`;
 }
 
 function projCard(pr, hTag = "h3") {

@@ -196,12 +196,12 @@
   });
 
   /* ---------- 6. Filas: relleno direccional + vista previa de la forma ---------- */
-  const pv = $(".row-pv"), pvImg = pv && $("img", pv);
+  const pv = $(".row-pv");
   $$(".row").forEach((row) => {
     row.addEventListener("pointerenter", (e) => {
       const r = row.getBoundingClientRect();
       row.style.setProperty("--o", e.clientX - r.left < r.width / 2 ? "left" : "right");
-      if (pv && FINE) { pvImg.src = row.dataset.pv; pv.classList.add("on"); }
+      if (pv && FINE) { $$(".pv-w", pv).forEach((w) => w.classList.toggle("is-on", w.dataset.k === row.dataset.pv)); pv.classList.add("on"); }
     });
     row.addEventListener("pointerleave", () => pv && pv.classList.remove("on"));
   });
