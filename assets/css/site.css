@@ -598,10 +598,29 @@ html.is-entering .curtain__mark{opacity:1;animation:fade-out 160ms var(--e-out) 
 /* =========================================================
    PIE (una línea, como el prototipo)
    ========================================================= */
-.ft{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--g);align-items:baseline;max-width:none;padding:28px var(--m) 32px;background:var(--black);color:var(--ivory);border-top:1px solid rgba(245,241,232,.12)}
-.ft>*{opacity:.6}
-.ft__a{grid-column:1/4}.ft__b{grid-column:4/7}.ft__c{grid-column:7/10}.ft__d{grid-column:10/13;justify-self:end}
-.ft a:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+.ft{background:var(--black);color:var(--ivory);border-top:1px solid rgba(245,241,232,.12);padding:72px var(--m) 0}
+.ft__top{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--g);row-gap:48px;padding-bottom:64px}
+.ft__brand{grid-column:1/5}
+.ft__logo{display:inline-flex;align-items:center;gap:10px;font-weight:620;font-size:24px;letter-spacing:-.02em}
+.ft__logo sup{font-size:.5em;font-weight:500}
+.ft__iso{width:30px;height:auto}
+.ft__brand p{margin-top:20px;max-width:34ch;font-size:16px;line-height:1.5;opacity:.7}
+.ft__col--a{grid-column:6/8}.ft__col--b{grid-column:8/11}.ft__col--c{grid-column:11/13}
+.ft__col h2{font-size:12px;font-weight:400;letter-spacing:.04em;opacity:.55;margin-bottom:18px}
+.ft__col ul{display:grid;gap:4px}
+.ft__col li a{display:inline-flex;align-items:center;min-height:32px;font-size:16px;position:relative}
+.ft__col li a::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .35s var(--e-out)}
+.ft__col li a:hover::after,.ft__col li a:focus-visible::after{transform:scaleX(1);transform-origin:left}
+.ft__social{display:flex;gap:10px;margin-top:16px}
+.ft__ico{position:relative;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;border:1px solid rgba(245,241,232,.3);transition:background .3s var(--e-out),color .3s var(--e-out),border-color .3s var(--e-out),transform .25s var(--e-out)}
+.ft__ico svg{width:22px;height:22px}
+.ft__ico:hover,.ft__ico:focus-visible{background:var(--cobalt);border-color:var(--cobalt);transform:translateY(-2px)}
+.ft__ico:active{transform:scale(.94)}
+.ft__ico::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 10px);left:50%;transform:translate(-50%,4px);white-space:nowrap;padding:6px 10px;border-radius:6px;background:var(--ivory);color:var(--black);font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s var(--e-out),transform .3s var(--e-out)}
+.ft__ico:hover::after,.ft__ico:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+.ft__bar{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--g);padding:24px 0 30px;border-top:1px solid rgba(245,241,232,.12)}
+.ft__bar>*{opacity:.6}
+.ft__bar>:nth-child(1){grid-column:1/4}.ft__bar>:nth-child(2){grid-column:4/7}.ft__bar>:nth-child(3){grid-column:7/10}.ft__bar>:nth-child(4){grid-column:10/13;justify-self:end}
 
 /* =========================================================
    ESTADOS INICIALES DE ANIMACIÓN (solo con movimiento activo)
@@ -677,8 +696,12 @@ html.is-entering .curtain__mark{opacity:1;animation:fade-out 160ms var(--e-out) 
   .hd__brand{grid-column:1/7}
   .hd__pr{display:none}
   .hd__menu{grid-column:7/13}
-  .ft{grid-template-columns:1fr 1fr;row-gap:10px}
-  .ft__a,.ft__b,.ft__c,.ft__d{grid-column:auto;justify-self:start}
+  .ft{padding-top:56px}
+  .ft__top{grid-template-columns:1fr 1fr;row-gap:40px;padding-bottom:48px}
+  .ft__brand{grid-column:1/-1}
+  .ft__col--a{grid-column:1}.ft__col--b{grid-column:2}.ft__col--c{grid-column:1/-1}
+  .ft__bar{grid-template-columns:1fr 1fr;row-gap:10px}
+  .ft__bar>*{grid-column:auto!important;justify-self:start!important}
   .hero__t{left:var(--m);top:auto;bottom:calc(44px + 56px + 26px + 74px + 26px);font-size:min(10.3vw,52px);line-height:.92}
   .hero__foot{bottom:28px;display:flex;flex-direction:column;align-items:stretch;gap:22px}
   .hero__cta .btn{width:100%;justify-content:space-between}

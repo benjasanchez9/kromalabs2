@@ -153,12 +153,30 @@ function header(active) {
 </div>`;
 }
 
+const MAIL_ICO = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4 7.5l8 5.6 8-5.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const IG_ICO = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.25" fill="currentColor"/></svg>`;
 const footer = `
-<footer class="ft mono">
-  <span class="ft__a">KROMA® <span id="year">2026</span></span>
-  <span class="ft__b">Montevideo — Uruguay</span>
-  <a class="ft__c" href="${IG_URL}" target="_blank" rel="noopener">${IG}<span class="sr"> (Instagram, se abre en otra pestaña)</span></a>
-  <span class="ft__d">${EMAIL}</span>
+<footer class="ft t-black">
+  <div class="ft__top">
+    <div class="ft__brand">
+      <a class="ft__logo" href="/" aria-label="KROMA, inicio">${iso("ft__iso")}<span aria-hidden="true">KROMA<sup>®</sup></span></a>
+      <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
+    </div>
+    <nav class="ft__col ft__col--a" aria-labelledby="ft-sitio"><h2 class="mono" id="ft-sitio">Sitio</h2><ul><li><a href="/">Inicio</a></li><li><a href="/nosotros">Nosotros</a></li><li><a href="/servicios">Servicios</a></li><li><a href="/proyectos">Proyectos</a></li><li><a href="/contacto">Hablemos</a></li></ul></nav>
+    <nav class="ft__col ft__col--b" aria-labelledby="ft-servicios"><h2 class="mono" id="ft-servicios">Servicios</h2><ul>${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}">${s.name}</a></li>`).join("")}</ul></nav>
+    <div class="ft__col ft__col--c"><h2 class="mono">Contacto</h2><ul><li><a href="/contacto">Formulario</a></li></ul>
+      <div class="ft__social">
+        <a class="ft__ico" href="mailto:${EMAIL}" aria-label="Escribir a KROMA por email: ${EMAIL}" data-tip="${EMAIL}">${MAIL_ICO}</a>
+        <a class="ft__ico" href="${IG_URL}" target="_blank" rel="noopener" aria-label="Instagram de KROMA (se abre en otra pestaña)" data-tip="Instagram">${IG_ICO}</a>
+      </div>
+    </div>
+  </div>
+  <div class="ft__bar mono">
+    <span>KROMA® <span id="year">2026</span></span>
+    <span>Montevideo — Uruguay</span>
+    <span>${IG}</span>
+    <span>${EMAIL}</span>
+  </div>
 </footer>
 <div class="ring" id="ring" aria-hidden="true"></div>
 <div class="curtain" aria-hidden="true"><div class="curtain__body"></div>${iso("curtain__mark")}</div>`;
