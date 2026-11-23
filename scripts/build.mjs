@@ -155,6 +155,8 @@ function header(active) {
 
 const MAIL_ICO = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4 7.5l8 5.6 8-5.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const IG_ICO = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.25" fill="currentColor"/></svg>`;
+const WA_URL = "https://wa.me/59898012704";
+const WA_ICO = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.2 19.8l1.1-4A8.2 8.2 0 1 1 8.4 18.9z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M9.2 8.3c.2-.4.5-.4.8-.4h.4c.2 0 .4.1.5.4l.6 1.4c.1.2 0 .5-.1.6l-.5.6c-.1.1-.1.3 0 .5.6 1 1.4 1.8 2.4 2.3.2.1.4.1.5 0l.6-.7c.2-.2.4-.2.6-.1l1.4.7c.2.1.4.3.3.5 0 .5-.2 1.1-.6 1.4-.5.4-1.2.6-1.9.4-2.6-.7-4.6-2.7-5.4-5.2-.2-.8 0-1.6.4-2.4z" fill="currentColor"/></svg>`;
 const footer = `
 <footer class="ft t-black">
   <div class="ft__top">
@@ -168,6 +170,7 @@ const footer = `
       <div class="ft__social">
         <a class="ft__ico" href="mailto:${EMAIL}" aria-label="Escribir a KROMA por email: ${EMAIL}" data-tip="${EMAIL}">${MAIL_ICO}</a>
         <a class="ft__ico" href="${IG_URL}" target="_blank" rel="noopener" aria-label="Instagram de KROMA (se abre en otra pestaña)" data-tip="Instagram">${IG_ICO}</a>
+        <a class="ft__ico" href="${WA_URL}" target="_blank" rel="noopener" aria-label="Escribir a KROMA por WhatsApp: +598 98 012 704 (se abre en otra pestaña)" data-tip="WhatsApp +598 98 012 704">${WA_ICO}</a>
       </div>
     </div>
   </div>

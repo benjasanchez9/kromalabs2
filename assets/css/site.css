@@ -739,3 +739,5 @@ html.is-entering .curtain__mark{opacity:1;animation:fade-out 160ms var(--e-out) 
   .row-pv{display:none}
   .ring{display:none}
 }
+.ft__ico:last-child::after{left:auto;right:0;transform:translate(0,4px)}
+.ft__ico:last-child:hover::after,.ft__ico:last-child:focus-visible::after{transform:none}
