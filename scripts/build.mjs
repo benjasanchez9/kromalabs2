@@ -77,8 +77,11 @@ function head({ title, seo, desc, path: p, ld = [] }) {
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/schibsted-grotesk-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css">
-<script>document.documentElement.classList.add("js")</script>
-<script src="/assets/js/site.js" defer></script>
+<script>(function(h){h.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches){h.classList.add("anim");setTimeout(function(){if(!window.KROMA_ANIM)h.classList.remove("anim")},2500)}})(document.documentElement)</script>
+<script src="/assets/js/vendor/gsap.min.js" defer></script>
+<script src="/assets/js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/js/vendor/SplitText.min.js" defer></script>
+${p === "/proyectos" ? '<script src="/assets/js/vendor/Flip.min.js" defer></script>\n' : ""}<script src="/assets/js/site.js" defer></script>
 <script type="speculationrules">{"prefetch":[{"source":"document","where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>`;
 }
@@ -89,6 +92,7 @@ function header(active) {
   const cur = (k) => (active === k || (k === "servicios" && active.startsWith("servicios")) ? ' aria-current="page"' : "");
   const svcItems = (cls) => SERVICES.map((s) => `<li><a class="${cls}" href="/servicios/${s.slug}"${active === "servicios/" + s.slug ? ' aria-current="page"' : ""}><span class="num">${s.n}</span><span class="${cls}-t">${s.name}</span><span class="${cls}-d">${s.short}</span></a></li>`).join("");
   return `<header class="hd" data-hd>
+  <span class="hd__progress" aria-hidden="true" data-progress></span>
   <div class="wrap hd__in">
     <a class="brand" href="/" aria-label="KROMA, ir al inicio">${iso("brand__iso")}<span class="brand__word" aria-hidden="true">kroma</span></a>
     <nav class="nav" aria-label="Principal">
@@ -138,6 +142,7 @@ const footer = `<footer class="ft">
         <li><a href="/contacto">Formulario de contacto</a></li>
       </ul></div>
     </div>
+    <p class="ft__word" aria-hidden="true" data-word>${iso("ft__iso")}<span>kroma</span></p>
     <div class="ft__bottom"><span>© <span data-year>2026</span> KROMA</span><span>Hecho en Montevideo, Uruguay</span></div>
   </div>
 </footer>`;
@@ -153,6 +158,7 @@ ${header(active)}
 ${body}
 </main>
 ${footer}
+<div class="curtain" aria-hidden="true" data-curtain><svg class="curtain__edge" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 20 C 25 0, 75 0, 100 20 Z"/></svg><div class="curtain__body">${iso("curtain__iso")}</div></div>
 </body>
 </html>
 `;
@@ -221,6 +227,39 @@ function closing({ title = "¿Por dónde empezamos?", text = "Contanos en una l�
 </section>`;
 }
 
+/* ---------------- sección fijada: de v1 a v2 ---------------- */
+const CHIPS = ["WhatsApp", "Planilla de Excel", "Email", "Facturación", "Cuaderno de pedidos", "Instagram"];
+const ring = (i) => { const a = (-90 + i * 60) * Math.PI / 180; return [50 + 36 * Math.cos(a), 50 + 36 * Math.sin(a)]; };
+const STAGES = ["Hoy: herramientas sueltas", "Ordenamos por impacto", "Conectamos lo que sirve", "Funcionando, con tu equipo"];
+function story() {
+  return `<section class="story" aria-labelledby="story-t" data-story>
+  <div class="story__pin">
+    <div class="wrap story__grid">
+      <div class="story__copy">
+        <h2 id="story-t" class="h2">De la versión 1 a la 2, en cuatro etapas.</h2>
+        <div class="story__bar" aria-hidden="true"><span data-story-bar></span></div>
+        <ol class="story__steps">
+          ${PROCESS.map((p, i) => `<li class="story__st${i === 0 ? " is-on" : ""}" data-st="${i}"><span class="story__n num">0${i + 1}</span><div><h3 class="h3">${p.t}</h3><p>${p.d}</p><p class="step__out"><span>Recibís</span>${p.out}</p></div></li>`).join("\n          ")}
+        </ol>
+        <p class="story__more"><a class="link link--inv" href="/nosotros#proceso">Ver el proceso en detalle ${ARROW}</a></p>
+      </div>
+      <div class="story__stage" aria-hidden="true">
+        <div class="stage" data-stage data-caps="${esc(JSON.stringify(STAGES))}">
+          <svg class="stage__lines" viewBox="0 0 100 100" preserveAspectRatio="none">${CHIPS.map((_, i) => { const [x, y] = ring(i); return `<path pathLength="1" d="M50 50L${x.toFixed(2)} ${y.toFixed(2)}"/>`; }).join("")}</svg>
+          <div class="stage__hub">${iso()}</div>
+          ${CHIPS.map((c, i) => { const [x, y] = ring(i); return `<div class="chip" data-chip="${i}" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%"><span class="chip__t">${c}</span><span class="chip__bar"><i></i></span></div>`; }).join("\n          ")}
+          <div class="stage__dash" data-dash>
+            <p class="dash__hd"><span>Tu negocio</span><span class="dash__v">v2</span></p>
+            <ul>${["Pedidos que se registran solos", "Stock sincronizado con la tienda", "Consultas ordenadas en un lugar", "Equipo capacitado y autónomo"].map((t) => `<li>${CHECK}<span>${t}</span></li>`).join("")}</ul>
+          </div>
+          <p class="stage__cap" data-cap>${STAGES[2]}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
 /* ---------------- Inicio ---------------- */
 const RELEASE = [
   ["webs", "Web nueva, con consultas que llegan ordenadas"],
@@ -245,7 +284,8 @@ const releasePanel = `<div class="rel" data-release>
 const home = page({
   path: "/", title: "Inicio", active: "inicio",
   desc: "Consultora tecnológica para empresas uruguayas: te ayudamos a elegir y aprovechar webs, automatizaciones, integraciones, identidad digital y más.",
-  body: `<section class="hero" aria-labelledby="hero-t">
+  body: `<section class="hero" aria-labelledby="hero-t" data-hero>
+  <div class="hero__bg" aria-hidden="true"></div>
   <div class="wrap hero__grid">
     <div class="hero__copy">
       <h1 id="hero-t" class="h1">Tu negocio.<br>Su próxima versión.</h1>
@@ -261,8 +301,8 @@ ${sec({ id: "servicios-t", title: "Qué hacemos", intro: "Cinco servicios que se
     <div class="sec__head"><h2 id="proof-t" class="h2">Lo que proponemos, lo aplicamos acá.</h2><p class="sec__intro">Una web lenta o difícil de usar pierde consultas. Medimos este sitio con las mismas herramientas que usamos en cada proyecto.</p></div>
     <div class="sec__body">
       <dl class="metrics">
-        <div><dt>Rendimiento en celular</dt><dd><span class="num">${METRICS.perf}</span><small>/100</small></dd></div>
-        <div><dt>Accesibilidad</dt><dd><span class="num">${METRICS.a11y}</span><small>/100</small></dd></div>
+        <div><dt>Rendimiento en celular</dt><dd><span class="num" data-count="${METRICS.perf}">${METRICS.perf}</span><small>/100</small></dd></div>
+        <div><dt>Accesibilidad</dt><dd><span class="num" data-count="${METRICS.a11y}">${METRICS.a11y}</span><small>/100</small></dd></div>
         <div><dt>Contenido principal visible</dt><dd><span class="num">${METRICS.lcp}</span></dd></div>
         <div><dt>Peso de esta página</dt><dd><span class="num">${METRICS.weight}</span></dd></div>
       </dl>
@@ -270,12 +310,10 @@ ${sec({ id: "servicios-t", title: "Qué hacemos", intro: "Cinco servicios que se
     </div>
   </div>
 </section>
-${sec({ id: "proceso-t", title: "Cómo trabajamos", intro: "Cuatro etapas, con un entregable claro en cada una. Siempre sabés en qué punto estamos y qué viene después.", cls: "sec--steps", body: `<ol class="steps">
-  ${PROCESS.map((p, i) => `<li class="step"><span class="step__n num">0${i + 1}</span><h3 class="h3">${p.t}</h3><p>${p.d}</p><p class="step__out"><span>Recibís</span>${p.out}</p></li>`).join("\n  ")}
-</ol><p class="sec__more"><a class="link" href="/nosotros#proceso">Ver el proceso en detalle ${ARROW}</a></p>` })}
+${story()}
 <section class="stmt tone-cobalt" aria-labelledby="stmt-t">
   <div class="wrap stmt__grid">
-    <h2 id="stmt-t" class="stmt__t">La tecnología no debería ser un privilegio de las grandes empresas.</h2>
+    <h2 id="stmt-t" class="stmt__t" data-words>La tecnología no debería ser un privilegio de las grandes empresas.</h2>
     <div class="stmt__body">
       <p>Hoy existe una herramienta para casi todo. El desafío ya no es encontrarla: es saber cuál conviene, cuánto invertir y cómo hacer que tu equipo la use.</p>
       <p>No vendemos ninguna herramienta. Te recomendamos la que tiene sentido para tu empresa, aunque sea la más simple.</p>

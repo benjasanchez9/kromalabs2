@@ -45,13 +45,42 @@ Es el único momento audaz del sitio. Todo lo demás es sobrio, preciso y legibl
 - **Sombras:** solo en los paneles de producto, y sutiles.
 - **Numeración:** solo donde hay secuencia real o lo pide el brief (servicios 01–05 y proceso).
 
-## Movimiento
-- **Un solo momento orquestado:** la actualización del hero, de unos 1,6 s.
-- **Respuestas:** a hover, foco y clic, de 150–250 ms.
-- **Demos de servicio:** se mueven solo cuando la persona actúa.
-- **Transición entre páginas:** View Transitions nativas con una máscara curva corta. Conserva URLs, botón atrás y pestañas nuevas.
-- **Movimiento reducido:** se muestra el estado final y no hay transiciones.
-- **Lo que se quitó:** rastro eléctrico, formas flotantes, olas y entradas al hacer scroll.
+## Movimiento (GSAP 3 + ScrollTrigger + SplitText; Flip solo en Proyectos)
+Todo se coordina en `assets/js/site.js`. Hay cuatro tipos de movimiento, cada uno con un rol distinto:
+- **Ligado al scroll:**
+  - la sección fijada "De la versión 1 a la 2": las herramientas sueltas se ordenan, se conectan al isotipo y terminan en el negocio v2;
+  - el parallax del hero, el panel que se aleja en profundidad, las líneas de la declaración, la máscara orgánica de la foto en Nosotros y las ilustraciones dentro de su marco;
+  - la barra de progreso de lectura.
+- **Una vez al entrar:**
+  - titulares por líneas con máscara;
+  - divisiones que se dibujan y listas que suben;
+  - tarjetas que aparecen recortadas;
+  - contadores de métricas;
+  - la marca grande del pie;
+  - las demos de servicio, que se presentan solas una vez.
+- **Respuesta a la persona:**
+  - la retícula del hero sigue al puntero;
+  - la vista previa de cada servicio sigue al cursor;
+  - botones magnéticos;
+  - preguntas que abren con altura animada;
+  - el filtro de proyectos reacomoda con Flip;
+  - las demos interactivas.
+- **Transición entre páginas:** cortina curva azul con el isotipo. Respeta pestañas nuevas, el botón atrás y los enlaces con modificador.
+
+Curvas:
+- entradas con `power3/power4.out`;
+- cambios de estado con `power2.inOut`.
+
+Duraciones:
+- microinteracciones: 0,16–0,25 s;
+- entradas: 0,6–1 s;
+- transición: 0,5 s.
+
+Reglas:
+- **Sin bloquear el scroll:** sin snap ni smooth scroll artificial.
+- **Celular:** sin sección fijada ni respuesta al puntero.
+- **Movimiento reducido o sin JavaScript:** todo queda visible en su estado final.
+- **Contenido accesible:** el que espera su animación usa transparencia, no `visibility`, para que siga disponible para lectores de pantalla.
 
 ## Imagen
 - Interfaces y piezas reales dibujadas en SVG: lo que KROMA entrega.

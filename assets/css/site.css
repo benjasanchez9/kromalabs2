@@ -524,16 +524,108 @@ main:focus { outline: none; }
 @media (max-width: 999px) { .ft__brand { grid-column: 1 / -1; } .ft__col, .ft__col:last-child { grid-column: span 4; } }
 @media (max-width: 640px) { .ft__col { grid-column: span 6; } .ft__col:last-child { grid-column: 1 / -1; } }
 
-/* ---------- transición entre páginas: máscara curva breve ---------- */
-@view-transition { navigation: auto; }
-::view-transition-old(root) { animation: 180ms var(--ease) both vt-out; }
-::view-transition-new(root) { animation: 420ms var(--ease) both vt-in; }
-@keyframes vt-out { to { opacity: 0; } }
-@keyframes vt-in { from { clip-path: ellipse(140% 0% at 50% 100%); } to { clip-path: ellipse(140% 140% at 50% 100%); } }
-
 /* ---------- movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; scroll-behavior: auto !important; }
-  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
   .dw__browser, .dw__phone { transform: none !important; }
 }
+
+/* =========================================================
+   Capa de movimiento (GSAP). Sin JavaScript o con movimiento
+   reducido, todo queda visible y en su estado final.
+   ========================================================= */
+
+/* Mientras arranca la animación, lo que va a entrar no parpadea */
+.anim [data-hero] .h1, .anim [data-hero] .lead, .anim [data-hero] .hero__ctas, .anim [data-hero] .hero__panel,
+.anim .phero .h1, .anim .phero .lead, .anim .svch__demo, .anim .about__ph { visibility: hidden; }
+.split-line { overflow: clip; padding-bottom: .06em; margin-bottom: -.06em; }
+
+/* barra de progreso de lectura */
+.hd { transition: border-color var(--mid) var(--ease), transform 380ms var(--ease); }
+.hd.is-hidden { transform: translateY(-100%); }
+.hd__progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--cobalt); transform: scaleX(0); transform-origin: left; pointer-events: none; }
+
+/* hero: retícula técnica que se ilumina alrededor del puntero */
+.hero { position: relative; isolation: isolate; overflow: clip; }
+.hero__bg {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: linear-gradient(rgba(7,7,8,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(7,7,8,.07) 1px, transparent 1px);
+  background-size: 56px 56px; background-position: -1px -1px;
+  -webkit-mask-image: radial-gradient(420px circle at var(--mx, 75%) var(--my, 40%), #000 0%, rgba(0,0,0,.35) 45%, transparent 75%);
+          mask-image: radial-gradient(420px circle at var(--mx, 75%) var(--my, 40%), #000 0%, rgba(0,0,0,.35) 45%, transparent 75%);
+}
+.hero__bg::after { content: ""; position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--cobalt); left: var(--mx, 75%); top: var(--my, 40%); transform: translate(-50%, -50%); opacity: .0; transition: opacity 300ms; }
+.hero:hover .hero__bg::after { opacity: .5; }
+.hero__panel { perspective: 1200px; }
+.rel { transform-origin: 50% 0; }
+
+/* filas: la vista previa sigue al puntero */
+@media (hover: hover) and (min-width: 1000px) {
+  .js .row__pv { left: 0; top: 0; right: auto; transform: none; }
+  .js .row__a:hover .row__pv, .js .row__a:focus-visible .row__pv { transform: none; }
+}
+
+/* ---------- sección fijada: de la versión 1 a la 2 ---------- */
+.story { background: var(--ink); color: var(--paper); }
+.story__pin { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding-block: clamp(72px, 8vw, 112px); }
+.story__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: 40px; align-items: center; }
+.story__copy { grid-column: 1 / span 5; }
+.story__bar { position: relative; height: 2px; margin: 28px 0 8px; background: var(--line-ink); }
+.story__bar span { position: absolute; inset: 0; background: var(--cobalt); transform-origin: left; transform: scaleX(.25); }
+.story__st { display: grid; grid-template-columns: 40px 1fr; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--line-ink); transition: opacity 300ms var(--ease); }
+.story__st p { color: var(--muted-ink); font-size: .9375rem; overflow: hidden; transition: max-height 420ms var(--ease); }
+/* solo con la animación activa en escritorio: una etapa a la vez */
+@media (min-width: 1000px) {
+  .motion .story__st:not(.is-on) .h3 { color: var(--muted-ink); }
+  .motion .story__st p { max-height: 0; }
+  .motion .story__st.is-on p { max-height: 120px; }
+}
+.story__st .step__out { color: var(--paper) !important; margin-top: 6px; }
+.story__st .step__out span { color: var(--muted-ink); }
+.story__n { color: #8fb0ff; font-weight: 700; padding-top: 4px; }
+.story__more { margin-top: 20px; }
+.story__stage { grid-column: 7 / -1; }
+.stage { position: relative; aspect-ratio: 1; max-width: 620px; margin-inline: auto; border-radius: 20px; background: radial-gradient(circle at 50% 50%, rgba(0,83,253,.22), transparent 62%), #0e0f12; border: 1px solid var(--line-ink); overflow: hidden; }
+.stage__lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stage__lines path { fill: none; stroke: #4d8bff; stroke-width: .3; stroke-dasharray: 1 1; stroke-dashoffset: 0; stroke-opacity: .85; }
+.stage__hub { position: absolute; left: 50%; top: 50%; width: 20%; aspect-ratio: 1; transform: translate(-50%, -50%); display: grid; place-items: center; border-radius: 28%; background: var(--cobalt); color: #fff; box-shadow: 0 0 0 10px rgba(0,83,253,.18), 0 0 60px rgba(0,83,253,.55); }
+.stage__hub svg { width: 58%; height: auto; }
+.chip { position: absolute; transform: translate(-50%, -50%); display: grid; gap: 6px; min-width: 132px; padding: 10px 14px; border-radius: 10px; background: #f5f1e8; color: var(--ink); font-size: .875rem; font-weight: 650; white-space: nowrap; box-shadow: 0 14px 30px -14px rgba(0,0,0,.8); }
+.chip__bar { display: block; height: 4px; border-radius: 2px; background: rgba(7,7,8,.1); overflow: hidden; }
+.chip__bar i { display: block; height: 100%; background: var(--cobalt); transform-origin: left; transform: scaleX(0); }
+.stage__dash { position: absolute; left: 50%; top: 50%; width: 72%; transform: translate(-50%, -50%) scale(.9); opacity: 0; padding: 22px; border-radius: 14px; background: #fff; color: var(--ink); box-shadow: 0 30px 60px -20px rgba(0,0,0,.7); }
+.dash__hd { display: flex; justify-content: space-between; align-items: center; font-weight: 750; font-size: 1.125rem; padding-bottom: 12px; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
+.dash__v { padding: 4px 10px; border-radius: 999px; background: var(--cobalt); color: #fff; font-size: .875rem; }
+.stage__dash ul { display: grid; gap: 10px; }
+.stage__dash li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: center; font-size: .9375rem; font-weight: 550; }
+.stage__dash .ic { color: var(--cobalt); stroke-width: 2.6; }
+.stage__cap { position: absolute; left: 18px; top: 14px; font-size: .875rem; font-weight: 600; color: var(--muted-ink); }
+@media (max-width: 999px) {
+  .story__copy, .story__stage { grid-column: 1 / -1; }
+  .story__bar { display: none; }
+}
+@media (max-width: 520px) { .chip { min-width: 0; padding: 8px 10px; font-size: .75rem; } }
+
+/* declaración: palabras que se encienden */
+
+/* proyectos: la ilustración se mueve dentro de su marco */
+.pc__art svg, .case__art svg { transform-origin: 50% 50%; }
+
+/* pie: marca grande */
+.ft__word { display: flex; align-items: center; gap: .18em; margin-top: 56px; font-size: clamp(4.5rem, 2rem + 13vw, 15rem); font-weight: 800; letter-spacing: -.06em; line-height: .8; color: var(--paper); overflow: clip; padding-bottom: .05em; }
+.ft__iso { width: .78em; height: auto; color: var(--cobalt); flex: none; }
+
+/* cortina de transición entre páginas */
+.curtain { position: fixed; inset: 0; z-index: 200; pointer-events: none; transform: translateY(105%); visibility: hidden; }
+.curtain__edge { position: absolute; left: 0; bottom: 100%; width: 100%; height: 12vh; fill: var(--cobalt); margin-bottom: -1px; }
+.curtain__body { position: absolute; inset: 0; background: var(--cobalt); display: grid; place-items: center; }
+.curtain__iso { width: 64px; height: auto; color: #fff; }
+
+/* botones magnéticos */
+.btn { will-change: transform; }
+
+/* con movimiento activo: las divisiones superiores se dibujan */
+.motion :is(.rows, .steps, .inc, .ex, .faq, .metrics, .guide, .proc__list) { border-top-color: transparent; background: linear-gradient(var(--ink), var(--ink)) 0 0 / calc(var(--rule, 1) * 100%) 1px no-repeat; }
+.motion .proc__it { opacity: .42; transition: opacity 400ms var(--ease); }
+.motion .proc__it.is-on { opacity: 1; }
+.motion .proc__it .proc__n { transition: color 400ms var(--ease); }
