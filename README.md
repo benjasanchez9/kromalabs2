@@ -1,7 +1,7 @@
 # KROMA — sitio web
 
 Sitio multipágina de KROMA, consultora tecnológica para empresas uruguayas.
-HTML, CSS y JavaScript sin dependencias ni paso de compilación: se publica tal cual en Vercel.
+HTML, CSS y JavaScript estáticos, sin paso de compilación en Vercel. Movimiento con GSAP y la forma 3D con Three.js (ambos alojados en el propio sitio).
 
 ## Publicar (GitHub + Vercel)
 
@@ -20,70 +20,62 @@ Cada vez que subas cambios al repo, Vercel vuelve a publicar solo.
 
 ## Formulario de contacto
 
-El formulario envía los mensajes a **somoskroma@gmail.com** mediante FormSubmit (formsubmit.co), sin servidor propio.
+El formulario envía los mensajes a **somoskromauy@gmail.com** mediante FormSubmit (formsubmit.co), sin servidor propio.
 
-**Paso único de activación:** después de publicar, completá el formulario una vez desde el sitio. FormSubmit manda un email de activación a somoskroma@gmail.com; hacé clic en **Activate Form**. Desde ese momento, cada consulta llega a esa casilla.
+**Paso único de activación:** después de publicar, completá el formulario una vez desde el sitio. FormSubmit manda un email de activación a somoskromauy@gmail.com; hacé clic en **Activate Form**. Desde ese momento, cada consulta llega a esa casilla.
 
 Mientras no esté activado, el sitio muestra un aviso honesto ("pendiente de activación") y sugiere escribir por email o Instagram: nunca simula un envío exitoso.
 
 ## Datos incluidos
 
-- Email: somoskroma@gmail.com (footer, menú móvil y página de contacto)
+- Email: somoskromauy@gmail.com (pie, menú y página de contacto)
 - Instagram: @_kromalabs → https://www.instagram.com/_kromalabs/
-- Isotipo oficial vectorizado desde el archivo provisto (`assets/img/kroma-isotipo.svg`)
-- Fotografías arquitectónicas provistas, en blanco y negro y optimizadas (`assets/img/arq-*.jpg/.webp`)
+- Isotipo oficial (`assets/img/kroma-isotipo.svg`)
 
 ## Pendientes para revisión
 
 | Pendiente | Dónde |
 |---|---|
-| **Activar el formulario** (ver arriba). | somoskroma@gmail.com |
-| **Confirmar la dirección pública** (`SITE_URL`) para la vista previa al compartir el link. | `scripts/build.mjs` |
-| **Proyectos**: los cuatro casos son **conceptos** y están marcados como tales. Reemplazarlos por casos reales cuando existan; el campo "Resultado" solo debe completarse con datos documentados. | `scripts/build.mjs` → `PROJECTS` |
-| **Isotipo**: el SVG se vectorizó desde una imagen. Si tenés el archivo vectorial original (.svg/.ai), conviene reemplazarlo para máxima precisión. | `assets/img/kroma-isotipo.svg` |
+| **Activar el formulario** (ver arriba). | somoskromauy@gmail.com |
+| **Dominio propio**: cuando exista, cambiar `SITE_URL` y regenerar. | `scripts/build.mjs` |
+| **Proyectos**: los cuatro casos son **conceptos** y están marcados como tales. Reemplazarlos por casos reales cuando existan; "Resultado" solo con datos documentados. | `scripts/build.mjs` → `PROJECTS` |
 
 ## Editar textos y páginas
 
-Todas las páginas se generan desde `scripts/build.mjs` (textos, servicios, proyectos, menú y footer en un solo lugar).
-Después de editarlo, regenerá los HTML desde la carpeta del proyecto:
+Todas las páginas se generan desde `scripts/build.mjs` (textos, servicios, proyectos, menú y pie en un solo lugar):
 
 ```
 node scripts/build.mjs .
 ```
 
-(Requiere Node.js instalado. Si preferís, también podés editar directamente los `index.html`.)
-
 ## Estructura
 
 ```
-/                         index.html
+/                         index.html  (seis capítulos: forma, criterio, servicios, proyectos, proceso, contacto)
 /nosotros                 nosotros/index.html
 /servicios                servicios/index.html
-/servicios/webs …         servicios/<servicio>/index.html  (4 páginas)
+/servicios/<servicio>     servicios/<servicio>/index.html  (5 páginas)
 /proyectos                proyectos/index.html
 /proyectos/<proyecto>     proyectos/<proyecto>/index.html  (4 conceptos)
 /contacto                 contacto/index.html
 404.html                  página de error
-assets/css/main.css       sistema visual completo (tokens, componentes, estados de movimiento)
-assets/js/main.js         motor de animaciones e interacciones (sin librerías)
-assets/fonts/             Figtree (400–900, woff2 + woff) e IBM Plex Mono, alojadas localmente
-scripts/icons.mjs         íconos y previews animados de los servicios
+assets/css/site.css       sistema visual "Digital Matter" con la paleta KROMA (negro, cobalto, marfil)
+assets/js/site.js         movimiento e interacciones de todo el sitio (GSAP + ScrollTrigger + SplitText)
+assets/js/home.js         escena del inicio: KROMA FORM y transformación ligada al scroll
+assets/js/kform.js        geometría, material y luz de KROMA FORM (Three.js)
+assets/js/vendor/         GSAP 3.13 y Three.js, alojados localmente
+assets/img/form/          imágenes de KROMA FORM para cada página
+assets/fonts/             Host Grotesk e IBM Plex Mono, alojadas localmente
+scripts/art.mjs           ilustraciones de los proyectos conceptuales
 vercel.json               URLs limpias y cabeceras
 ```
 
-## Tipografía
-
-Figtree, la más cercana al mockup, alojada en el propio sitio en dos formatos. Si un navegador no la carga, entra un respaldo del sistema con las mismas proporciones, así que los títulos no se desarman. La puntuación de los títulos lleva un pequeño espacio compensado para que el punto o la coma nunca toquen la letra.
-
 ## Sistema de movimiento
 
-- **Duraciones**: microinteracciones 160 ms · UI 280 ms · entradas 760 ms · cortina 420 ms · ambiente 14 s+.
-- **Curvas**: `--ease-out` para entradas y respuestas, `--ease-in-out` para la cortina y el menú.
-- **Ligadas al scroll** (un único motor rAF que solo procesa lo visible): curvas y parallax del hero, bandas orgánicas, avance de la tarea en Automatizaciones, ensamblado de piezas en Identidad digital, profundidad en Webs, parallax de imágenes de proyectos.
-- **Una vez al entrar**: titulares por líneas con máscara, recortes, fundidos y subidas (distintos según el contenido).
-- **Respuesta**: filas de servicios con relleno direccional y foto que se abre, botones, enlaces, FAQ, nodos de Integraciones, isotipo del hero que sigue levemente al puntero.
-- **Heros vivos**: el hero principal combina ondas de distinta frecuencia (nunca se repite igual) en las curvas, la foto, el isotipo y el texto. Cada página interna tiene una forma orgánica que respira, deriva, gira lento y reacciona al mouse.
-- **Ambiente (flotación)**: los bordes de la banda marfil y de la foto del hero ondulan lento, la foto deriva dentro de su recorte, el isotipo y el texto flotan unos píxeles; formas decorativas de Nosotros y Servicios flotan; señal que recorre el diagrama de Integraciones. Se pausa fuera de pantalla.
-- **Rastro eléctrico**: solo en secciones negras (servicios y cierre del Inicio, lista de Servicios), con puntero fino; límite de 44 puntos y 5 ramificaciones, adaptado a la densidad de pantalla, pausado fuera de pantalla, sin interceptar clics.
-- **Movimiento reducido**: sin rastro, parallax, ambiente ni cortina; todo el contenido visible y las demos en su estado final.
-- **Sin JavaScript**: todo el contenido se muestra igual.
+- **Inicio**: la forma aparece con la luz, el titular sale por líneas y la forma responde levemente al puntero. Al bajar, la escena queda fija un tramo: la cámara entra al pliegue, la banda se abre, se parte en tres, se ordena y termina en paneles de interfaz junto a "Tecnología con criterio". Todo es reversible y no secuestra la rueda.
+- **Rendimiento**: Three.js se descarga recién con la primera interacción; hasta entonces se ve una imagen idéntica de la forma.
+- **Una vez al entrar**: titulares por líneas con máscara, recortes en proyectos, capas del proceso que se dibujan.
+- **Respuesta**: filas de servicios con relleno cobalto direccional y vista previa de la forma, botones con flecha que se reemplaza, FAQ, filtros, nodos de Integraciones.
+- **Demos por servicio**: profundidad en Webs, tarea que avanza en Automatizaciones, señal entre herramientas en Integraciones, piezas que se ordenan en Identidad digital y recomendación según prioridades en Consultoría.
+- **Transición entre páginas**: cortina curva cobalto con el isotipo (la misma de la versión anterior).
+- **Movimiento reducido o sin JavaScript**: todo el contenido visible, sin escena fijada ni cortina.

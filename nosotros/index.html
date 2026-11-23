@@ -2,12 +2,11 @@
 <html lang="es-UY">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nosotros: consultora tecnológica en Uruguay — KROMA</title>
 <meta name="description" content="KROMA nace para democratizar la digitalización de las empresas uruguayas: elegir bien las herramientas e implementarlas con criterio.">
 <link rel="canonical" href="https://kromalabs2.vercel.app/nosotros">
-<meta name="theme-color" content="#0053fd">
-<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#070708">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kromalabs2.vercel.app/nosotros">
 <meta property="og:title" content="Nosotros: consultora tecnológica en Uruguay — KROMA">
@@ -18,313 +17,170 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ProfessionalService","@id":"https://kromalabs2.vercel.app/#kroma","name":"KROMA","url":"https://kromalabs2.vercel.app/","description":"Consultoría tecnológica para empresas uruguayas: webs, automatizaciones, integraciones, identidad digital y consultoría tecnológica.","logo":"https://kromalabs2.vercel.app/assets/img/logo-512.png","image":"https://kromalabs2.vercel.app/assets/img/og-kroma.jpg","email":"somoskroma@gmail.com","sameAs":["https://www.instagram.com/_kromalabs/"],"areaServed":{"@type":"Country","name":"Uruguay"},"address":{"@type":"PostalAddress","addressLocality":"Montevideo","addressCountry":"UY"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ProfessionalService","@id":"https://kromalabs2.vercel.app/#kroma","name":"KROMA","url":"https://kromalabs2.vercel.app/","description":"Consultoría tecnológica para empresas uruguayas: webs, automatizaciones, integraciones, identidad digital y consultoría tecnológica.","logo":"https://kromalabs2.vercel.app/assets/img/logo-512.png","image":"https://kromalabs2.vercel.app/assets/img/og-kroma.jpg","email":"somoskromauy@gmail.com","sameAs":["https://www.instagram.com/_kromalabs/"],"areaServed":{"@type":"Country","name":"Uruguay"},"address":{"@type":"PostalAddress","addressLocality":"Montevideo","addressCountry":"UY"}}]}</script>
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/figtree-900.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/main.css">
-<script>(function(d){var h=d.documentElement;h.classList.add("js");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("js","is-entering")},3000)})(document);</script>
-<script src="/assets/js/main.js" defer></script>
+<link rel="preload" href="/assets/fonts/host-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(d){var h=d.documentElement,rm=matchMedia("(prefers-reduced-motion: reduce)").matches;h.classList.add("js",rm?"rm":"anim");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!rm)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("anim","is-entering")},3000)})(document);</script>
+<script src="/assets/js/vendor/gsap.min.js" defer></script>
+<script src="/assets/js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/js/vendor/SplitText.min.js" defer></script>
+<script src="/assets/js/site.js" defer></script>
 <script type="speculationrules">{"prefetch":[{"source":"document","where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="iso" viewBox="0 0 100.00 78.48"><path fill="currentColor" d="M86.15 78.48C84.84 78.57 83.27 78.37 82.22 78.22C81.17 78.06 80.93 78.02 79.86 77.56C78.78 77.10 76.88 76.16 75.79 75.46C74.69 74.76 74.09 74.14 73.29 73.36C72.50 72.58 71.86 71.95 71.00 70.80C70.13 69.65 69.42 68.94 68.11 66.47C66.80 64.00 64.55 58.55 63.12 55.97C61.70 53.39 60.82 52.40 59.58 50.98C58.34 49.57 56.81 48.35 55.71 47.51C54.60 46.66 53.87 46.33 52.95 45.93C52.03 45.54 51.07 45.30 50.20 45.14C49.32 44.99 48.45 44.97 47.70 45.01C46.96 45.06 46.48 45.17 45.73 45.41C44.99 45.65 43.90 46.11 43.24 46.46C42.59 46.81 42.36 47.01 41.80 47.51C41.24 48.00 40.39 48.85 39.90 49.41C39.40 49.97 39.46 49.74 38.85 50.85C38.23 51.97 36.96 54.79 36.22 56.10C35.48 57.41 35.16 57.84 34.38 58.73C33.61 59.61 32.64 60.62 31.56 61.42C30.48 62.22 29.09 62.99 27.89 63.52C26.68 64.04 25.74 64.37 24.34 64.57C22.94 64.76 21.11 64.87 19.49 64.70C17.87 64.52 16.08 64.04 14.63 63.52C13.19 62.99 11.85 62.18 10.83 61.55C9.80 60.91 9.26 60.44 8.46 59.71C7.67 58.98 6.81 58.13 6.04 57.15C5.26 56.18 4.55 55.25 3.81 53.87C3.06 52.49 2.19 50.72 1.57 48.88C0.96 47.05 0.39 44.75 0.13 42.85C-0.13 40.94 -0.15 39.35 0.00 37.47C0.15 35.59 0.63 33.22 1.05 31.56C1.47 29.90 1.75 29.05 2.49 27.49C3.24 25.94 4.75 23.45 5.51 22.24C6.28 21.04 6.31 21.10 7.09 20.28C7.86 19.46 9.22 18.12 10.17 17.32C11.12 16.52 11.85 16.05 12.80 15.49C13.74 14.92 14.81 14.35 15.81 13.91C16.82 13.47 17.74 13.15 18.83 12.86C19.93 12.58 21.15 12.31 22.38 12.20C23.60 12.10 25.22 12.14 26.18 12.20C27.14 12.27 27.30 12.34 28.15 12.60C29.00 12.86 30.49 13.41 31.30 13.78C32.11 14.15 32.40 14.38 33.01 14.83C33.61 15.28 34.24 15.74 34.91 16.47C35.58 17.20 36.24 17.76 37.01 19.23C37.77 20.69 38.70 23.72 39.50 25.26C40.30 26.80 41.00 27.64 41.80 28.48C42.60 29.32 43.59 29.90 44.29 30.31C44.99 30.73 45.52 30.82 46.00 30.97C46.48 31.12 46.46 31.19 47.18 31.23C47.90 31.28 49.41 31.34 50.33 31.23C51.25 31.12 51.90 30.88 52.69 30.58C53.48 30.27 53.99 30.13 55.05 29.40C56.11 28.66 57.84 27.42 59.06 26.18C60.27 24.95 61.55 23.10 62.34 21.98C63.12 20.87 62.97 21.08 63.78 19.49C64.59 17.89 66.19 14.26 67.19 12.40C68.20 10.54 68.91 9.53 69.82 8.33C70.72 7.14 71.60 6.20 72.64 5.25C73.68 4.30 74.93 3.32 76.05 2.62C77.17 1.92 78.32 1.44 79.33 1.05C80.34 0.66 81.34 0.44 82.09 0.26C82.83 0.09 82.94 0.04 83.79 0.00C84.65 -0.04 85.91 -0.17 87.20 0.00C88.50 0.17 90.29 0.59 91.54 1.05C92.78 1.51 93.84 2.20 94.69 2.76C95.53 3.31 96.03 3.82 96.59 4.40C97.15 4.98 97.62 5.58 98.03 6.23C98.45 6.89 98.80 7.59 99.08 8.33C99.37 9.08 99.61 9.84 99.74 10.70C99.87 11.55 99.91 12.60 99.87 13.45C99.83 14.30 99.72 14.94 99.48 15.81C99.23 16.69 98.80 17.89 98.43 18.70C98.05 19.51 97.66 20.06 97.24 20.67C96.83 21.28 96.53 21.73 95.93 22.38C95.33 23.02 94.72 23.76 93.64 24.54C92.55 25.32 90.86 26.38 89.44 27.03C88.01 27.69 86.72 28.08 85.10 28.48C83.49 28.87 81.12 29.07 79.72 29.40C78.32 29.72 77.58 30.07 76.71 30.45C75.83 30.82 75.34 31.00 74.48 31.63C73.61 32.25 72.21 33.43 71.52 34.19C70.83 34.94 70.60 35.59 70.34 36.15C70.08 36.72 69.99 36.96 69.95 37.60C69.90 38.23 69.93 39.26 70.08 39.96C70.23 40.66 70.65 41.36 70.87 41.80C71.08 42.24 70.90 42.07 71.39 42.59C71.88 43.10 72.76 44.15 73.82 44.88C74.88 45.61 76.60 46.48 77.76 46.98C78.92 47.48 79.33 47.57 80.77 47.90C82.22 48.23 84.82 48.53 86.42 48.95C88.01 49.37 89.39 49.98 90.35 50.39C91.32 50.81 91.49 50.98 92.19 51.44C92.89 51.90 93.82 52.53 94.55 53.15C95.29 53.77 95.99 54.47 96.59 55.18C97.19 55.89 97.73 56.67 98.16 57.41C98.60 58.16 98.91 58.75 99.21 59.65C99.52 60.54 99.87 61.75 100.00 62.80C100.13 63.85 100.13 64.90 100.00 65.94C99.87 66.99 99.56 68.13 99.21 69.09C98.86 70.06 98.52 70.81 97.90 71.72C97.28 72.63 96.29 73.76 95.47 74.54C94.65 75.32 93.88 75.85 92.98 76.38C92.08 76.90 91.23 77.34 90.09 77.69C88.95 78.04 87.47 78.39 86.15 78.48Z"/></symbol></defs></svg>
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false"><defs><symbol id="iso" viewBox="0 0 100.00 78.48"><path fill="currentColor" d="M86.15 78.48C84.84 78.57 83.27 78.37 82.22 78.22C81.17 78.06 80.93 78.02 79.86 77.56C78.78 77.10 76.88 76.16 75.79 75.46C74.69 74.76 74.09 74.14 73.29 73.36C72.50 72.58 71.86 71.95 71.00 70.80C70.13 69.65 69.42 68.94 68.11 66.47C66.80 64.00 64.55 58.55 63.12 55.97C61.70 53.39 60.82 52.40 59.58 50.98C58.34 49.57 56.81 48.35 55.71 47.51C54.60 46.66 53.87 46.33 52.95 45.93C52.03 45.54 51.07 45.30 50.20 45.14C49.32 44.99 48.45 44.97 47.70 45.01C46.96 45.06 46.48 45.17 45.73 45.41C44.99 45.65 43.90 46.11 43.24 46.46C42.59 46.81 42.36 47.01 41.80 47.51C41.24 48.00 40.39 48.85 39.90 49.41C39.40 49.97 39.46 49.74 38.85 50.85C38.23 51.97 36.96 54.79 36.22 56.10C35.48 57.41 35.16 57.84 34.38 58.73C33.61 59.61 32.64 60.62 31.56 61.42C30.48 62.22 29.09 62.99 27.89 63.52C26.68 64.04 25.74 64.37 24.34 64.57C22.94 64.76 21.11 64.87 19.49 64.70C17.87 64.52 16.08 64.04 14.63 63.52C13.19 62.99 11.85 62.18 10.83 61.55C9.80 60.91 9.26 60.44 8.46 59.71C7.67 58.98 6.81 58.13 6.04 57.15C5.26 56.18 4.55 55.25 3.81 53.87C3.06 52.49 2.19 50.72 1.57 48.88C0.96 47.05 0.39 44.75 0.13 42.85C-0.13 40.94 -0.15 39.35 0.00 37.47C0.15 35.59 0.63 33.22 1.05 31.56C1.47 29.90 1.75 29.05 2.49 27.49C3.24 25.94 4.75 23.45 5.51 22.24C6.28 21.04 6.31 21.10 7.09 20.28C7.86 19.46 9.22 18.12 10.17 17.32C11.12 16.52 11.85 16.05 12.80 15.49C13.74 14.92 14.81 14.35 15.81 13.91C16.82 13.47 17.74 13.15 18.83 12.86C19.93 12.58 21.15 12.31 22.38 12.20C23.60 12.10 25.22 12.14 26.18 12.20C27.14 12.27 27.30 12.34 28.15 12.60C29.00 12.86 30.49 13.41 31.30 13.78C32.11 14.15 32.40 14.38 33.01 14.83C33.61 15.28 34.24 15.74 34.91 16.47C35.58 17.20 36.24 17.76 37.01 19.23C37.77 20.69 38.70 23.72 39.50 25.26C40.30 26.80 41.00 27.64 41.80 28.48C42.60 29.32 43.59 29.90 44.29 30.31C44.99 30.73 45.52 30.82 46.00 30.97C46.48 31.12 46.46 31.19 47.18 31.23C47.90 31.28 49.41 31.34 50.33 31.23C51.25 31.12 51.90 30.88 52.69 30.58C53.48 30.27 53.99 30.13 55.05 29.40C56.11 28.66 57.84 27.42 59.06 26.18C60.27 24.95 61.55 23.10 62.34 21.98C63.12 20.87 62.97 21.08 63.78 19.49C64.59 17.89 66.19 14.26 67.19 12.40C68.20 10.54 68.91 9.53 69.82 8.33C70.72 7.14 71.60 6.20 72.64 5.25C73.68 4.30 74.93 3.32 76.05 2.62C77.17 1.92 78.32 1.44 79.33 1.05C80.34 0.66 81.34 0.44 82.09 0.26C82.83 0.09 82.94 0.04 83.79 0.00C84.65 -0.04 85.91 -0.17 87.20 0.00C88.50 0.17 90.29 0.59 91.54 1.05C92.78 1.51 93.84 2.20 94.69 2.76C95.53 3.31 96.03 3.82 96.59 4.40C97.15 4.98 97.62 5.58 98.03 6.23C98.45 6.89 98.80 7.59 99.08 8.33C99.37 9.08 99.61 9.84 99.74 10.70C99.87 11.55 99.91 12.60 99.87 13.45C99.83 14.30 99.72 14.94 99.48 15.81C99.23 16.69 98.80 17.89 98.43 18.70C98.05 19.51 97.66 20.06 97.24 20.67C96.83 21.28 96.53 21.73 95.93 22.38C95.33 23.02 94.72 23.76 93.64 24.54C92.55 25.32 90.86 26.38 89.44 27.03C88.01 27.69 86.72 28.08 85.10 28.48C83.49 28.87 81.12 29.07 79.72 29.40C78.32 29.72 77.58 30.07 76.71 30.45C75.83 30.82 75.34 31.00 74.48 31.63C73.61 32.25 72.21 33.43 71.52 34.19C70.83 34.94 70.60 35.59 70.34 36.15C70.08 36.72 69.99 36.96 69.95 37.60C69.90 38.23 69.93 39.26 70.08 39.96C70.23 40.66 70.65 41.36 70.87 41.80C71.08 42.24 70.90 42.07 71.39 42.59C71.88 43.10 72.76 44.15 73.82 44.88C74.88 45.61 76.60 46.48 77.76 46.98C78.92 47.48 79.33 47.57 80.77 47.90C82.22 48.23 84.82 48.53 86.42 48.95C88.01 49.37 89.39 49.98 90.35 50.39C91.32 50.81 91.49 50.98 92.19 51.44C92.89 51.90 93.82 52.53 94.55 53.15C95.29 53.77 95.99 54.47 96.59 55.18C97.19 55.89 97.73 56.67 98.16 57.41C98.60 58.16 98.91 58.75 99.21 59.65C99.52 60.54 99.87 61.75 100.00 62.80C100.13 63.85 100.13 64.90 100.00 65.94C99.87 66.99 99.56 68.13 99.21 69.09C98.86 70.06 98.52 70.81 97.90 71.72C97.28 72.63 96.29 73.76 95.47 74.54C94.65 75.32 93.88 75.85 92.98 76.38C92.08 76.90 91.23 77.34 90.09 77.69C88.95 78.04 87.47 78.39 86.15 78.48Z"/></symbol></defs></svg>
 
-<a class="skip-link" href="#contenido">Saltar al contenido</a>
-<header class="site-header" data-on="ivory">
-  <div class="wrap">
-    <a class="brand" href="/" aria-label="KROMA — Inicio"><span class="brand__word" aria-hidden="true">kroma</span></a>
-    <nav class="nav" aria-label="Principal">
-      <ul class="nav__list">
-        <li class="nav__pill-ind" aria-hidden="true"></li>
-        <li><a class="nav__link" href="/">Inicio</a></li>
-        <li><a class="nav__link" href="/nosotros" aria-current="page">Nosotros</a></li>
-        <li class="nav__item--sub">
-          <div class="nav__row">
-            <a class="nav__link" href="/servicios">Servicios</a>
-            <button class="nav__subtoggle" type="button" aria-expanded="false" aria-controls="sub-servicios" aria-label="Mostrar servicios"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-          </div>
-          <div class="nav__sub mega" id="sub-servicios">
-            <ul class="mega__grid">
-              <li style="--i:0"><a class="mega__tile" href="/servicios/webs">
-                <span class="mega__ico"><svg class="ico ico--webs" viewBox="0 0 48 48" aria-hidden="true">
-    <rect class="s" x="5" y="8" width="38" height="32" rx="4"/><path class="s" d="M5 15h38"/>
-    <circle class="f" cx="9.5" cy="11.5" r="1.1"/><circle class="f o" cx="13.2" cy="11.5" r="1.1"/>
-    <svg x="5" y="15" width="38" height="25" overflow="hidden"><g class="ico-scroll">
-      <rect class="f" x="5" y="4" width="19" height="4" rx="1"/><rect class="f o" x="5" y="11" width="28" height="2" rx="1"/>
-      <rect class="f o" x="5" y="15" width="22" height="2" rx="1"/><rect class="a" x="5" y="20" width="12" height="4" rx="1"/>
-      <rect class="f" x="5" y="29" width="28" height="9" rx="1.5"/><rect class="f o" x="5" y="41" width="24" height="2" rx="1"/>
-      <rect class="f" x="5" y="47" width="19" height="4" rx="1"/><rect class="f o" x="5" y="54" width="28" height="2" rx="1"/>
-    </g></svg>
-    <path class="ico-cursor" d="M31 27l9 3.5-4 1.4-1.4 4z"/>
-  </svg></span>
-                <span class="mega__txt"><span class="mega__num">01</span><span class="mega__name">Webs</span><span class="mega__desc">Sitios a medida, rápidos y pensados para convertir.</span></span>
-                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              </a></li><li style="--i:1"><a class="mega__tile" href="/servicios/automatizaciones">
-                <span class="mega__ico"><svg class="ico ico--auto" viewBox="0 0 48 48" aria-hidden="true">
-    <path class="s o" d="M7 32H41"/><path class="ico-progress" d="M7 32H41"/>
-    <circle class="ico-node n1" cx="7" cy="32" r="3.6"/><circle class="ico-node n2" cx="18.3" cy="32" r="3.6"/>
-    <circle class="ico-node n3" cx="29.6" cy="32" r="3.6"/><circle class="ico-node n4" cx="41" cy="32" r="3.6"/>
-    <g class="ico-task"><rect class="a" x="1" y="12" width="12" height="9" rx="2.5"/><path class="ico-check" d="M4 16.6l2 2 3.6-3.8"/></g>
-  </svg></span>
-                <span class="mega__txt"><span class="mega__num">02</span><span class="mega__name">Automatizaciones</span><span class="mega__desc">Menos trabajo manual. Más tiempo para lo importante.</span></span>
-                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              </a></li><li style="--i:2"><a class="mega__tile" href="/servicios/integraciones">
-                <span class="mega__ico"><svg class="ico ico--integ" viewBox="0 0 48 48" aria-hidden="true">
-    <path class="s o" d="M13 12C20 12 18 24 24 24M13 36C20 36 18 24 24 24M24 24C30 24 28 12 35 12M24 24C30 24 28 36 35 36"/>
-    <path class="ico-flow" d="M13 12C20 12 18 24 24 24C30 24 28 36 35 36"/>
-    <path class="ico-flow f2" d="M13 36C20 36 18 24 24 24C30 24 28 12 35 12"/>
-    <rect class="s" x="4" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="4" y="32" width="9" height="9" rx="2.5"/>
-    <rect class="s" x="35" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="35" y="32" width="9" height="9" rx="2.5"/>
-    <rect class="ico-hub" x="19" y="19" width="10" height="10" rx="3"/>
-  </svg></span>
-                <span class="mega__txt"><span class="mega__num">03</span><span class="mega__name">Integraciones</span><span class="mega__desc">Conectamos tus herramientas para que todo fluya.</span></span>
-                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              </a></li><li style="--i:3"><a class="mega__tile" href="/servicios/identidad-digital">
-                <span class="mega__ico"><svg class="ico ico--ident" viewBox="0 0 48 48" aria-hidden="true">
-    <rect class="s o" x="5" y="5" width="38" height="38" rx="5"/>
-    <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
-    <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
-  </svg></span>
-                <span class="mega__txt"><span class="mega__num">04</span><span class="mega__name">Identidad digital</span><span class="mega__desc">Una presencia digital sólida y coherente con tu negocio.</span></span>
-                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              </a></li><li style="--i:4"><a class="mega__tile" href="/servicios/consultoria-tecnologica">
-                <span class="mega__ico"><svg class="ico ico--consult" viewBox="0 0 48 48" aria-hidden="true">
-    <path class="s o" d="M11 8C19 8 19 24 25 24M11 18C19 18 19 24 25 24M11 30C19 30 19 24 25 24M11 40C19 40 19 24 25 24M25 24H36"/>
-    <path class="ico-pick" pathLength="1" d="M11 18C19 18 19 24 25 24H36"/>
-    <circle class="ico-opt x1" cx="7.5" cy="8" r="3.4"/><circle class="ico-opt k" cx="7.5" cy="18" r="3.4"/>
-    <circle class="ico-opt x2" cx="7.5" cy="30" r="3.4"/><circle class="ico-opt x3" cx="7.5" cy="40" r="3.4"/>
-    <rect class="ico-goal" x="36" y="18.5" width="9" height="11" rx="3"/>
-  </svg></span>
-                <span class="mega__txt"><span class="mega__num">05</span><span class="mega__name">Consultoría tecnológica</span><span class="mega__desc">Primero entendemos tu negocio. Después elegimos la tecnología.</span></span>
-                <span class="mega__go" aria-hidden="true"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              </a></li>
-            </ul>
-            <div class="mega__side">
-              <span class="mega__label">Servicios</span>
-              <p>Elegimos la herramienta según tu operación<span class="pt">,</span> no al revés<span class="pt">.</span></p>
-              <a class="mega__all" href="/servicios">Ver todos los servicios <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              <a class="mega__cta" href="/contacto?servicio=no-se">¿No sabés por dónde empezar? <strong>Hablemos</strong></a>
-            </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="hd" id="hd">
+  <div class="hd__in">
+    <a class="hd__brand" href="/" aria-label="KROMA, inicio"><svg class="hd__iso" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg><span aria-hidden="true">KROMA<sup>®</sup></span></a>
+    <span class="hd__tag mono" aria-hidden="true">Consultoría tecnológica</span>
+    <nav class="hd__nav" aria-label="Principal">
+      <ul>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/nosotros" aria-current="page">Nosotros</a></li>
+        <li class="hd__sub">
+          <a href="/servicios">Servicios</a>
+          <button class="hd__tg" type="button" aria-expanded="false" aria-controls="sub-servicios"><span class="sr">Mostrar servicios</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <div class="hd__drop" id="sub-servicios">
+            <ul><li><a href="/servicios/webs"><span class="mono">01</span><span class="hd__dn">Webs</span><span class="hd__dd">Sitios a medida, rápidos y pensados para convertir.</span></a></li><li><a href="/servicios/automatizaciones"><span class="mono">02</span><span class="hd__dn">Automatizaciones</span><span class="hd__dd">Menos trabajo manual. Más tiempo para lo importante.</span></a></li><li><a href="/servicios/integraciones"><span class="mono">03</span><span class="hd__dn">Integraciones</span><span class="hd__dd">Conectamos tus herramientas para que todo fluya.</span></a></li><li><a href="/servicios/identidad-digital"><span class="mono">04</span><span class="hd__dn">Identidad digital</span><span class="hd__dd">Una presencia digital sólida y coherente con tu negocio.</span></a></li><li><a href="/servicios/consultoria-tecnologica"><span class="mono">05</span><span class="hd__dn">Consultoría tecnológica</span><span class="hd__dd">Primero entendemos tu negocio. Después elegimos la tecnología.</span></a></li></ul>
           </div>
         </li>
-        <li><a class="nav__link" href="/proyectos">Proyectos</a></li>
+        <li><a href="/proyectos">Proyectos</a></li>
       </ul>
-      <a class="btn nav__cta" href="/contacto">Hablemos <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir menú"><span></span><span></span></button>
     </nav>
+    <a class="btn btn--sm hd__cta" href="/contacto"><span>Hablemos</span><span class="btn__ar" aria-hidden="true"><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu"><span>Menú</span><i aria-hidden="true"></i></button>
   </div>
 </header>
-<div class="mobile-menu" id="menu-movil">
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
+  <div class="menu__top"><span class="mono">KROMA® / Menú</span><button class="menu__close" type="button">Cerrar <i aria-hidden="true"></i></button></div>
   <nav aria-label="Menú móvil">
-    <ul class="mobile-menu__main">
-      <li><a href="/">Inicio</a></li>
-      <li><a href="/nosotros" aria-current="page">Nosotros</a></li>
-      <li><a href="/servicios">Servicios</a>
-        <ul class="mobile-menu__sub"><li><a href="/servicios/webs"><span class="mobile-menu__ico"><svg class="ico ico--webs" viewBox="0 0 48 48" aria-hidden="true">
-    <rect class="s" x="5" y="8" width="38" height="32" rx="4"/><path class="s" d="M5 15h38"/>
-    <circle class="f" cx="9.5" cy="11.5" r="1.1"/><circle class="f o" cx="13.2" cy="11.5" r="1.1"/>
-    <svg x="5" y="15" width="38" height="25" overflow="hidden"><g class="ico-scroll">
-      <rect class="f" x="5" y="4" width="19" height="4" rx="1"/><rect class="f o" x="5" y="11" width="28" height="2" rx="1"/>
-      <rect class="f o" x="5" y="15" width="22" height="2" rx="1"/><rect class="a" x="5" y="20" width="12" height="4" rx="1"/>
-      <rect class="f" x="5" y="29" width="28" height="9" rx="1.5"/><rect class="f o" x="5" y="41" width="24" height="2" rx="1"/>
-      <rect class="f" x="5" y="47" width="19" height="4" rx="1"/><rect class="f o" x="5" y="54" width="28" height="2" rx="1"/>
-    </g></svg>
-    <path class="ico-cursor" d="M31 27l9 3.5-4 1.4-1.4 4z"/>
-  </svg></span>Webs</a></li><li><a href="/servicios/automatizaciones"><span class="mobile-menu__ico"><svg class="ico ico--auto" viewBox="0 0 48 48" aria-hidden="true">
-    <path class="s o" d="M7 32H41"/><path class="ico-progress" d="M7 32H41"/>
-    <circle class="ico-node n1" cx="7" cy="32" r="3.6"/><circle class="ico-node n2" cx="18.3" cy="32" r="3.6"/>
-    <circle class="ico-node n3" cx="29.6" cy="32" r="3.6"/><circle class="ico-node n4" cx="41" cy="32" r="3.6"/>
-    <g class="ico-task"><rect class="a" x="1" y="12" width="12" height="9" rx="2.5"/><path class="ico-check" d="M4 16.6l2 2 3.6-3.8"/></g>
-  </svg></span>Automatizaciones</a></li><li><a href="/servicios/integraciones"><span class="mobile-menu__ico"><svg class="ico ico--integ" viewBox="0 0 48 48" aria-hidden="true">
-    <path class="s o" d="M13 12C20 12 18 24 24 24M13 36C20 36 18 24 24 24M24 24C30 24 28 12 35 12M24 24C30 24 28 36 35 36"/>
-    <path class="ico-flow" d="M13 12C20 12 18 24 24 24C30 24 28 36 35 36"/>
-    <path class="ico-flow f2" d="M13 36C20 36 18 24 24 24C30 24 28 12 35 12"/>
-    <rect class="s" x="4" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="4" y="32" width="9" height="9" rx="2.5"/>
-    <rect class="s" x="35" y="7" width="9" height="9" rx="2.5"/><rect class="s" x="35" y="32" width="9" height="9" rx="2.5"/>
-    <rect class="ico-hub" x="19" y="19" width="10" height="10" rx="3"/>
-  </svg></span>Integraciones</a></li><li><a href="/servicios/identidad-digital"><span class="mobile-menu__ico"><svg class="ico ico--ident" viewBox="0 0 48 48" aria-hidden="true">
-    <rect class="s o" x="5" y="5" width="38" height="38" rx="5"/>
-    <circle class="ico-p p1" cx="17" cy="17" r="6"/><rect class="ico-p p2" x="25" y="11" width="12" height="12" rx="3"/>
-    <rect class="ico-p p3" x="11" y="25" width="12" height="12" rx="6"/><path class="ico-p p4" d="M31 25l6 11H25z"/>
-  </svg></span>Identidad digital</a></li><li><a href="/servicios/consultoria-tecnologica"><span class="mobile-menu__ico"><svg class="ico ico--consult" viewBox="0 0 48 48" aria-hidden="true">
-    <path class="s o" d="M11 8C19 8 19 24 25 24M11 18C19 18 19 24 25 24M11 30C19 30 19 24 25 24M11 40C19 40 19 24 25 24M25 24H36"/>
-    <path class="ico-pick" pathLength="1" d="M11 18C19 18 19 24 25 24H36"/>
-    <circle class="ico-opt x1" cx="7.5" cy="8" r="3.4"/><circle class="ico-opt k" cx="7.5" cy="18" r="3.4"/>
-    <circle class="ico-opt x2" cx="7.5" cy="30" r="3.4"/><circle class="ico-opt x3" cx="7.5" cy="40" r="3.4"/>
-    <rect class="ico-goal" x="36" y="18.5" width="9" height="11" rx="3"/>
-  </svg></span>Consultoría tecnológica</a></li></ul>
-      </li>
-      <li><a href="/proyectos">Proyectos</a></li>
-      <li><a href="/contacto">Hablemos</a></li>
+    <ul class="menu__main">
+      <li><a href="/"><span class="mono">01</span>Inicio</a></li>
+      <li><a href="/nosotros" aria-current="page"><span class="mono">02</span>Nosotros</a></li>
+      <li><a href="/servicios"><span class="mono">03</span>Servicios</a></li>
+      <li><a href="/proyectos"><span class="mono">04</span>Proyectos</a></li>
+      <li><a href="/contacto"><span class="mono">05</span>Hablemos</a></li>
     </ul>
+    <ul class="menu__svc"><li><a href="/servicios/webs">Webs</a></li><li><a href="/servicios/automatizaciones">Automatizaciones</a></li><li><a href="/servicios/integraciones">Integraciones</a></li><li><a href="/servicios/identidad-digital">Identidad digital</a></li><li><a href="/servicios/consultoria-tecnologica">Consultoría tecnológica</a></li></ul>
   </nav>
-  <div class="mobile-menu__foot"><p>Consultoría tecnológica para empresas<span class="pt">.</span></p><div class="social social--menu">
-  <a class="social__btn" href="mailto:somoskroma@gmail.com" aria-label="Escribir a KROMA por email: somoskroma@gmail.com" data-tip="somoskroma@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4 7.5l8 5.6 8-5.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-  <a class="social__btn" href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener" aria-label="Instagram de KROMA (se abre en otra pestaña)" data-tip="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.25" fill="currentColor"/></svg></a>
-  
-</div></div>
+  <div class="menu__foot mono"><span>somoskromauy@gmail.com</span><a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">Instagram @_kromalabs</a><span>Montevideo — Uruguay</span></div>
 </div>
 <main id="contenido" tabindex="-1">
 
-<section class="page-hero about-hero theme-ivory" data-theme="ivory" aria-labelledby="t">
-  <div class="wrap about-hero__grid">
-    <div class="about-hero__text">
-      <h1 id="t" class="lines display about-hero__title" data-lines><span class="ln"><span style="--i:0;--base:0ms">Digitalizar</span></span><span class="ln"><span style="--i:1;--base:0ms">también es</span></span><span class="ln"><span style="--i:2;--base:0ms">elegir bien<span class="pt">.</span></span></span></h1>
-      <div class="about-hero__intro" data-reveal="rise" style="--delay:400ms">
-        <p class="lead">Somos una consultora tecnológica uruguaya<span class="pt">.</span> Nuestro propósito es democratizar la digitalización de las empresas<span class="pt">.</span></p>
-        <a class="link-arrow" href="#proceso">Ver cómo trabajamos <svg class="" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
+<section class="ph t-ivory ph--art" aria-labelledby="t">
+  <div class="wrap ph__grid">
+    <nav class="crumb mono" aria-label="Ruta"><ol><li><a href="/">Inicio</a></li><li aria-current="page">Nosotros</li></ol></nav>
+    <h1 class="d1 ph__t" id="t" data-split>Digitalizar<br>también es<br>elegir bien.</h1>
+    <div class="ph__aside" data-rise>
+      <p class="lead">Somos una consultora tecnológica uruguaya. Nuestro propósito es democratizar la digitalización de las empresas.</p>
+      <a class="lk" href="#proceso">Ver cómo trabajamos <svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
-    <div class="about-hero__visual" aria-hidden="true">
-      <div class="live about-hero__orb" style="color:var(--blue)" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path data-live='{"pts":[[50,4],[78,10],[96,34],[92,64],[72,90],[42,97],[14,82],[3,52],[16,20]],"amp":6,"open":false}' fill="currentColor" d="M50 4C60.3 2.3 70.3 5.0 78.0 10.0C85.7 15.0 93.7 25.0 96.0 34.0C98.3 43.0 96.0 54.7 92.0 64.0C88.0 73.3 80.3 84.5 72.0 90.0C63.7 95.5 51.7 98.3 42.0 97.0C32.3 95.7 20.5 89.5 14.0 82.0C7.5 74.5 2.7 62.3 3.0 52.0C3.3 41.7 8.2 28.0 16.0 20.0C23.8 12.0 39.7 5.7 50.0 4.0Z"/></svg></div>
-      <div class="about-hero__mark"><div class="float-soft"><svg class="" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg></div></div>
+    <div class="ph__art" aria-hidden="true"><img src="/assets/img/form/nosotros.webp" alt="" width="924" height="886" decoding="async" data-float></div>
+  </div>
+</section>
+<div class="sweep" aria-hidden="true"><svg viewBox="0 0 1440 220" preserveAspectRatio="none"><path class="sweep__b" d="M0 120C240 40 420 30 640 90S1060 210 1440 110V220H0Z"/><path class="sweep__c" d="M0 220V170C200 120 380 110 560 150S900 220 1100 220Z"/></svg></div>
+<section class="sec t-black about" aria-labelledby="proposito">
+  <div class="wrap">
+    <h2 id="proposito" class="d2 about__big" data-split>Nunca hubo tantas herramientas disponibles. Pero más opciones no siempre significan mejores decisiones.</h2>
+    <div class="about__grid">
+      <p>Para muchas empresas, digitalizarse se volvió una lista de suscripciones que nadie termina de usar. El valor no está en sumar tecnología, sino en elegirla bien e implementarla con criterio.</p>
+      <p>Democratizar la digitalización es eso: que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala.</p>
+      <blockquote class="about__q">Tecnología que se entiende, se usa y se puede mantener. Ese es nuestro criterio.</blockquote>
     </div>
   </div>
 </section>
-<div class="about-band" data-band aria-hidden="true">
-  <svg viewBox="0 0 1300 320" preserveAspectRatio="none">
-    <path fill="var(--black)" d="M0 150C180 120 330 40 520 70C700 98 760 230 930 240C1080 250 1180 140 1300 120V320H0Z"/>
-    <path fill="var(--blue)" d="M0 320V270C110 180 200 130 330 140C460 150 520 280 690 320Z"/>
-  </svg>
-</div>
-<section class="section theme-black manifesto" data-theme="black" aria-labelledby="proposito">
+<section class="sec t-ivory flow" id="proceso" aria-labelledby="proceso-t">
   <div class="wrap">
-    <h2 id="proposito" class="manifesto__big" data-words><span class="mw" style="--w:0">Nunca</span> <span class="mw" style="--w:1">hubo</span> <span class="mw" style="--w:2">tantas</span> <span class="mw" style="--w:3">herramientas</span> <span class="mw" style="--w:4">disponibles<span class="pt">.</span></span> <span class="mw" style="--w:5">Pero</span> <span class="mw" style="--w:6">más</span> <span class="mw" style="--w:7">opciones</span> <span class="mw" style="--w:8">no</span> <span class="mw" style="--w:9">siempre</span> <span class="mw" style="--w:10">significan</span> <span class="mw" style="--w:11">mejores</span> <span class="mw" style="--w:12">decisiones<span class="pt">.</span></span></h2>
-    <div class="manifesto__grid">
-      <figure class="manifesto__figure" data-reveal="wipe">
-        <div class="proj__media"><div class="proj__para" data-parallax="0.06"><picture><source srcset="/assets/img/arq-escalera-900.webp 900w, /assets/img/arq-escalera.webp 1536w" sizes="(max-width: 920px) 100vw, 50vw" type="image/webp"><img src="/assets/img/arq-escalera.jpg" srcset="/assets/img/arq-escalera-900.jpg 900w, /assets/img/arq-escalera.jpg 1536w" sizes="(max-width: 920px) 100vw, 50vw" alt="Escalera recta entre volúmenes de hormigón, en blanco y negro" width="1536" height="1024" loading="lazy" decoding="async"></picture></div></div>
-      </figure>
-      <div class="manifesto__text">
-        <p>Para muchas empresas<span class="pt">,</span> digitalizarse se volvió una lista de suscripciones que nadie termina de usar<span class="pt">.</span> El valor no está en sumar tecnología<span class="pt">,</span> sino en elegirla bien e implementarla con criterio<span class="pt">.</span></p>
-        <p>Democratizar la digitalización es eso<span class="pt">:</span> que una empresa chica o mediana pueda acceder al mismo criterio que una grande<span class="pt">,</span> con soluciones a su escala<span class="pt">.</span></p>
-        <blockquote class="manifesto__quote">Tecnología que se entiende, se usa y se puede mantener. Ese es nuestro criterio.</blockquote>
-      </div>
+    <div class="shead">
+      <p class="mono shead__k">Proceso</p>
+      <h2 class="d2" id="proceso-t" data-split>Cómo trabajamos.</h2>
+      <p class="shead__note">Cuatro etapas claras. En cada momento sabés en qué punto estamos y qué viene después.</p>
     </div>
-  </div>
-</section>
-<section class="section theme-ivory flow" data-theme="ivory" aria-labelledby="proceso" id="proceso" style="--n:4">
-  <div class="wrap">
-    <div class="sec-head flow__head">
-      <div>
-        <h2 id="proceso-t" class="lines h2"><span class="ln"><span style="--i:0;--base:0ms">Cómo trabajamos<span class="pt">.</span></span></span></h2>
-      </div>
-      <p class="muted flow__lede">Cuatro etapas claras<span class="pt">.</span> En cada momento sabés en qué punto estamos y qué viene después<span class="pt">.</span></p>
-    </div>
-  </div>
-  <div class="flow__track">
-    <div class="flow__sticky">
-      <div class="wrap flow__grid">
-        <div class="flow__dial" aria-hidden="true">
-          <svg class="dial" viewBox="0 0 400 400">
-            <circle class="dial__ring" cx="200" cy="200" r="168"/>
-            <circle class="dial__ticks" cx="200" cy="200" r="134"/>
-            <circle class="dial__progress" cx="200" cy="200" r="168" pathLength="100" transform="rotate(-90 200 200)"/>
-            <g class="dial__orbit"><circle class="dial__dot" cx="200" cy="32" r="7"/></g>
-            <g class="dial__node" data-i="0" transform="translate(200.0 32.0)"><circle r="24"/><text dy=".35em">01</text></g><g class="dial__node" data-i="1" transform="translate(368.0 200.0)"><circle r="24"/><text dy=".35em">02</text></g><g class="dial__node" data-i="2" transform="translate(200.0 368.0)"><circle r="24"/><text dy=".35em">03</text></g><g class="dial__node" data-i="3" transform="translate(32.0 200.0)"><circle r="24"/><text dy=".35em">04</text></g>
-          </svg>
-          <div class="dial__center">
-            <span class="dial__num"><span data-dial-num>01</span><small>/04</small></span>
-            <span class="dial__name" data-dial-name>Entendemos</span>
-          </div>
-        </div>
-        <div class="flow__main">
-          <div class="flow__tabs" role="tablist" aria-label="Etapas del proceso">
-            <button type="button" class="flow__tab" role="tab" id="ft-0" aria-controls="fp-0" aria-selected="true" tabindex="0" data-i="0"><span class="flow__tab-num">01</span><span class="flow__tab-name">Entendemos</span><span class="flow__tab-bar" aria-hidden="true"><i></i></span></button><button type="button" class="flow__tab" role="tab" id="ft-1" aria-controls="fp-1" aria-selected="false" tabindex="-1" data-i="1"><span class="flow__tab-num">02</span><span class="flow__tab-name">Priorizamos</span><span class="flow__tab-bar" aria-hidden="true"><i></i></span></button><button type="button" class="flow__tab" role="tab" id="ft-2" aria-controls="fp-2" aria-selected="false" tabindex="-1" data-i="2"><span class="flow__tab-num">03</span><span class="flow__tab-name">Desarrollamos</span><span class="flow__tab-bar" aria-hidden="true"><i></i></span></button><button type="button" class="flow__tab" role="tab" id="ft-3" aria-controls="fp-3" aria-selected="false" tabindex="-1" data-i="3"><span class="flow__tab-num">04</span><span class="flow__tab-name">Acompañamos</span><span class="flow__tab-bar" aria-hidden="true"><i></i></span></button>
-          </div>
-          <div class="flow__panels" tabindex="0" aria-label="Detalle de cada etapa">
-            <div class="flow__panel is-active" role="tabpanel" id="fp-0" aria-labelledby="ft-0" data-i="0">
-              <p class="flow__step num">Etapa 01 de 04</p>
-              <h3 class="flow__title">Entendemos<span class="pt">.</span></h3>
-              <p class="flow__desc lead">Nos sumergimos en tu negocio<span class="pt">,</span> tus desafíos y tus oportunidades<span class="pt">.</span></p>
-              <ul class="flow__acts"><li style="--k:0"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Conversamos con quienes hacen el trabajo todos los días</li><li style="--k:1"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Relevamos herramientas, procesos y datos actuales</li><li style="--k:2"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Detectamos dónde se pierde tiempo o se repiten tareas</li></ul>
-              <p class="flow__out"><span class="num">Te llevás</span><strong>Un diagnóstico claro de tu situación</strong></p>
-            </div><div class="flow__panel" role="tabpanel" id="fp-1" aria-labelledby="ft-1" data-i="1">
-              <p class="flow__step num">Etapa 02 de 04</p>
-              <h3 class="flow__title">Priorizamos<span class="pt">.</span></h3>
-              <p class="flow__desc lead">Definimos el camino con criterio y foco en lo que genera valor<span class="pt">.</span></p>
-              <ul class="flow__acts"><li style="--k:0"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Ordenamos las oportunidades por impacto y esfuerzo</li><li style="--k:1"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Elegimos herramientas a la escala de tu empresa</li><li style="--k:2"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Acordamos alcance, etapas y costos antes de empezar</li></ul>
-              <p class="flow__out"><span class="num">Te llevás</span><strong>Un plan por etapas<span class="pt">,</span> sin sorpresas</strong></p>
-            </div><div class="flow__panel" role="tabpanel" id="fp-2" aria-labelledby="ft-2" data-i="2">
-              <p class="flow__step num">Etapa 03 de 04</p>
-              <h3 class="flow__title">Desarrollamos<span class="pt">.</span></h3>
-              <p class="flow__desc lead">Creamos soluciones robustas<span class="pt">,</span> escalables y a medida<span class="pt">.</span></p>
-              <ul class="flow__acts"><li style="--k:0"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Implementamos por etapas, de a una cosa por vez</li><li style="--k:1"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Probamos con datos y casos reales</li><li style="--k:2"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Revisamos juntos cada avance</li></ul>
-              <p class="flow__out"><span class="num">Te llevás</span><strong>La solución funcionando en tu operación</strong></p>
-            </div><div class="flow__panel" role="tabpanel" id="fp-3" aria-labelledby="ft-3" data-i="3">
-              <p class="flow__step num">Etapa 04 de 04</p>
-              <h3 class="flow__title">Acompañamos<span class="pt">.</span></h3>
-              <p class="flow__desc lead">Estamos en cada etapa para que tu negocio siga creciendo<span class="pt">.</span></p>
-              <ul class="flow__acts"><li style="--k:0"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Capacitamos a tu equipo en el uso diario</li><li style="--k:1"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Dejamos documentación simple y ordenada</li><li style="--k:2"><span class="flow__check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>Ajustamos según cómo se usa en la práctica</li></ul>
-              <p class="flow__out"><span class="num">Te llevás</span><strong>Autonomía para usar y mantener lo que hicimos</strong></p>
-            </div>
-          </div>
+    <div class="flow__grid">
+      <div class="flow__side" aria-hidden="true">
+        <div class="flow__stick">
+          <span class="flow__num"><span data-flow-num>01</span><small>/ 04</small></span>
+          <span class="flow__name" data-flow-name>Entendemos</span>
+          <span class="flow__bar"><i data-flow-bar></i></span>
         </div>
       </div>
+      <ol class="flow__list">
+        <li class="flow__it is-on" data-i="0">
+          <p class="mono">Etapa 01 de 04</p>
+          <h3>Entendemos.</h3>
+          <p class="lead">Nos sumergimos en tu negocio, tus desafíos y tus oportunidades.</p>
+          <ul><li>Conversamos con quienes hacen el trabajo todos los días</li><li>Relevamos herramientas, procesos y datos actuales</li><li>Detectamos dónde se pierde tiempo o se repiten tareas</li></ul>
+          <p class="flow__out"><span class="mono">Te llevás</span><strong>Un diagnóstico claro de tu situación</strong></p>
+        </li>
+        <li class="flow__it" data-i="1">
+          <p class="mono">Etapa 02 de 04</p>
+          <h3>Priorizamos.</h3>
+          <p class="lead">Definimos el camino con criterio y foco en lo que genera valor.</p>
+          <ul><li>Ordenamos las oportunidades por impacto y esfuerzo</li><li>Elegimos herramientas a la escala de tu empresa</li><li>Acordamos alcance, etapas y costos antes de empezar</li></ul>
+          <p class="flow__out"><span class="mono">Te llevás</span><strong>Un plan por etapas, sin sorpresas</strong></p>
+        </li>
+        <li class="flow__it" data-i="2">
+          <p class="mono">Etapa 03 de 04</p>
+          <h3>Desarrollamos.</h3>
+          <p class="lead">Creamos soluciones robustas, escalables y a medida.</p>
+          <ul><li>Implementamos por etapas, de a una cosa por vez</li><li>Probamos con datos y casos reales</li><li>Revisamos juntos cada avance</li></ul>
+          <p class="flow__out"><span class="mono">Te llevás</span><strong>La solución funcionando en tu operación</strong></p>
+        </li>
+        <li class="flow__it" data-i="3">
+          <p class="mono">Etapa 04 de 04</p>
+          <h3>Acompañamos.</h3>
+          <p class="lead">Estamos en cada etapa para que tu negocio siga creciendo.</p>
+          <ul><li>Capacitamos a tu equipo en el uso diario</li><li>Dejamos documentación simple y ordenada</li><li>Ajustamos según cómo se usa en la práctica</li></ul>
+          <p class="flow__out"><span class="mono">Te llevás</span><strong>Autonomía para usar y mantener lo que hicimos</strong></p>
+        </li>
+      </ol>
     </div>
   </div>
 </section>
-<section class="section theme-black principles" data-theme="black" aria-labelledby="principios">
+<section class="sec t-black" aria-labelledby="principios">
   <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <h2 id="principios" class="lines h2"><span class="ln"><span style="--i:0;--base:0ms">Lo que nos guía<span class="pt">.</span></span></span></h2>
-      </div>
-    </div>
-    <ol class="principles__list">
-      <li class="principles__row"><span class="principles__word">Claridad</span><p class="principles__desc">Explicamos cada decisión sin jerga<span class="pt">,</span> para que puedas evaluarla<span class="pt">.</span></p></li><li class="principles__row"><span class="principles__word">Escala</span><p class="principles__desc">Proponemos soluciones acordes al tamaño y al momento de tu empresa<span class="pt">.</span></p></li><li class="principles__row"><span class="principles__word">Autonomía</span><p class="principles__desc">Buscamos que tu equipo pueda usar y mantener lo que implementamos<span class="pt">.</span></p></li>
-    </ol>
+    <div class="shead"><p class="mono shead__k">Principios</p><h2 class="d2" id="principios" data-split>Lo que nos guía.</h2></div>
+    <ul class="princ">
+      <li><span class="princ__w">Claridad</span><p>Explicamos cada decisión sin jerga, para que puedas evaluarla.</p></li>
+      <li><span class="princ__w">Escala</span><p>Proponemos soluciones acordes al tamaño y al momento de tu empresa.</p></li>
+      <li><span class="princ__w">Autonomía</span><p>Buscamos que tu equipo pueda usar y mantener lo que implementamos.</p></li>
+    </ul>
   </div>
 </section>
-<section class="section closing theme-blue" data-theme="blue" aria-labelledby="cierre-2-t">
-  <div class="wrap closing__inner">
-    <h2 id="cierre-2-t" class="lines h1 closing__title"><span class="ln"><span style="--i:0;--base:0ms">Empecemos por</span></span><span class="ln"><span style="--i:1;--base:0ms">entender<span class="pt">.</span></span></span></h2>
-    <p class="lead closing__text">Una primera conversación alcanza para identificar por dónde conviene empezar<span class="pt">.</span></p>
-    <form class="closing__form" action="/contacto" method="get">
-      <label class="closing__label" for="cierre-2-m">En una línea, ¿qué querés mejorar?</label>
-      <div class="closing__field">
+<section class="sec close t-cobalt" aria-labelledby="cierre-2-t">
+
+  <div class="wrap close__in">
+    <h2 class="d2" id="cierre-2-t" data-split>Empecemos por<br>entender.</h2>
+    <p class="lead close__tx">Una primera conversación alcanza para identificar por dónde conviene empezar.</p>
+    <form class="close__form" action="/contacto" method="get">
+      <label class="close__lb" for="cierre-2-m">En una línea, ¿qué querés mejorar?</label>
+      <div class="close__fd">
         <input id="cierre-2-m" name="mensaje" type="text" maxlength="300" autocomplete="off" placeholder="Por ejemplo: ordenar los pedidos de WhatsApp">
-        
-        <button class="btn " type="submit">Seguir en el formulario <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+        <button class="btn btn--ivory" type="submit"><span>Seguir en el formulario</span><span class="btn__ar" aria-hidden="true"><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
       </div>
     </form>
   </div>
-  <svg class="closing__mark" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg>
 </section>
 
 </main>
 
-<footer class="site-footer" data-theme="black">
-  <div class="wrap">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <a class="brand" href="/" aria-label="KROMA — Inicio"><svg class="brand__mark" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg><span class="brand__word" aria-hidden="true">kroma</span></a>
-        <p>Consultoría tecnológica para empresas<span class="pt">.</span> Te ayudamos a elegir herramientas y aprovecharlas bien<span class="pt">.</span></p>
-      </div>
-      <div class="footer__col">
-        <h2>Sitio</h2>
-        <ul><li><a href="/">Inicio</a></li><li><a href="/nosotros">Nosotros</a></li><li><a href="/proyectos">Proyectos</a></li><li><a href="/contacto">Hablemos</a></li></ul>
-      </div>
-      <div class="footer__col">
-        <h2>Servicios</h2>
-        <ul><li><a href="/servicios/webs">Webs</a></li><li><a href="/servicios/automatizaciones">Automatizaciones</a></li><li><a href="/servicios/integraciones">Integraciones</a></li><li><a href="/servicios/identidad-digital">Identidad digital</a></li><li><a href="/servicios/consultoria-tecnologica">Consultoría tecnológica</a></li></ul>
-      </div>
-      <div class="footer__col">
-        <h2>Contacto</h2>
-        <ul><li><a href="/contacto">Formulario</a></li></ul>
-        <div class="social social--footer">
-  <a class="social__btn" href="mailto:somoskroma@gmail.com" aria-label="Escribir a KROMA por email: somoskroma@gmail.com" data-tip="somoskroma@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4 7.5l8 5.6 8-5.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-  <a class="social__btn" href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener" aria-label="Instagram de KROMA (se abre en otra pestaña)" data-tip="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.25" fill="currentColor"/></svg></a>
-  
-</div>
-      </div>
+<footer class="ft t-black">
+  <div class="wrap ft__top">
+    <div class="ft__brand">
+      <a class="ft__logo" href="/" aria-label="KROMA, inicio"><svg class="ft__iso" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg><span aria-hidden="true">KROMA<sup>®</sup></span></a>
+      <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
     </div>
-    <div class="footer__bottom">
-      <span>© <span id="year">2026</span> KROMA</span>
-      <span>Hecho en Uruguay</span>
-    </div>
+    <div class="ft__col"><h2 class="mono">Sitio</h2><ul><li><a href="/">Inicio</a></li><li><a href="/nosotros">Nosotros</a></li><li><a href="/proyectos">Proyectos</a></li><li><a href="/contacto">Hablemos</a></li></ul></div>
+    <div class="ft__col"><h2 class="mono">Servicios</h2><ul><li><a href="/servicios/webs">Webs</a></li><li><a href="/servicios/automatizaciones">Automatizaciones</a></li><li><a href="/servicios/integraciones">Integraciones</a></li><li><a href="/servicios/identidad-digital">Identidad digital</a></li><li><a href="/servicios/consultoria-tecnologica">Consultoría tecnológica</a></li></ul></div>
+    <div class="ft__col"><h2 class="mono">Contacto</h2><ul><li><a href="/contacto">Formulario</a></li><li><span class="ft__mail">somoskromauy@gmail.com</span></li><li><a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">Instagram @_kromalabs<span class="sr"> (se abre en otra pestaña)</span></a></li></ul></div>
   </div>
+  <div class="wrap ft__bottom mono"><span>© <span id="year">2026</span> KROMA</span><span>Montevideo — Uruguay</span><span>Hecho en Uruguay</span></div>
 </footer>
 <div class="curtain" aria-hidden="true"><div class="curtain__body"></div><svg class="curtain__mark" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg></div>
 </body>
