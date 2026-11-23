@@ -8,7 +8,7 @@ const t = (x, y, txt, size, { w = 400, fill = C.black, o = 1, a = "start", ls = 
   `<text x="${x}" y="${y}" font-size="${size}" font-weight="${w}" fill="${fill}"${o < 1 ? ` fill-opacity="${o}"` : ""}${a !== "start" ? ` text-anchor="${a}"` : ""}${ls ? ` letter-spacing="${ls}"` : ""}>${txt}</text>`;
 
 // 1 · Web para un estudio profesional: sitio en escritorio + formulario en el celular
-const web = svg(C.sand, `
+const WEB_BROWSER_BODY = `
   <rect x="282" y="164" width="520" height="490" rx="16" fill="${C.black}" fill-opacity=".08"/>
   <rect x="270" y="150" width="520" height="490" rx="16" fill="${C.ivory}"/>
   <path d="M270 166a16 16 0 0 1 16-16h488a16 16 0 0 1 16 16v24H270z" fill="${C.bar}"/>
@@ -22,7 +22,8 @@ const web = svg(C.sand, `
   <path d="M300 528H700M300 570H700M300 612H700" stroke="${C.black}" stroke-opacity=".14" stroke-width="1.5"/>
   ${t(300, 555, "Contabilidad mensual", 16, { w: 600 })}${t(300, 597, "Sueldos y jornales", 16, { w: 600 })}
   <path d="M684 549h14M691 542v14M684 591h14M691 584v14" stroke="${C.black}" stroke-width="2" stroke-linecap="round"/>
-  <rect x="735" y="300" width="190" height="370" rx="28" fill="${C.black}"/>
+`;
+const WEB_PHONE_BODY = `  <rect x="735" y="300" width="190" height="370" rx="28" fill="${C.black}"/>
   <rect x="745" y="312" width="170" height="346" rx="20" fill="${C.ivory}"/>
   <rect x="805" y="320" width="50" height="6" rx="3" fill="${C.black}" fill-opacity=".2"/>
   ${t(760, 360, "¿Qué necesitás?", 18, { w: 800, ls: -0.3 })}
@@ -32,7 +33,14 @@ const web = svg(C.sand, `
   ${t(760, 462, "Nombre", 12, { o: 0.6 })}<rect x="760" y="470" width="140" height="36" rx="6" fill="none" stroke="${C.black}" stroke-opacity=".3" stroke-width="1.5"/>
   ${t(760, 532, "Email o teléfono", 12, { o: 0.6 })}<rect x="760" y="540" width="140" height="36" rx="6" fill="none" stroke="${C.black}" stroke-opacity=".3" stroke-width="1.5"/>
   <rect x="760" y="596" width="140" height="42" rx="6" fill="${C.blue}"/>${t(830, 623, "Enviar", 15, { w: 700, fill: C.ivory, a: "middle" })}
-`);
+`;
+const web = svg(C.sand, WEB_BROWSER_BODY + WEB_PHONE_BODY);
+// Capas para la demo de Webs: el navegador y el celular se mueven a distinta profundidad
+export const WEB_LAYERS = {
+  browser: `<svg class="layer" viewBox="262 146 536 500" aria-hidden="true" focusable="false">${WEB_BROWSER_BODY}</svg>`,
+  phone: `<svg class="layer" viewBox="731 296 198 378" aria-hidden="true" focusable="false">${WEB_PHONE_BODY}</svg>`,
+};
+
 
 // 2 · Automatización de pedidos: un pedido avanza por sus etapas y dispara dos avisos
 const nodes = [[320, "Recibido"], [506, "Validado"], [693, "En la planilla"], [880, "Avisado"]];
@@ -100,9 +108,34 @@ const cafe = svg(C.black, `
   ${sw.map(([c, hex], i) => `<circle cx="${600 + i * 84}" cy="540" r="34" fill="${c}"/>${t(600 + i * 84, 604, hex, 12, { fill: C.ivory, o: 0.6, a: "middle" })}`).join("")}
 `);
 
+
+// 5 · Consultoría: opciones del mercado comparadas con criterios claros; una queda recomendada
+const opts = [["Planilla compartida", [2, 3, 2]], ["CRM liviano", [3, 2, 2]], ["Sistema a medida", [3, 1, 1]], ["Suite corporativa", [2, 1, 1]]];
+const consulta = svg(C.ivory, `
+  <rect x="290" y="170" width="620" height="440" rx="16" fill="#ffffff" stroke="${C.black}" stroke-opacity=".1"/>
+  ${t(318, 214, "Ordenar las consultas de clientes", 20, { w: 800, ls: -0.4 })}
+  ${t(318, 240, "Opciones evaluadas", 14, { o: 0.6 })}
+  ${t(640, 286, "Utilidad", 13, { o: 0.6, a: "middle" })}${t(740, 286, "Costo", 13, { o: 0.6, a: "middle" })}${t(840, 286, "Adopción", 13, { o: 0.6, a: "middle" })}
+  ${opts.map(([n, v], i) => {
+    const y = 300 + i * 72, best = i === 1;
+    return `${best ? `<rect x="302" y="${y}" width="596" height="64" rx="10" fill="${C.blue}"/>` : `<path d="M318 ${y + 64}H882" stroke="${C.black}" stroke-opacity=".1"/>`}
+    ${t(320, y + 38, n, 17, { w: 700, fill: best ? C.ivory : C.black })}
+    ${v.map((k, j) => [0, 1, 2].map((b) => `<rect x="${606 + j * 100 + b * 24}" y="${y + 28}" width="20" height="8" rx="4" fill="${best ? C.ivory : C.black}" fill-opacity="${b < k ? (best ? 1 : 0.75) : (best ? 0.3 : 0.12)}"/>`).join("")).join("")}`;
+  }).join("")}
+`);
+
 export const PROJECT_ART = {
   "web-estudio-profesional": web,
   "automatizacion-pedidos": pedidos,
   "integracion-tienda-stock": stock,
   "identidad-cafeteria": cafe,
+};
+
+// Vista previa de cada servicio (filas de Servicios): reutiliza el entregable de su concepto
+export const SERVICE_ART = {
+  webs: web,
+  automatizaciones: pedidos,
+  integraciones: stock,
+  "identidad-digital": cafe,
+  "consultoria-tecnologica": consulta,
 };
