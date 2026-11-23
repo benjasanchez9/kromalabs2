@@ -47,6 +47,18 @@ function initGL() {
     gl = null;
   }
 }
+// Chrome a veces no entrega el contexto 3D al primer intento (GPU ocupada, otras pestañas con 3D):
+// se reintenta antes de rendirse, y si la placa de video pierde el contexto se vuelve a crear.
+function startGL(n) {
+  initGL();
+  if (gl) { dirty = true; return; }
+  if (n < 5) setTimeout(() => startGL(n + 1), 350 * (n + 1));
+  else gsap.to(poster, { opacity: 1, duration: 0.8 });
+}
+for (const c of [cBack, cFront]) {
+  c.addEventListener('webglcontextlost', (e) => { e.preventDefault(); });
+  c.addEventListener('webglcontextrestored', () => { gl = null; startGL(0); });
+}
 function sizeGL() {
   if (!gl) return;
   const dpr = Math.min(devicePixelRatio || 1, gl.layout === 'mobile' ? 1.5 : 1.75);
@@ -156,8 +168,7 @@ function boot() {
   // Si WebGL falla, vuelve la imagen fija.
   Promise.all([import('three'), import('./kform.js')]).then(([t, k]) => {
     THREE = t; createForm = k.createForm;
-    initGL();
-    if (!gl) gsap.to(poster, { opacity: 1, duration: 0.8 });
+    startGL(0);
     dirty = true;
   }).catch((e) => { console.warn('No se pudo cargar la escena 3D: se mantiene la imagen fija.', e); gsap.to(poster, { opacity: 1, duration: 0.8 }); });
 
