@@ -55,7 +55,7 @@ function sizeGL() {
 }
 
 /* ------------------------------------------------------------------ estado */
-const L = { a: 1 };                       // la forma llega encendida (la imagen fija es idéntica)
+const L = { a: MOTION ? 0 : 1 };          // la forma se enciende con la luz al cargar (como el prototipo)
 const S = { p: 0 };                       // avance por la escena fijada (0..1)
 const C = { x: 0, y: 0, tx: 0, ty: 0 };   // puntero, suavizado
 let dirty = true, visible = true;
@@ -132,7 +132,7 @@ function draw() {
   const weave = !!gl.front && p1 < 0.02;
   cFront.style.visibility = weave ? 'visible' : 'hidden';
   if (weave) gl.front.render({ ...o, clipDepth: o.cz - 0.25 });
-  if (!gl.shown) { gl.shown = true; doc.classList.add('gl'); poster.style.opacity = ''; }
+  if (!gl.shown) { gl.shown = true; doc.classList.add('gl'); }
 }
 
 function tick() {
@@ -152,19 +152,31 @@ function boot() {
   doc.classList.add('scene');
   window.KROMA_HOME_TONE = 't-black';
 
-  // entrada (una vez): la forma aparece con la luz y el titular sale por líneas
-  gsap.fromTo(poster, { opacity: 0.25, scale: 1.04 }, { opacity: 1, scale: 1, duration: 1.4, ease: 'power3.out', clearProps: 'transform' });
+  // La forma 3D se carga enseguida (Three.js en un archivo aparte, sin bloquear la página).
+  // Si WebGL falla, vuelve la imagen fija.
+  Promise.all([import('three'), import('./kform.js')]).then(([t, k]) => {
+    THREE = t; createForm = k.createForm;
+    initGL();
+    if (!gl) gsap.to(poster, { opacity: 1, duration: 0.8 });
+    dirty = true;
+  }).catch((e) => { console.warn('No se pudo cargar la escena 3D: se mantiene la imagen fija.', e); gsap.to(poster, { opacity: 1, duration: 0.8 }); });
+
+  // Entrada (una vez), con los tiempos del prototipo:
+  // marca → la forma aparece por la luz → titular por líneas → bajada, botón e indicador
   const fontsReady = document.fonts ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))]) : Promise.resolve();
   fontsReady.then(() => {
     let split = null;
     try { split = SplitText.create(h1, { type: 'lines', mask: 'lines', linesClass: 'split-line' }); } catch (e) {}
     gsap.set(h1, { visibility: 'visible' });
-    if (split) gsap.from(split.lines, { yPercent: 115, duration: 0.95, stagger: 0.1, ease: 'expo.out', delay: 0.3 });
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, onUpdate: () => (dirty = true) });
+    tl.to('.hd__brand', { clipPath: 'inset(0 0% 0 0)', duration: 0.7 }, 0.1)
+      .to(L, { a: 1, duration: 1.7, ease: 'power3.inOut' }, 0.2);
+    if (split) tl.from(split.lines, { yPercent: 135, duration: 0.95, stagger: 0.1 }, 0.75);
+    tl.to(['.hd__tag', '.hd__loc', '.hd__pr', '.hd__menu'], { opacity: 1, duration: 0.6, stagger: 0.05, ease: 'power2.out' }, 0.5)
+      .fromTo('.hero__sub', { opacity: 0, y: 14 }, { opacity: 0.88, y: 0, duration: 0.8 }, 1.45)
+      .fromTo('.hero__cta', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8 }, 1.55)
+      .to('.hero__cue', { opacity: 0.66, duration: 0.6, ease: 'power2.out' }, 1.8);
   });
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  tl.fromTo('.hero__sub', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8 }, 1.25)
-    .fromTo('.hero__cta', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8 }, 1.35)
-    .fromTo('.hero__cue', { opacity: 0 }, { opacity: 0.66, duration: 0.6, ease: 'power2.out' }, 1.6);
 
   // escena fijada: hero → materia → sistema (scrub, reversible, sin secuestrar la rueda)
   const mm = gsap.matchMedia();
@@ -181,22 +193,6 @@ function boot() {
     });
     return () => { tw.scrollTrigger?.kill(); S.p = 0; };
   });
-
-  // El 3D se crea con la primera interacción: la carga inicial queda liviana
-  // y la imagen fija (idéntica) cubre hasta ese momento.
-  let started = false;
-  const EV = ['pointermove', 'pointerdown', 'touchstart', 'wheel', 'keydown', 'scroll'];
-  const start = async () => {
-    if (started) return; started = true;
-    EV.forEach((e) => removeEventListener(e, start));
-    try {
-      const [t, k] = await Promise.all([import('three'), import('./kform.js')]);
-      THREE = t; createForm = k.createForm;
-      initGL(); dirty = true;
-    } catch (e) { console.warn('No se pudo cargar la escena 3D: se mantiene la imagen fija.', e); }
-  };
-  EV.forEach((e) => addEventListener(e, start, { passive: true }));
-  if (scrollY > 0) start();
 
   if (FINE) addEventListener('pointermove', (e) => { C.tx = (e.clientX / innerWidth) * 2 - 1; C.ty = (e.clientY / innerHeight) * 2 - 1; }, { passive: true });
   addEventListener('resize', () => {

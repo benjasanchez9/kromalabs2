@@ -22,8 +22,7 @@
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/host-grotesk.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/img/form/hero.webp" as="image" type="image/webp" media="(min-width: 761px) and (min-aspect-ratio: 9/10)" fetchpriority="high">
-<link rel="preload" href="/assets/img/form/hero-m.webp" as="image" type="image/webp" media="(max-width: 760px), (max-aspect-ratio: 9/10)" fetchpriority="high">
+<link rel="modulepreload" href="/assets/js/kform.js">
 <link rel="stylesheet" href="/assets/css/site.css">
 <script>(function(d){var h=d.documentElement,rm=matchMedia("(prefers-reduced-motion: reduce)").matches;h.classList.add("js",rm?"rm":"anim");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!rm)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("anim","is-entering")},3000)})(document);</script>
 <script src="/assets/js/vendor/gsap.min.js" defer></script>
@@ -42,38 +41,24 @@
 <header class="hd" id="hd">
   <div class="hd__in">
     <a class="hd__brand" href="/" aria-label="KROMA, inicio"><svg class="hd__iso" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg><span aria-hidden="true">KROMA<sup>®</sup></span></a>
-    <span class="hd__tag mono" aria-hidden="true">Consultoría tecnológica</span>
-    <nav class="hd__nav" aria-label="Principal">
-      <ul>
-        <li><a href="/" aria-current="page">Inicio</a></li>
-        <li><a href="/nosotros">Nosotros</a></li>
-        <li class="hd__sub">
-          <a href="/servicios">Servicios</a>
-          <button class="hd__tg" type="button" aria-expanded="false" aria-controls="sub-servicios"><span class="sr">Mostrar servicios</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-          <div class="hd__drop" id="sub-servicios">
-            <ul><li><a href="/servicios/webs"><span class="hd__dn">Webs</span><span class="hd__dd">Sitios a medida, rápidos y pensados para convertir.</span></a></li><li><a href="/servicios/automatizaciones"><span class="hd__dn">Automatizaciones</span><span class="hd__dd">Menos trabajo manual. Más tiempo para lo importante.</span></a></li><li><a href="/servicios/integraciones"><span class="hd__dn">Integraciones</span><span class="hd__dd">Conectamos tus herramientas para que todo fluya.</span></a></li><li><a href="/servicios/identidad-digital"><span class="hd__dn">Identidad digital</span><span class="hd__dd">Una presencia digital sólida y coherente con tu negocio.</span></a></li><li><a href="/servicios/consultoria-tecnologica"><span class="hd__dn">Consultoría tecnológica</span><span class="hd__dd">Primero entendemos tu negocio. Después elegimos la tecnología.</span></a></li></ul>
-          </div>
-        </li>
-        <li><a href="/proyectos">Proyectos</a></li>
-      </ul>
-    </nav>
-    <a class="btn btn--sm hd__cta" href="/contacto"><span>Hablemos</span><span class="btn__ar" aria-hidden="true"><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-    <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu"><span>Menú</span><i aria-hidden="true"></i></button>
+    <span class="hd__tag mono">Consultoría tecnológica</span>
+    <span class="hd__loc mono">Montevideo — Uruguay</span>
+    <a class="hd__pr" href="/proyectos">Proyectos</a>
+    <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu">Menú <i aria-hidden="true"></i></button>
   </div>
 </header>
-<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
+<div class="menu" id="menu" tabindex="-1" role="dialog" aria-modal="true" aria-label="Menú" hidden>
   <div class="menu__top"><span class="mono">KROMA® / Menú</span><button class="menu__close" type="button">Cerrar <i aria-hidden="true"></i></button></div>
-  <nav aria-label="Menú móvil">
+  <nav aria-label="Principal">
     <ul class="menu__main">
-      <li><a href="/" aria-current="page">Inicio</a></li>
-      <li><a href="/nosotros">Nosotros</a></li>
-      <li><a href="/servicios">Servicios</a></li>
-      <li><a href="/proyectos">Proyectos</a></li>
-      <li><a href="/contacto">Hablemos</a></li>
+      <li><a href="/" aria-current="page"><span class="mono">01</span>Inicio</a></li>
+      <li><a href="/nosotros"><span class="mono">02</span>Nosotros</a></li>
+      <li><a href="/servicios"><span class="mono">03</span>Servicios</a></li>
+      <li><a href="/proyectos"><span class="mono">04</span>Proyectos</a></li>
+      <li><a href="/contacto"><span class="mono">05</span>Hablemos</a></li>
     </ul>
-    <ul class="menu__svc"><li><a href="/servicios/webs">Webs</a></li><li><a href="/servicios/automatizaciones">Automatizaciones</a></li><li><a href="/servicios/integraciones">Integraciones</a></li><li><a href="/servicios/identidad-digital">Identidad digital</a></li><li><a href="/servicios/consultoria-tecnologica">Consultoría tecnológica</a></li></ul>
   </nav>
-  <div class="menu__foot mono"><span>somoskromauy@gmail.com</span><a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">Instagram @_kromalabs</a><span>Montevideo — Uruguay</span></div>
+  <div class="menu__foot mono"><span>somoskromauy@gmail.com</span><a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">@_kromalabs<span class="sr"> (Instagram, se abre en otra pestaña)</span></a><span>Montevideo — Uruguay</span></div>
 </div>
 <main id="contenido" tabindex="-1">
 
@@ -93,7 +78,7 @@
   </div>
   <div class="mani t-cobalt" id="mani">
     <div class="mani__in">
-      <p class="mono mani__k">002 — Criterio</p>
+      <p class="mono mani__k">KROMA® / 002 — Criterio</p>
       <h2 class="mani__t"><span class="l"><span>Tecnología</span></span><span class="l"><span>con criterio.</span></span></h2>
       <p class="mani__lead">Estrategia, desarrollo e integración para que tu negocio avance con sentido.</p>
       <p class="mani__p">Hoy existe una herramienta para casi todo. El desafío ya no es encontrarla: es saber cuál conviene, cómo implementarla y lograr que tu equipo la use.</p>
@@ -101,25 +86,14 @@
   </div>
 </section>
 
-<section class="sec t-ivory values" aria-labelledby="crit-t">
-  <div class="wrap">
-    <h2 class="sr" id="crit-t">Nuestro criterio</h2>
-    <ol class="values__l">
-      <li><span class="mono">01</span><h3>Primero entendemos tu operación</h3><p>Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
-      <li><span class="mono">02</span><h3>Elegimos lo que tiene sentido</h3><p>Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
-      <li><span class="mono">03</span><h3>Lo dejamos funcionando</h3><p>Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
-    </ol>
-  </div>
-</section>
-
-<section class="sec t-black" aria-labelledby="svc-t">
+<section class="sec t-ivory cap" aria-labelledby="svc-t">
   <div class="wrap">
     <div class="shead">
       <p class="mono shead__k">003 — Servicios</p>
       <h2 class="d2" id="svc-t" data-split>Herramientas que<br>mueven tu negocio.</h2>
       <div class="shead__a"><a class="lk" href="/servicios">Ver todos los servicios <svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
     </div>
-    <ul class="rows">
+    <ul class="rows rows--plain">
   <li class="row" data-pv="/assets/img/form/webs.webp">
     <a href="/servicios/webs">
 
@@ -162,6 +136,17 @@
   </li>
 </ul>
 <div class="row-pv" aria-hidden="true"><img src="/assets/img/form/webs.webp" alt="" width="480" height="360" loading="lazy" decoding="async"></div>
+  </div>
+</section>
+
+<section class="sec t-black values" aria-labelledby="crit-t">
+  <div class="wrap">
+    <h2 class="sr" id="crit-t">Nuestro criterio</h2>
+    <ol class="values__l">
+      <li><span class="mono">01</span><h3>Primero entendemos tu operación</h3><p>Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
+      <li><span class="mono">02</span><h3>Elegimos lo que tiene sentido</h3><p>Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
+      <li><span class="mono">03</span><h3>Lo dejamos funcionando</h3><p>Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
+    </ol>
   </div>
 </section>
 
@@ -249,33 +234,22 @@
 <section class="sec close t-black" aria-labelledby="cierre-1-t">
   <div class="close__glow" aria-hidden="true"></div>
   <div class="wrap close__in">
-    <h2 class="d2" id="cierre-1-t" data-split>¿Por dónde<br>empezamos?</h2>
+    <p class="mono close__k">006 — Contacto</p>
+    <h2 class="close__t" id="cierre-1-t" data-split>¿Por dónde<br>empezamos?</h2>
     <p class="lead close__tx">Contanos qué querés mejorar en tu empresa y vemos juntos cuál es el primer paso.</p>
-    <form class="close__form" action="/contacto" method="get">
-      <label class="close__lb" for="cierre-1-m">En una línea, ¿qué querés mejorar?</label>
-      <div class="close__fd">
-        <input id="cierre-1-m" name="mensaje" type="text" maxlength="300" autocomplete="off" placeholder="Por ejemplo: ordenar los pedidos de WhatsApp">
-
-        <button class="btn " type="submit"><span>Seguir en el formulario</span><span class="btn__ar" aria-hidden="true"><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
-      </div>
-    </form>
+    <div class="close__act"><a class="btn " href="/contacto"><span>Hablemos</span><span class="btn__ar" aria-hidden="true"><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a><span class="close__mail">somoskromauy@gmail.com</span></div>
   </div>
 </section>
 
 </main>
 
-<footer class="ft t-black">
-  <div class="wrap ft__top">
-    <div class="ft__brand">
-      <a class="ft__logo" href="/" aria-label="KROMA, inicio"><svg class="ft__iso" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg><span aria-hidden="true">KROMA<sup>®</sup></span></a>
-      <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
-    </div>
-    <div class="ft__col"><h2 class="mono">Sitio</h2><ul><li><a href="/">Inicio</a></li><li><a href="/nosotros">Nosotros</a></li><li><a href="/proyectos">Proyectos</a></li><li><a href="/contacto">Hablemos</a></li></ul></div>
-    <div class="ft__col"><h2 class="mono">Servicios</h2><ul><li><a href="/servicios/webs">Webs</a></li><li><a href="/servicios/automatizaciones">Automatizaciones</a></li><li><a href="/servicios/integraciones">Integraciones</a></li><li><a href="/servicios/identidad-digital">Identidad digital</a></li><li><a href="/servicios/consultoria-tecnologica">Consultoría tecnológica</a></li></ul></div>
-    <div class="ft__col"><h2 class="mono">Contacto</h2><ul><li><a href="/contacto">Formulario</a></li><li><span class="ft__mail">somoskromauy@gmail.com</span></li><li><a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">Instagram @_kromalabs<span class="sr"> (se abre en otra pestaña)</span></a></li></ul></div>
-  </div>
-  <div class="wrap ft__bottom mono"><span>© <span id="year">2026</span> KROMA</span><span>Hecho en Montevideo, Uruguay</span></div>
+<footer class="ft mono">
+  <span class="ft__a">KROMA® <span id="year">2026</span></span>
+  <span class="ft__b">Montevideo — Uruguay</span>
+  <a class="ft__c" href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">@_kromalabs<span class="sr"> (Instagram, se abre en otra pestaña)</span></a>
+  <span class="ft__d">somoskromauy@gmail.com</span>
 </footer>
+<div class="ring" id="ring" aria-hidden="true"></div>
 <div class="curtain" aria-hidden="true"><div class="curtain__body"></div><svg class="curtain__mark" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg></div>
 </body>
 </html>

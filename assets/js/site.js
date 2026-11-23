@@ -71,36 +71,41 @@
     document.addEventListener("click", (e) => { if (!sub.contains(e.target)) set(false); });
   }
 
-  /* Menú móvil (panel cobalto) con foco atrapado */
+  /* Menú (panel cobalto del prototipo) con foco atrapado */
   const menu = $("#menu"), menuBtn = $(".hd__menu"), menuClose = $(".menu__close");
   if (menu && menuBtn) {
-    const focusables = () => $$("a, button", menu);
-    const open = () => {
+    const links = $$(".menu__main a", menu);
+    const focusables = () => [menuClose, ...$$("a", menu)];
+    const open = (ev) => {
+      const byKey = !ev || ev.detail === 0; // abierto con teclado → foco visible en el primer enlace
       menu.hidden = false;
-      requestAnimationFrame(() => menu.classList.add("is-open"));
       menuBtn.setAttribute("aria-expanded", "true");
       document.body.style.overflow = "hidden";
-      if (MOTION) G.fromTo($$(".menu__main a", menu), { yPercent: 105 }, { yPercent: 0, duration: 0.8, stagger: 0.05, ease: "expo.out", delay: 0.2 });
-      setTimeout(() => menuClose.focus(), RM ? 0 : 300);
+      if (MOTION) {
+        G.fromTo(menu, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "expo.inOut" });
+        G.fromTo(links, { yPercent: 105 }, { yPercent: 0, duration: 0.8, stagger: 0.05, ease: "expo.out", delay: 0.3 });
+      } else menu.style.clipPath = "inset(0 0 0% 0)";
+      setTimeout(() => (byKey ? links[0] : menu).focus({ preventScroll: true }), MOTION ? 450 : 0);
     };
     const close = () => {
-      menu.classList.remove("is-open");
+      const done = () => { menu.hidden = true; menuBtn.focus({ preventScroll: true }); };
       menuBtn.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
-      setTimeout(() => { menu.hidden = true; }, RM ? 0 : 400);
-      menuBtn.focus();
+      if (MOTION) G.to(menu, { clipPath: "inset(0 0 100% 0)", duration: 0.55, ease: "expo.inOut", onComplete: done });
+      else { menu.style.clipPath = "inset(0 0 100% 0)"; done(); }
     };
     menuBtn.addEventListener("click", open);
     menuClose.addEventListener("click", close);
+    links.forEach((l) => l.addEventListener("click", () => { if (new URL(l.href).pathname === location.pathname) close(); }));
     menu.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
       if (e.key === "Tab") {
         const f = focusables(), i = f.indexOf(document.activeElement);
-        if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+        if (i === -1) { e.preventDefault(); (e.shiftKey ? f[f.length - 1] : f[0]).focus(); }
+        else if (e.shiftKey && i === 0) { e.preventDefault(); f[f.length - 1].focus(); }
         else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
       }
     });
-    matchMedia("(min-width: 921px)").addEventListener("change", (m) => { if (m.matches && menu.classList.contains("is-open")) close(); });
   }
 
   /* ---------- 2. Transición entre páginas: cortina curva cobalto (la de la versión publicada) ---------- */
@@ -137,9 +142,8 @@
 
   // En el inicio la cabecera aparece junto con la escena
   if (document.body.classList.contains("is-home")) {
-    G.to(hd, { opacity: 1, duration: 0.8, ease: "power2.out", delay: 0.45 });
-    // si la escena 3D no llega a cargar, el titular y el botón aparecen igual
-    setTimeout(() => { if (!window.KROMA_HOME_READY) G.to(".hero__t, .hero__sub, .hero__cta, .hero__cue", { autoAlpha: 1, duration: 0.6 }); }, 2500);
+    // si la escena del inicio no llega a cargar, todo aparece igual
+    setTimeout(() => { if (!window.KROMA_HOME_READY) { G.to(".hero__t, .hero__sub, .hero__cta, .hero__cue, .hd__tag, .hd__loc, .hd__pr, .hd__menu, .stage__poster", { autoAlpha: 1, duration: 0.6 }); G.to(".hd__brand", { clipPath: "inset(0 0% 0 0)", duration: 0.6 }); } }, 2500);
   }
 
   /* ---------- 4. Revelados ---------- */
@@ -156,7 +160,10 @@
       try { split = SPLIT ? SPLIT.create(el, { type: "lines", mask: "lines", linesClass: "split-line" }) : null; } catch (err) { split = null; }
       G.set(el, { visibility: "visible" });
       if (!split) return;
-      G.from(split.lines, { yPercent: 112, duration: T.enter, stagger: T.stagger, ease: T.ease, delay: inHero ? 0.15 : 0, scrollTrigger: inHero ? undefined : { trigger: el, ...enter } });
+      const inv = el.classList.contains("close__t");
+      G.from(split.lines, inv
+        ? { yPercent: 130, duration: 1, stagger: 0.09, ease: "expo.out", scrollTrigger: { trigger: el.closest("section"), start: "top 70%", once: true } }
+        : { yPercent: 130, duration: T.enter, stagger: T.stagger, ease: T.ease, delay: inHero ? 0.15 : 0, scrollTrigger: inHero ? undefined : { trigger: el, ...enter } });
     });
     // Texto grande de "Qué resuelve": líneas que suben desde una máscara al entrar
     $$("[data-split-lines]").forEach((el) => {
@@ -178,6 +185,9 @@
     G.to(items, { "--draw": 1, duration: 1.1, stagger: 0.14, ease: "expo.inOut", scrollTrigger: { trigger: el, ...enter } });
     G.from(items.map((i) => i.children), { opacity: 0, y: 18, duration: 0.8, stagger: 0.05, ease: "expo.out", delay: 0.2, scrollTrigger: { trigger: el, ...enter } });
   });
+  // Capacidades (inicio) y filas de servicios: como el prototipo
+  G.from(".cap .shead > *", { y: 30, opacity: 0, duration: 0.9, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: ".cap", start: "top 75%", once: true } });
+  $$(".rows").forEach((el) => G.from($$(".row", el), { clipPath: "inset(0 0 100% 0)", y: 20, duration: 0.9, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 80%", once: true } }));
   // Tarjetas de proyecto: recorte que se abre
   $$(".pc__media, .pl__media").forEach((el) => {
     G.from(el, { clipPath: "inset(12% 8% 12% 8% round 6px)", duration: T.clip, ease: T.ease, scrollTrigger: { trigger: el, start: "top 88%", once: true } });
@@ -192,7 +202,7 @@
     G.fromTo(el, { yPercent: -3 }, { yPercent: 3, ease: "none", scrollTrigger: { trigger: el.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
   });
   $$(".ph__glow, .close__glow").forEach((el) => {
-    G.fromTo(el, { xPercent: -4, yPercent: 6 }, { xPercent: 4, yPercent: -6, ease: "none", scrollTrigger: { trigger: el.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
+    G.fromTo(el, { xPercent: -6, yPercent: 8 }, { xPercent: 4, yPercent: -6, ease: "none", scrollTrigger: { trigger: el.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
   });
 
   /* ---------- 6. Filas: relleno direccional + vista previa de la forma ---------- */
@@ -239,8 +249,17 @@
   const board = $(".ident__board");
   if (board) G.fromTo(board, { "--p": 0 }, { "--p": 1, ease: "power2.out", scrollTrigger: { trigger: board, start: "top 85%", end: "center 55%", scrub: 0.6 } });
 
-  /* ---------- 9. Botones magnéticos (leves; nunca escapan del puntero) ---------- */
-  if (FINE) $$(".hero__cta .btn, .close .btn, .ph .btn").forEach((el) => {
+  /* ---------- 9. Círculo que acompaña al cursor (el cursor del sistema sigue visible) ---------- */
+  const ring = $("#ring");
+  if (ring && FINE) {
+    const rx = G.quickTo(ring, "x", { duration: 0.35, ease: "power3.out" }), ry = G.quickTo(ring, "y", { duration: 0.35, ease: "power3.out" });
+    addEventListener("pointermove", (e) => { ring.classList.add("on"); rx(e.clientX); ry(e.clientY); }, { passive: true });
+    document.addEventListener("pointerleave", () => ring.classList.remove("on"));
+    document.addEventListener("pointerover", (e) => ring.classList.toggle("big", !!e.target.closest("a, button, summary, [tabindex='0']")));
+  }
+
+  /* ---------- 10. Botones magnéticos (leves; nunca escapan del puntero) ---------- */
+  if (FINE) $$(".hero__cta .btn, .close .btn").forEach((el) => {
     const qx = G.quickTo(el, "x", { duration: 0.4, ease: "power3.out" }), qy = G.quickTo(el, "y", { duration: 0.4, ease: "power3.out" });
     el.addEventListener("pointermove", (e) => { const r = el.getBoundingClientRect(); qx(clamp((e.clientX - (r.left + r.width / 2)) * 0.12, -6, 6)); qy(clamp((e.clientY - (r.top + r.height / 2)) * 0.2, -5, 5)); });
     el.addEventListener("pointerleave", () => { qx(0); qy(0); });

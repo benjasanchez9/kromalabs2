@@ -111,7 +111,7 @@ function head({ title, seo, desc, path: p, ld = [], home = false }) {
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/host-grotesk.woff2" as="font" type="font/woff2" crossorigin>${home ? `\n<link rel="preload" href="/assets/img/form/hero.webp" as="image" type="image/webp" media="(min-width: 761px) and (min-aspect-ratio: 9/10)" fetchpriority="high">\n<link rel="preload" href="/assets/img/form/hero-m.webp" as="image" type="image/webp" media="(max-width: 760px), (max-aspect-ratio: 9/10)" fetchpriority="high">` : ""}
+<link rel="preload" href="/assets/fonts/host-grotesk.woff2" as="font" type="font/woff2" crossorigin>${home ? `\n<link rel="modulepreload" href="/assets/js/kform.js">` : ""}
 <link rel="stylesheet" href="/assets/css/site.css">
 <script>(function(d){var h=d.documentElement,rm=matchMedia("(prefers-reduced-motion: reduce)").matches;h.classList.add("js",rm?"rm":"anim");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!rm)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("anim","is-entering")},3000)})(document);</script>
 <script src="/assets/js/vendor/gsap.min.js" defer></script>
@@ -126,60 +126,40 @@ const sprite = `<svg class="sprite" width="0" height="0" aria-hidden="true" focu
 
 function header(active) {
   const cur = (k) => (active === k ? ' aria-current="page"' : "");
-  const inSvc = active.startsWith("servicios");
   return `
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="hd" id="hd">
   <div class="hd__in">
     <a class="hd__brand" href="/" aria-label="KROMA, inicio">${iso("hd__iso")}<span aria-hidden="true">KROMA<sup>®</sup></span></a>
-    <span class="hd__tag mono" aria-hidden="true">Consultoría tecnológica</span>
-    <nav class="hd__nav" aria-label="Principal">
-      <ul>
-        <li><a href="/"${cur("inicio")}>Inicio</a></li>
-        <li><a href="/nosotros"${cur("nosotros")}>Nosotros</a></li>
-        <li class="hd__sub${inSvc ? " is-current" : ""}">
-          <a href="/servicios"${cur("servicios")}>Servicios</a>
-          <button class="hd__tg" type="button" aria-expanded="false" aria-controls="sub-servicios"><span class="sr">Mostrar servicios</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-          <div class="hd__drop" id="sub-servicios">
-            <ul>${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}"${cur("servicios/" + s.slug)}><span class="hd__dn">${s.name}</span><span class="hd__dd">${s.short}</span></a></li>`).join("")}</ul>
-          </div>
-        </li>
-        <li><a href="/proyectos"${cur("proyectos")}>Proyectos</a></li>
-      </ul>
-    </nav>
-    <a class="btn btn--sm hd__cta" href="/contacto"${cur("contacto")}><span>Hablemos</span><span class="btn__ar" aria-hidden="true">${ARROW}${ARROW}</span></a>
-    <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu"><span>Menú</span><i aria-hidden="true"></i></button>
+    <span class="hd__tag mono">Consultoría tecnológica</span>
+    <span class="hd__loc mono">Montevideo — Uruguay</span>
+    <a class="hd__pr" href="/proyectos"${cur("proyectos")}>Proyectos</a>
+    <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu">Menú <i aria-hidden="true"></i></button>
   </div>
 </header>
-<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
+<div class="menu" id="menu" tabindex="-1" role="dialog" aria-modal="true" aria-label="Menú" hidden>
   <div class="menu__top"><span class="mono">KROMA® / Menú</span><button class="menu__close" type="button">Cerrar <i aria-hidden="true"></i></button></div>
-  <nav aria-label="Menú móvil">
+  <nav aria-label="Principal">
     <ul class="menu__main">
-      <li><a href="/"${cur("inicio")}>Inicio</a></li>
-      <li><a href="/nosotros"${cur("nosotros")}>Nosotros</a></li>
-      <li><a href="/servicios"${cur("servicios")}>Servicios</a></li>
-      <li><a href="/proyectos"${cur("proyectos")}>Proyectos</a></li>
-      <li><a href="/contacto"${cur("contacto")}>Hablemos</a></li>
+      <li><a href="/"${cur("inicio")}><span class="mono">01</span>Inicio</a></li>
+      <li><a href="/nosotros"${cur("nosotros")}><span class="mono">02</span>Nosotros</a></li>
+      <li><a href="/servicios"${active.startsWith("servicios") ? ' aria-current="page"' : ""}><span class="mono">03</span>Servicios</a></li>
+      <li><a href="/proyectos"${cur("proyectos")}><span class="mono">04</span>Proyectos</a></li>
+      <li><a href="/contacto"${cur("contacto")}><span class="mono">05</span>Hablemos</a></li>
     </ul>
-    <ul class="menu__svc">${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}">${s.name}</a></li>`).join("")}</ul>
   </nav>
-  <div class="menu__foot mono"><span>${EMAIL}</span><a href="${IG_URL}" target="_blank" rel="noopener">Instagram ${IG}</a><span>Montevideo — Uruguay</span></div>
+  <div class="menu__foot mono"><span>${EMAIL}</span><a href="${IG_URL}" target="_blank" rel="noopener">${IG}<span class="sr"> (Instagram, se abre en otra pestaña)</span></a><span>Montevideo — Uruguay</span></div>
 </div>`;
 }
 
 const footer = `
-<footer class="ft t-black">
-  <div class="wrap ft__top">
-    <div class="ft__brand">
-      <a class="ft__logo" href="/" aria-label="KROMA, inicio">${iso("ft__iso")}<span aria-hidden="true">KROMA<sup>®</sup></span></a>
-      <p>Consultoría tecnológica para empresas. Te ayudamos a elegir herramientas y aprovecharlas bien.</p>
-    </div>
-    <div class="ft__col"><h2 class="mono">Sitio</h2><ul><li><a href="/">Inicio</a></li><li><a href="/nosotros">Nosotros</a></li><li><a href="/proyectos">Proyectos</a></li><li><a href="/contacto">Hablemos</a></li></ul></div>
-    <div class="ft__col"><h2 class="mono">Servicios</h2><ul>${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}">${s.name}</a></li>`).join("")}</ul></div>
-    <div class="ft__col"><h2 class="mono">Contacto</h2><ul><li><a href="/contacto">Formulario</a></li><li><span class="ft__mail">${EMAIL}</span></li><li><a href="${IG_URL}" target="_blank" rel="noopener">Instagram ${IG}<span class="sr"> (se abre en otra pestaña)</span></a></li></ul></div>
-  </div>
-  <div class="wrap ft__bottom mono"><span>© <span id="year">2026</span> KROMA</span><span>Hecho en Montevideo, Uruguay</span></div>
+<footer class="ft mono">
+  <span class="ft__a">KROMA® <span id="year">2026</span></span>
+  <span class="ft__b">Montevideo — Uruguay</span>
+  <a class="ft__c" href="${IG_URL}" target="_blank" rel="noopener">${IG}<span class="sr"> (Instagram, se abre en otra pestaña)</span></a>
+  <span class="ft__d">${EMAIL}</span>
 </footer>
+<div class="ring" id="ring" aria-hidden="true"></div>
 <div class="curtain" aria-hidden="true"><div class="curtain__body"></div>${iso("curtain__mark")}</div>`;
 
 function page({ path: p, title, seo, desc, active, body, ld, home = false }) {
@@ -209,7 +189,7 @@ const crumb = (items) => `<nav class="crumb mono" aria-label="Ruta"><ol>${items.
 
 // Filas editoriales de servicios: toda la fila es el enlace. Relleno cobalto direccional y vista previa de la forma.
 function svcRows({ numbered = true } = {}) {
-  return `<ul class="rows">
+  return `<ul class="rows${numbered ? "" : " rows--plain"}">
   ${SERVICES.map((s) => `<li class="row" data-pv="/assets/img/form/${s.slug}.webp">
     <a href="/servicios/${s.slug}">
       ${numbered ? `<span class="row__n mono">${s.n}</span>` : ""}
@@ -233,30 +213,16 @@ function projCard(pr, hTag = "h3") {
 
 // Cierre de página: frase propia y el primer paso del contacto a mano.
 // Es un formulario GET real hacia /contacto: funciona sin JavaScript y lleva lo escrito al campo Mensaje.
-const EXAMPLES = {
-  webs: "renovar la web de la empresa",
-  automatizaciones: "dejar de cargar pedidos a mano",
-  integraciones: "conectar la tienda con el stock",
-  "identidad-digital": "publicar sin depender de nadie",
-  "consultoria-tecnologica": "elegir un sistema de gestión",
-};
 let closingN = 0;
-function closing({ tone = "black", title, text, servicio = "", example = "" }) {
+function closing({ title, text, servicio = "", label = "Contacto" }) {
   const id = `cierre-${++closingN}`;
-  const ej = example || EXAMPLES[servicio] || "ordenar los pedidos de WhatsApp";
-  return `<section class="sec close t-${tone}" aria-labelledby="${id}-t">
-  ${tone === "black" ? '<div class="close__glow" aria-hidden="true"></div>' : ""}
+  return `<section class="sec close t-black" aria-labelledby="${id}-t">
+  <div class="close__glow" aria-hidden="true"></div>
   <div class="wrap close__in">
-    <h2 class="d2" id="${id}-t" data-split>${br(title)}</h2>
+    <p class="mono close__k">${label}</p>
+    <h2 class="close__t" id="${id}-t" data-split>${br(title)}</h2>
     <p class="lead close__tx">${text}</p>
-    <form class="close__form" action="/contacto" method="get">
-      <label class="close__lb" for="${id}-m">En una línea, ¿qué querés mejorar?</label>
-      <div class="close__fd">
-        <input id="${id}-m" name="mensaje" type="text" maxlength="300" autocomplete="off" placeholder="Por ejemplo: ${ej}">
-        ${servicio ? `<input type="hidden" name="servicio" value="${servicio}">` : ""}
-        <button class="btn ${tone === "cobalt" ? "btn--ivory" : ""}" type="submit"><span>Seguir en el formulario</span><span class="btn__ar" aria-hidden="true">${ARROW}${ARROW}</span></button>
-      </div>
-    </form>
+    <div class="close__act">${btn(servicio ? `/contacto?servicio=${servicio}` : "/contacto", "Hablemos")}<span class="close__mail">${EMAIL}</span></div>
   </div>
 </section>`;
 }
@@ -299,7 +265,7 @@ write("/", page({
   </div>
   <div class="mani t-cobalt" id="mani">
     <div class="mani__in">
-      <p class="mono mani__k">002 — Criterio</p>
+      <p class="mono mani__k">KROMA® / 002 — Criterio</p>
       <h2 class="mani__t"><span class="l"><span>Tecnología</span></span><span class="l"><span>con criterio.</span></span></h2>
       <p class="mani__lead">Estrategia, desarrollo e integración para que tu negocio avance con sentido.</p>
       <p class="mani__p">Hoy existe una herramienta para casi todo. El desafío ya no es encontrarla: es saber cuál conviene, cómo implementarla y lograr que tu equipo la use.</p>
@@ -307,18 +273,7 @@ write("/", page({
   </div>
 </section>
 
-<section class="sec t-ivory values" aria-labelledby="crit-t">
-  <div class="wrap">
-    <h2 class="sr" id="crit-t">Nuestro criterio</h2>
-    <ol class="values__l">
-      <li><span class="mono">01</span><h3>Primero entendemos tu operación</h3><p>Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
-      <li><span class="mono">02</span><h3>Elegimos lo que tiene sentido</h3><p>Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
-      <li><span class="mono">03</span><h3>Lo dejamos funcionando</h3><p>Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
-    </ol>
-  </div>
-</section>
-
-<section class="sec t-black" aria-labelledby="svc-t">
+<section class="sec t-ivory cap" aria-labelledby="svc-t">
   <div class="wrap">
     <div class="shead">
       <p class="mono shead__k">003 — Servicios</p>
@@ -326,6 +281,17 @@ write("/", page({
       <div class="shead__a">${linkAr("/servicios", "Ver todos los servicios")}</div>
     </div>
     ${svcRows({ numbered: false })}
+  </div>
+</section>
+
+<section class="sec t-black values" aria-labelledby="crit-t">
+  <div class="wrap">
+    <h2 class="sr" id="crit-t">Nuestro criterio</h2>
+    <ol class="values__l">
+      <li><span class="mono">01</span><h3>Primero entendemos tu operación</h3><p>Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
+      <li><span class="mono">02</span><h3>Elegimos lo que tiene sentido</h3><p>Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
+      <li><span class="mono">03</span><h3>Lo dejamos funcionando</h3><p>Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
+    </ol>
   </div>
 </section>
 
@@ -358,7 +324,7 @@ write("/", page({
   </div>
 </section>
 
-${closing({ tone: "black", title: ["¿Por dónde", "empezamos?"], text: "Contanos qué querés mejorar en tu empresa y vemos juntos cuál es el primer paso." })}
+${closing({ label: "006 — Contacto", title: ["¿Por dónde", "empezamos?"], text: "Contanos qué querés mejorar en tu empresa y vemos juntos cuál es el primer paso." })}
 `,
 }));
 
@@ -431,7 +397,7 @@ write("/nosotros", page({
     </ul>
   </div>
 </section>
-${closing({ tone: "cobalt", title: ["Empecemos por", "entender."], text: "Una primera conversación alcanza para identificar por dónde conviene empezar." })}
+${closing({ title: ["Empecemos por", "entender."], text: "Una primera conversación alcanza para identificar por dónde conviene empezar." })}
 `,
 }));
 
@@ -792,7 +758,7 @@ ${svcDemo(s.slug)}
     </div>
   </div>
 </section>
-${closing({ tone: "black", servicio: s.slug, title: ["Hablemos de", s.name.toLowerCase() + "."], text: `Contanos qué necesitás y te decimos cómo lo encararíamos. ¿Te interesa otro frente? Seguí por <a href="/servicios/${next.slug}">${next.name}</a>.` })}
+${closing({ servicio: s.slug, title: ["Hablemos de", s.name.toLowerCase() + "."], text: `Contanos qué necesitás y te decimos cómo lo encararíamos. ¿Te interesa otro frente? Seguí por <a href="/servicios/${next.slug}">${next.name}</a>.` })}
 `;
   write(`/servicios/${s.slug}`, page({ path: `/servicios/${s.slug}`, title: s.name, seo: d.seo, active: "servicios/" + s.slug, desc: d.desc, body, ld: [
     { "@type": "Service", name: s.name, serviceType: d.seo, description: d.desc, url: `${SITE_URL}/servicios/${s.slug}`, provider: { "@id": SITE_URL + "/#kroma" }, areaServed: { "@type": "Country", name: "Uruguay" } },
@@ -842,7 +808,7 @@ write("/proyectos", page({
     <p class="pf__empty" hidden>No hay conceptos para este servicio todavía.</p>
   </div>
 </section>
-${closing({ tone: "cobalt", title: ["¿Tu caso", "es el próximo?"], text: "Cuando publiquemos proyectos realizados, van a estar acá. Mientras tanto, contanos el tuyo." })}
+${closing({ title: ["¿Tu caso", "es el próximo?"], text: "Cuando publiquemos proyectos realizados, van a estar acá. Mientras tanto, contanos el tuyo." })}
 `,
 }));
 
@@ -880,7 +846,7 @@ PROJECTS.forEach((pr, i) => {
     ${btn(`/proyectos/${next.slug}`, "Ver caso", "btn--ivory")}
   </div>
 </section>
-${closing({ tone: "cobalt", title: ["¿Algo", "parecido?"], text: "Si tu empresa tiene una necesidad similar, contanos y lo vemos.", servicio: pr.service })}
+${closing({ title: ["¿Algo", "parecido?"], text: "Si tu empresa tiene una necesidad similar, contanos y lo vemos.", servicio: pr.service })}
 `,
   }));
 });
