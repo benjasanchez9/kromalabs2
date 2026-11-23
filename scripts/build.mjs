@@ -141,7 +141,7 @@ function header(active) {
           <a href="/servicios"${cur("servicios")}>Servicios</a>
           <button class="hd__tg" type="button" aria-expanded="false" aria-controls="sub-servicios"><span class="sr">Mostrar servicios</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
           <div class="hd__drop" id="sub-servicios">
-            <ul>${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}"${cur("servicios/" + s.slug)}><span class="mono">${s.n}</span><span class="hd__dn">${s.name}</span><span class="hd__dd">${s.short}</span></a></li>`).join("")}</ul>
+            <ul>${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}"${cur("servicios/" + s.slug)}><span class="hd__dn">${s.name}</span><span class="hd__dd">${s.short}</span></a></li>`).join("")}</ul>
           </div>
         </li>
         <li><a href="/proyectos"${cur("proyectos")}>Proyectos</a></li>
@@ -155,11 +155,11 @@ function header(active) {
   <div class="menu__top"><span class="mono">KROMA® / Menú</span><button class="menu__close" type="button">Cerrar <i aria-hidden="true"></i></button></div>
   <nav aria-label="Menú móvil">
     <ul class="menu__main">
-      <li><a href="/"${cur("inicio")}><span class="mono">01</span>Inicio</a></li>
-      <li><a href="/nosotros"${cur("nosotros")}><span class="mono">02</span>Nosotros</a></li>
-      <li><a href="/servicios"${cur("servicios")}><span class="mono">03</span>Servicios</a></li>
-      <li><a href="/proyectos"${cur("proyectos")}><span class="mono">04</span>Proyectos</a></li>
-      <li><a href="/contacto"${cur("contacto")}><span class="mono">05</span>Hablemos</a></li>
+      <li><a href="/"${cur("inicio")}>Inicio</a></li>
+      <li><a href="/nosotros"${cur("nosotros")}>Nosotros</a></li>
+      <li><a href="/servicios"${cur("servicios")}>Servicios</a></li>
+      <li><a href="/proyectos"${cur("proyectos")}>Proyectos</a></li>
+      <li><a href="/contacto"${cur("contacto")}>Hablemos</a></li>
     </ul>
     <ul class="menu__svc">${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}">${s.name}</a></li>`).join("")}</ul>
   </nav>
@@ -178,7 +178,7 @@ const footer = `
     <div class="ft__col"><h2 class="mono">Servicios</h2><ul>${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}">${s.name}</a></li>`).join("")}</ul></div>
     <div class="ft__col"><h2 class="mono">Contacto</h2><ul><li><a href="/contacto">Formulario</a></li><li><span class="ft__mail">${EMAIL}</span></li><li><a href="${IG_URL}" target="_blank" rel="noopener">Instagram ${IG}<span class="sr"> (se abre en otra pestaña)</span></a></li></ul></div>
   </div>
-  <div class="wrap ft__bottom mono"><span>© <span id="year">2026</span> KROMA</span><span>Montevideo — Uruguay</span><span>Hecho en Uruguay</span></div>
+  <div class="wrap ft__bottom mono"><span>© <span id="year">2026</span> KROMA</span><span>Hecho en Montevideo, Uruguay</span></div>
 </footer>
 <div class="curtain" aria-hidden="true"><div class="curtain__body"></div>${iso("curtain__mark")}</div>`;
 
@@ -226,7 +226,7 @@ function projCard(pr, hTag = "h3") {
   return `<article class="pc">
   <a class="pc__a" href="/proyectos/${pr.slug}">
     <div class="pc__media"><div class="pc__para">${PROJECT_ART[pr.slug]}</div><span class="pc__cta">Ver caso ${ARROW}</span></div>
-    <div class="pc__info"><${hTag} class="pc__t">${pr.title}</${hTag}><span class="pc__k mono">Concepto · ${pr.serviceName}</span></div>
+    <div class="pc__info"><${hTag} class="pc__t">${pr.title}</${hTag}><span class="pc__k">Concepto de ${pr.serviceName.toLowerCase()}</span></div>
   </a>
 </article>`;
 }
@@ -310,7 +310,7 @@ write("/", page({
 <section class="sec t-ivory values" aria-labelledby="crit-t">
   <div class="wrap">
     <h2 class="sr" id="crit-t">Nuestro criterio</h2>
-    <ol class="values__l" data-stagger>
+    <ol class="values__l">
       <li><span class="mono">01</span><h3>Primero entendemos tu operación</h3><p>Antes de proponer una herramienta, vemos cómo trabajás hoy y dónde se pierde tiempo.</p></li>
       <li><span class="mono">02</span><h3>Elegimos lo que tiene sentido</h3><p>Recomendamos soluciones a la escala de tu empresa y de tu presupuesto, no la opción más nueva.</p></li>
       <li><span class="mono">03</span><h3>Lo dejamos funcionando</h3><p>Implementamos, explicamos cómo se usa y acompañamos los primeros pasos.</p></li>
@@ -325,7 +325,7 @@ write("/", page({
       <h2 class="d2" id="svc-t" data-split>Herramientas que<br>mueven tu negocio.</h2>
       <div class="shead__a">${linkAr("/servicios", "Ver todos los servicios")}</div>
     </div>
-    ${svcRows()}
+    ${svcRows({ numbered: false })}
   </div>
 </section>
 
@@ -399,8 +399,7 @@ write("/nosotros", page({
 </section>
 <section class="sec t-ivory flow" id="proceso" aria-labelledby="proceso-t">
   <div class="wrap">
-    <div class="shead">
-      <p class="mono shead__k">Proceso</p>
+    <div class="shead shead--plain">
       <h2 class="d2" id="proceso-t" data-split>Cómo trabajamos.</h2>
       <p class="shead__note">Cuatro etapas claras. En cada momento sabés en qué punto estamos y qué viene después.</p>
     </div>
@@ -426,7 +425,7 @@ write("/nosotros", page({
 </section>
 <section class="sec t-black" aria-labelledby="principios">
   <div class="wrap">
-    <div class="shead"><p class="mono shead__k">Principios</p><h2 class="d2" id="principios" data-split>Lo que nos guía.</h2></div>
+    <div class="shead shead--plain"><h2 class="d2" id="principios">Lo que nos guía.</h2></div>
     <ul class="princ">
       ${PRINCIPLES.map(([t, d]) => `<li><span class="princ__w">${t}</span><p>${d}</p></li>`).join("\n      ")}
     </ul>
@@ -457,7 +456,7 @@ write("/servicios", page({
 <section class="sec t-ivory" aria-labelledby="eleccion">
   <div class="wrap split">
     <div class="split__h">
-      <h2 class="d2" id="eleccion" data-split>Elegimos lo que<br>necesitás.</h2>
+      <h2 class="d2" id="eleccion">Elegimos lo que<br>necesitás.</h2>
       <p class="lead">Tecnología útil. Sin ruido. Con impacto real.</p>
     </div>
     <div class="split__b">
@@ -609,7 +608,7 @@ const SVC_PAGES = {
 
 // Interacción explicativa propia de cada servicio
 function svcDemo(slug) {
-  const head = (k, t, note) => `<div class="shead"><p class="mono shead__k">${k}</p><h2 class="d2" id="demo-t" data-split>${br(t)}</h2><p class="shead__note">${note}</p></div>`;
+  const head = (k, t, note) => `<div class="shead shead--plain"><h2 class="d2" id="demo-t">${br(t)}</h2><p class="shead__note">${note}</p></div>`;
   if (slug === "webs") {
     const frame = (cls, depth, label, mobile = false) => `
       <div class="wl ${cls}" data-depth="${depth}">
@@ -662,7 +661,7 @@ function svcDemo(slug) {
     return `<section class="sec t-black demo" aria-labelledby="demo-t">
   <div class="wrap ig" data-route="p1,p2,p3,p4">
     ${head("Flujo de datos", ["Un dato,", "un solo viaje."], "Ejemplo ilustrativo. Pasá el cursor o navegá con el teclado por cada herramienta para ver qué hace.")}
-    <div class="ig__scroll">
+    <section class="ig__scroll" tabindex="0" aria-label="Diagrama de integración, desplazable horizontalmente">
       <svg class="ig__svg" viewBox="0 0 1000 520" role="group" aria-label="Diagrama: un pedido viaja del formulario web al sistema de gestión, y de ahí a facturación, reportes y email al cliente">
         <path class="ig__path" id="p1" data-from="form" data-to="hub" d="M250 260C310 260 320 260 380 260"/>
         <path class="ig__path" id="p2" data-from="hub" data-to="fact" d="M630 260C700 260 680 88 750 88"/>
@@ -671,7 +670,8 @@ function svcDemo(slug) {
         <circle class="ig__sig" r="7" cx="250" cy="260" aria-hidden="true"/>
         ${N.map(node).join("")}
       </svg>
-    </div>
+    </section>
+    <p class="ig__hint">Deslizá para ver el diagrama completo.</p>
     <div class="sr">${N.map((n) => `<span id="nd-${n.id}">${n.desc.split(": ").slice(1).join(": ")}</span>`).join("")}</div>
     <p class="ig__cap lead" aria-live="polite" data-default="Cada herramienta cumple un rol. Pasá el cursor o navegá con el teclado por el diagrama para ver cuál.">Cada herramienta cumple un rol. Pasá el cursor o navegá con el teclado por el diagrama para ver cuál.</p>
     <ol class="ig__flow">
@@ -734,6 +734,7 @@ function svcDemo(slug) {
   return "";
 }
 
+const ART_DIM = { webs: [536, 385], automatizaciones: [616, 432], integraciones: [716, 630], "identidad-digital": [836, 728], "consultoria-tecnologica": [773, 706] };
 const TONE_NEXT = { black: "ivory", cobalt: "ivory", ivory: "cobalt" };
 for (const s of SERVICES) {
   const d = SVC_PAGES[s.slug];
@@ -749,7 +750,7 @@ for (const s of SERVICES) {
       <p class="lead">${d.lead}</p>
       ${btn(`/contacto?servicio=${s.slug}`, d.cta || "Consultar por " + s.name.toLowerCase(), d.tone === "cobalt" ? "btn--ivory" : "")}
     </div>
-    <div class="ph__art" aria-hidden="true"><img src="/assets/img/form/${s.slug}.webp" alt="" decoding="async" data-float></div>
+    <div class="ph__art" aria-hidden="true"><img src="/assets/img/form/${s.slug}.webp" alt="" width="${ART_DIM[s.slug][0]}" height="${ART_DIM[s.slug][1]}" decoding="async" data-float></div>
   </div>
 </section>
 <section class="sec t-${TONE_NEXT[d.tone]} prob" aria-labelledby="problema">
@@ -761,8 +762,8 @@ for (const s of SERVICES) {
 ${svcDemo(s.slug)}
 <section class="sec t-ivory" aria-labelledby="incluye">
   <div class="wrap">
-    <div class="shead"><p class="mono shead__k">Qué incluye</p><h2 class="d2" id="incluye" data-split>Lo que<br>hacemos.</h2></div>
-    <ul class="incl" data-stagger>
+    <div class="shead shead--plain"><h2 class="d2" id="incluye">Lo que<br>hacemos.</h2></div>
+    <ul class="incl">
       ${d.includes.map(([t, x]) => `<li><h3>${t}</h3><p>${x}</p></li>`).join("\n      ")}
     </ul>
   </div>
@@ -777,7 +778,7 @@ ${svcDemo(s.slug)}
 </section>
 <section class="sec t-cobalt" aria-labelledby="como">
   <div class="wrap">
-    <div class="shead"><p class="mono shead__k">Cómo trabajamos</p><h2 class="d2" id="como" data-split>Paso<br>a paso.</h2><div class="shead__a">${linkAr("/nosotros#proceso", "Nuestro proceso")}</div></div>
+    <div class="shead shead--plain"><h2 class="d2" id="como">Paso<br>a paso.</h2><div class="shead__a">${linkAr("/nosotros#proceso", "Nuestro proceso")}</div></div>
     <ol class="layers">
       ${d.steps.map(([t, x], i) => `<li class="layer"><span class="mono">${pad(i + 1)}</span><h3>${t}</h3><p>${x}</p></li>`).join("\n      ")}
     </ol>
@@ -785,7 +786,7 @@ ${svcDemo(s.slug)}
 </section>
 <section class="sec t-ivory" aria-labelledby="faq">
   <div class="wrap split">
-    <div class="split__h"><h2 id="faq" class="d2" data-split>Dudas<br>habituales.</h2></div>
+    <div class="split__h"><h2 id="faq" class="d2">Dudas<br>habituales.</h2></div>
     <div class="split__b faq">
       ${d.faq.map(([q, a]) => `<details><summary>${q}<span class="faq__i" aria-hidden="true"></span></summary><div class="faq__a"><p>${a}</p></div></details>`).join("\n      ")}
     </div>

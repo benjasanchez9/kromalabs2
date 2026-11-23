@@ -87,7 +87,7 @@
       menu.classList.remove("is-open");
       menuBtn.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
-      setTimeout(() => { menu.hidden = true; }, RM ? 0 : 560);
+      setTimeout(() => { menu.hidden = true; }, RM ? 0 : 400);
       menuBtn.focus();
     };
     menuBtn.addEventListener("click", open);
@@ -143,6 +143,8 @@
   }
 
   /* ---------- 4. Revelados ---------- */
+  // Tokens de movimiento: entradas lentas y decididas, respuestas rápidas
+  const T = { enter: 0.9, clip: 1.1, stagger: 0.08, ease: "expo.out" };
   const enter = { start: "top 82%", once: true };
   // Las divisiones por línea esperan a la tipografía (si tarda, siguen igual a los 1,2 s)
   const fontsReady = document.fonts ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1200))]) : Promise.resolve();
@@ -154,24 +156,20 @@
       try { split = SPLIT ? SPLIT.create(el, { type: "lines", mask: "lines", linesClass: "split-line" }) : null; } catch (err) { split = null; }
       G.set(el, { visibility: "visible" });
       if (!split) return;
-      G.from(split.lines, { yPercent: 112, duration: inHero ? 1 : 0.95, stagger: 0.09, ease: "expo.out", delay: inHero ? 0.15 : 0, scrollTrigger: inHero ? undefined : { trigger: el, ...enter } });
+      G.from(split.lines, { yPercent: 112, duration: T.enter, stagger: T.stagger, ease: T.ease, delay: inHero ? 0.15 : 0, scrollTrigger: inHero ? undefined : { trigger: el, ...enter } });
     });
     // Texto grande de "Qué resuelve": líneas que suben desde una máscara al entrar
     $$("[data-split-lines]").forEach((el) => {
       let split;
       try { split = SPLIT.create(el, { type: "lines", mask: "lines", linesClass: "split-line", aria: "none" }); } catch (err) { return; }
-      G.from(split.lines, { yPercent: 110, duration: 1, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: el, ...enter } });
+      G.from(split.lines, { yPercent: 110, duration: T.enter, stagger: T.stagger, ease: T.ease, scrollTrigger: { trigger: el, ...enter } });
     });
     ST.refresh();
   });
   // Bloques que suben (cabeceras de página, laterales)
   $$("[data-rise]").forEach((el) => {
     const inHero = !!el.closest(".ph");
-    G.fromTo(el, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out", delay: inHero ? 0.45 : 0, scrollTrigger: inHero ? undefined : { trigger: el, ...enter } });
-  });
-  // Listas que entran escalonadas
-  $$("[data-stagger]").forEach((el) => {
-    G.from(el.children, { opacity: 0, y: 30, duration: 0.9, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: el, ...enter } });
+    G.fromTo(el, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: T.enter, ease: T.ease, delay: inHero ? 0.45 : 0, scrollTrigger: inHero ? undefined : { trigger: el, ...enter } });
   });
   // Capas del proceso: la línea superior se dibuja y el contenido se apila
   $$(".layers").forEach((el) => {
@@ -180,17 +178,9 @@
     G.to(items, { "--draw": 1, duration: 1.1, stagger: 0.14, ease: "expo.inOut", scrollTrigger: { trigger: el, ...enter } });
     G.from(items.map((i) => i.children), { opacity: 0, y: 18, duration: 0.8, stagger: 0.05, ease: "expo.out", delay: 0.2, scrollTrigger: { trigger: el, ...enter } });
   });
-  // Filas de servicios: entran desde abajo con recorte
-  $$(".rows").forEach((el) => {
-    G.from($$(".row", el), { clipPath: "inset(0 0 100% 0)", y: 24, duration: 0.9, stagger: 0.07, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 85%", once: true } });
-  });
   // Tarjetas de proyecto: recorte que se abre
   $$(".pc__media, .pl__media").forEach((el) => {
-    G.from(el, { clipPath: "inset(12% 8% 12% 8% round 6px)", duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%", once: true } });
-  });
-  // Filas de contenido con línea superior
-  $$(".case__row, .incl li, .ex li, .princ li, .flow__it, .faq details").forEach((el) => {
-    G.from(el, { opacity: 0, y: 20, duration: 0.8, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 90%", once: true } });
+    G.from(el, { clipPath: "inset(12% 8% 12% 8% round 6px)", duration: T.clip, ease: T.ease, scrollTrigger: { trigger: el, start: "top 88%", once: true } });
   });
 
   /* ---------- 5. Parallax de baja amplitud ---------- */
