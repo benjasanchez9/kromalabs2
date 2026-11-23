@@ -22,8 +22,7 @@
   /* ---------- 1. Cabecera: tono según la sección debajo, se oculta al bajar ---------- */
   const hd = $("#hd");
   const tones = $$(".t-black, .t-ivory, .t-cobalt, .matter, .mani");
-  let lastY = scrollY, ticking = false;
-  const BG = { "t-black": "#070708", "t-ivory": "#f5f1e8", "t-cobalt": "#0053fd" };
+  let ticking = false;
   function headerUpdate() {
     ticking = false;
     const probe = 34;
@@ -40,21 +39,12 @@
     if (document.body.classList.contains("is-home") && window.KROMA_HOME_TONE && scrollY < (window.KROMA_HOME_END || 0)) tone = window.KROMA_HOME_TONE;
     hd.classList.toggle("is-light", tone === "t-ivory");
     hd.classList.toggle("is-cobalt", tone === "t-cobalt");
-    hd.style.setProperty("--hd-bg", BG[tone]);
-    const yy = scrollY;
-    hd.classList.toggle("is-solid", yy > 80);
-    const menuOpen = $("#menu")?.classList.contains("is-open");
-    const dropOpen = $(".hd__sub.is-open");
-    if (!menuOpen && !dropOpen && !hd.contains(document.activeElement)) hd.classList.toggle("is-hidden", yy > lastY && yy > 240);
-    if (yy < lastY) hd.classList.remove("is-hidden");
-    lastY = yy;
   }
   const reqHeader = () => { if (!ticking) { ticking = true; requestAnimationFrame(headerUpdate); } };
   addEventListener("scroll", reqHeader, { passive: true });
   addEventListener("resize", reqHeader);
   window.KROMA_HEADER = reqHeader;
   headerUpdate();
-  hd.addEventListener("focusin", () => hd.classList.remove("is-hidden"));
 
   /* Desplegable de Servicios: hover en escritorio, clic y teclado en todos */
   const sub = $(".hd__sub"), tg = $(".hd__tg");
