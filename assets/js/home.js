@@ -144,7 +144,7 @@ function draw() {
   const weave = !!gl.front && p1 < 0.02;
   cFront.style.visibility = weave ? 'visible' : 'hidden';
   if (weave) gl.front.render({ ...o, clipDepth: o.cz - 0.25 });
-  if (!gl.shown) { gl.shown = true; doc.classList.add('gl'); }
+  if (!gl.shown) { gl.shown = true; doc.classList.add('gl'); gsap.killTweensOf(poster); gsap.set(poster, { opacity: 0 }); }
 }
 
 function tick() {
@@ -171,6 +171,8 @@ function boot() {
     startGL(0);
     dirty = true;
   }).catch((e) => { console.warn('No se pudo cargar la escena 3D: se mantiene la imagen fija.', e); gsap.to(poster, { opacity: 1, duration: 0.8 }); });
+  // red de seguridad: si en 6 s la forma no apareció, se muestra la imagen fija (nunca un escenario vacío)
+  setTimeout(() => { if (!gl?.shown) gsap.to(poster, { opacity: 1, duration: 0.8 }); }, 6000);
 
   // Entrada (una vez), con los tiempos del prototipo:
   // marca → la forma aparece por la luz → titular por líneas → bajada, botón e indicador

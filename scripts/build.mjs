@@ -111,13 +111,13 @@ function head({ title, seo, desc, path: p, ld = [], home = false }) {
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/host-grotesk.woff2" as="font" type="font/woff2" crossorigin>${home ? `\n<link rel="modulepreload" href="/assets/js/kform.js">` : ""}
+<link rel="preload" href="/assets/fonts/host-grotesk.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css">
 <script>(function(d){var h=d.documentElement,rm=matchMedia("(prefers-reduced-motion: reduce)").matches;h.classList.add("js",rm?"rm":"anim");try{if(sessionStorage.getItem("kroma-transition")){sessionStorage.removeItem("kroma-transition");if(!rm)h.classList.add("is-entering")}}catch(e){}setTimeout(function(){if(!window.KROMA_READY)h.classList.remove("anim","is-entering")},3000)})(document);</script>
 <script src="/assets/js/vendor/gsap.min.js" defer></script>
 <script src="/assets/js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="/assets/js/vendor/SplitText.min.js" defer></script>
-<script src="/assets/js/site.js" defer></script>${home ? `\n<script type="importmap">{"imports":{"three":"/assets/js/vendor/three.module.min.js"}}</script>\n<script type="module" src="/assets/js/home.js"></script>\n<link rel="modulepreload" href="/assets/js/home.js">` : ""}
+<script src="/assets/js/site.js" defer></script>${home ? `\n<script type="importmap">{"imports":{"three":"/assets/js/vendor/three.module.min.js"}}</script>\n<link rel="modulepreload" href="/assets/js/vendor/three.module.min.js">\n<link rel="modulepreload" href="/assets/js/kform.js">\n<script type="module" src="/assets/js/home.js"></script>` : ""}
 <script type="speculationrules">{"prefetch":[{"source":"document","where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>`;
 }
