@@ -166,11 +166,12 @@ function boot() {
 
   // La forma 3D se carga enseguida (Three.js en un archivo aparte, sin bloquear la página).
   // Si WebGL falla, vuelve la imagen fija.
-  Promise.all([import('three'), import('./kform.js')]).then(([t, k]) => {
+  const idle = window.requestIdleCallback || ((f) => setTimeout(f, 200));
+  idle(() => Promise.all([import('three'), import('./kform.js')]).then(([t, k]) => {
     THREE = t; createForm = k.createForm;
     startGL(0);
     dirty = true;
-  }).catch((e) => { console.warn('No se pudo cargar la escena 3D: se mantiene la imagen fija.', e); gsap.to(poster, { opacity: 1, duration: 0.8 }); });
+  }).catch((e) => { console.warn('No se pudo cargar la escena 3D: se mantiene la imagen fija.', e); gsap.to(poster, { opacity: 1, duration: 0.8 }); }), { timeout: 1200 });
   // red de seguridad: si en 6 s la forma no apareció, se muestra la imagen fija (nunca un escenario vacío)
   setTimeout(() => { if (!gl?.shown) gsap.to(poster, { opacity: 1, duration: 0.8 }); }, 6000);
 

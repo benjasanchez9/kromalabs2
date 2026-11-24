@@ -6,10 +6,10 @@ Contacto: somoskromauy@gmail.com · Instagram: https://www.instagram.com/_kromal
 
 ## Servicios
 
-- [Webs](https://kromalabs2.vercel.app/servicios/webs): Diseño y desarrollo de sitios web claros, rápidos y fáciles de actualizar para empresas uruguayas.
-- [Automatizaciones](https://kromalabs2.vercel.app/servicios/automatizaciones): Automatización de tareas repetitivas para empresas: pedidos, avisos, reportes y flujos de trabajo.
-- [Integraciones](https://kromalabs2.vercel.app/servicios/integraciones): Integración de sistemas para empresas: tienda online, gestión, facturación, CRM y reportes conectados.
-- [Identidad digital](https://kromalabs2.vercel.app/servicios/identidad-digital): Identidad visual y diseño de material para redes y otros puntos de contacto, con un sistema coherente.
+- [Webs](https://kromalabs2.vercel.app/servicios/webs): Diseño y desarrollo web para empresas en Uruguay: sitios claros, rápidos y fáciles de actualizar, pensados para que te encuentren y te contacten.
+- [Automatizaciones](https://kromalabs2.vercel.app/servicios/automatizaciones): Automatización de procesos para empresas en Uruguay: pedidos, avisos, reportes y tareas repetitivas que pasan a hacerse solas, sin cambiar cómo trabaja tu equipo.
+- [Integraciones](https://kromalabs2.vercel.app/servicios/integraciones): Integración de sistemas para empresas en Uruguay: conectamos tienda online, gestión, facturación y CRM para que la información se cargue una sola vez.
+- [Identidad digital](https://kromalabs2.vercel.app/servicios/identidad-digital): Identidad digital para empresas en Uruguay: identidad visual, plantillas y piezas para redes y otros puntos de contacto, con un sistema coherente y fácil de usar.
 - [Consultoría tecnológica](https://kromalabs2.vercel.app/servicios/consultoria-tecnologica): Consultoría tecnológica para empresas uruguayas: analizamos tu operación y te ayudamos a elegir herramientas útiles, accesibles y a la medida de tu negocio.
 
 ## Sobre KROMA

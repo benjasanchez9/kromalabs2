@@ -252,7 +252,11 @@
   // Nosotros: del ruido al criterio (las herramientas se apagan y queda "Criterio.")
   const wall = $(".wall");
   if (wall) {
-    const items = $$(".wall__grid span", wall).map((el) => ({ el, at: +el.dataset.at }));
+    const grid = $(".wall__grid", wall);
+    const base = (grid.dataset.words || "").split("|").filter(Boolean);
+    const list = base.concat(base, base.slice(0, 12));
+    grid.innerHTML = list.map((t) => `<span>${t.replace(/[&<>"']/g, "")}</span>`).join("");
+    const items = $$("span", grid).map((el, i) => ({ el, at: 0.08 + (Math.sin(i * 91.7) * 0.5 + 0.5) * 0.42 }));
     const q = $(".wall__q", wall), end = $(".wall__end", wall);
     const ss = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
     const paint = (p) => {

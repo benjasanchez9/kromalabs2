@@ -16,6 +16,8 @@ const ISO_D = svgFile.match(/ d="([^"]+)"/)[1];
 const SITE_URL = "https://kromalabs2.vercel.app";
 const EMAIL = "somoskromauy@gmail.com";
 const IG = "@_kromalabs";
+const PHONE = "+59898012704";
+const PHONE_TXT = "+598 98 012 704";
 const IG_URL = "https://www.instagram.com/_kromalabs/";
 const FORM_ENDPOINT = `https://formsubmit.co/ajax/${EMAIL}`;
 
@@ -78,7 +80,8 @@ const ORG_LD = {
   "@type": "ProfessionalService", "@id": SITE_URL + "/#kroma", name: "KROMA", url: SITE_URL + "/",
   description: "Consultoría tecnológica para empresas uruguayas: webs, automatizaciones, integraciones, identidad digital y consultoría tecnológica.",
   logo: SITE_URL + "/assets/img/logo-512.png", image: SITE_URL + "/assets/img/og-kroma.jpg",
-  email: EMAIL, sameAs: [IG_URL], areaServed: { "@type": "Country", name: "Uruguay" },
+  email: EMAIL, telephone: PHONE, sameAs: [IG_URL], areaServed: { "@type": "Country", name: "Uruguay" },
+  contactPoint: { "@type": "ContactPoint", contactType: "customer service", telephone: PHONE, email: EMAIL, availableLanguage: "es" },
   address: { "@type": "PostalAddress", addressLocality: "Montevideo", addressCountry: "UY" },
 };
 const crumbsLd = (items) => ({
@@ -374,7 +377,6 @@ ${closing({ label: "006 — Contacto", title: ["¿Por dónde", "empezamos?"], te
    ========================================================= */
 // Muro de "Del ruido al criterio": tipos de herramientas que hoy se le ofrecen a una empresa (genéricos, sin marcas)
 const WALL_BASE = ["Planillas", "CRM", "ERP", "Facturación electrónica", "Agenda online", "Tienda online", "Chatbot", "Formularios", "Pasarela de pago", "Email marketing", "Control de stock", "Reportes", "Nube", "Firma digital", "Mesa de ayuda", "Reservas", "Punto de venta", "Inteligencia artificial", "Automatizaciones", "Integraciones", "App propia", "Landing page", "Redes sociales", "Analítica", "Gestión de proyectos", "Videollamadas", "Contabilidad", "Sueldos", "Logística", "Encuestas", "Catálogo", "Newsletter", "Calendario compartido", "Base de datos", "Portal de clientes", "Cotizador", "Inventario", "Tableros", "Mensajería", "Documentos compartidos", "Seguimiento de pedidos", "Turnos", "Cobros recurrentes", "Marketplace", "Atención al cliente", "Presupuestos", "Firma de contratos", "Respaldos"];
-const WALL = WALL_BASE.concat(WALL_BASE, WALL_BASE.slice(0, 12));
 
 const PRINCIPLES = [
   ["Claridad", "Explicamos cada decisión sin jerga, para que puedas evaluarla."],
@@ -400,7 +402,7 @@ write("/nosotros", page({
 <div class="sweep" aria-hidden="true"><svg viewBox="0 0 1440 220" preserveAspectRatio="none"><path class="sweep__b" d="M0 120C240 40 420 30 640 90S1060 210 1440 110V220H0Z"/><path class="sweep__c" d="M0 220V170C200 120 380 110 560 150S900 220 1100 220Z"/></svg></div>
 <section class="t-black wall" aria-labelledby="proposito">
   <div class="wall__stick">
-    <div class="wall__grid" aria-hidden="true">${WALL.map((t, i) => `<span data-at="${(0.08 + (Math.sin(i * 91.7) * 0.5 + 0.5) * 0.42).toFixed(3)}">${t}</span>`).join("")}</div>
+    <div class="wall__grid" aria-hidden="true" data-words="${WALL_BASE.join("|")}"></div>
     <h2 id="proposito" class="wall__q">Nunca hubo tantas herramientas disponibles. Pero más opciones no siempre significan mejores decisiones.</h2>
     <div class="wall__end"><span class="wall__w" aria-hidden="true">Criterio.</span><p>Digitalizar también es elegir bien.</p></div>
   </div>
@@ -453,7 +455,7 @@ ${closing({ title: ["Empecemos por", "entender."], text: "Una primera conversaci
    ========================================================= */
 write("/servicios", page({
   path: "/servicios", title: "Servicios", seo: "Servicios de tecnología para empresas", ld: [crumbsLd([["Servicios", "/servicios"]])], active: "servicios",
-  desc: "Webs, automatizaciones, integraciones, identidad digital y consultoría tecnológica para empresas uruguayas.",
+  desc: "Servicios de tecnología para empresas en Uruguay: webs, automatizaciones, integraciones, identidad digital y consultoría para elegir bien las herramientas.",
   body: `
 <section class="ph t-black" aria-labelledby="t">
   <div class="ph__glow" aria-hidden="true"></div>
@@ -479,6 +481,20 @@ write("/servicios", page({
     </div>
   </div>
 </section>
+<section class="sec t-ivory sec--tight" aria-labelledby="faq-svc">
+  <div class="wrap split">
+    <div class="split__h"><h2 class="d2" id="faq-svc">Antes de<br>escribirnos.</h2></div>
+    <div class="split__b faq">
+      ${[
+        ["¿Cuánto cuesta trabajar con KROMA?", "Depende del alcance. Después de la primera conversación te enviamos una propuesta con el alcance, las etapas y el costo, y lo acordamos antes de empezar."],
+        ["¿Cuánto demora un proyecto?", "Trabajamos por etapas, de a una cosa por vez. En la propuesta te indicamos qué incluye cada etapa y cuándo la entregamos."],
+        ["¿Tengo que cambiar las herramientas que ya uso?", "No necesariamente. Primero vemos qué tenés y qué funciona. Muchas veces conviene conectar o aprovechar mejor lo que ya existe antes que sumar algo nuevo."],
+        ["¿Qué pasa después de escribirles?", "Te respondemos para coordinar una primera conversación. Ahí entendemos tu situación y te decimos por dónde conviene empezar, o si conviene esperar."],
+        ["¿Trabajan con empresas chicas?", "Sí. Nuestro propósito es que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala."],
+      ].map(([q, a]) => `<details><summary>${q}<span class="faq__i" aria-hidden="true"></span></summary><div class="faq__a"><p>${a}</p></div></details>`).join("\n      ")}
+    </div>
+  </div>
+</section>
 `,
 }));
 
@@ -490,7 +506,7 @@ const SVC_PAGES = {
     seo: "Diseño web para empresas en Uruguay", tone: "black",
     title: ["Una web que", "trabaja para", "tu negocio."],
     lead: "Diseñamos y desarrollamos sitios claros, rápidos y fáciles de actualizar, pensados para que tus clientes entiendan qué hacés y cómo contactarte.",
-    desc: "Diseño y desarrollo de sitios web claros, rápidos y fáciles de actualizar para empresas uruguayas.",
+    desc: "Diseño y desarrollo web para empresas en Uruguay: sitios claros, rápidos y fáciles de actualizar, pensados para que te encuentren y te contacten.",
     problem: "Muchas webs se ven bien pero no ayudan: <em>la información queda desactualizada</em>, cargan lento en el celular o nadie sabe cómo cambiar un texto.",
     includes: [
       ["Estrategia y contenidos", "Ordenamos qué decir, en qué orden y para quién, antes de diseñar."],
@@ -516,7 +532,7 @@ const SVC_PAGES = {
     seo: "Automatización de procesos para empresas", tone: "cobalt",
     title: ["Menos tareas", "repetidas.", "Más tiempo útil."],
     lead: "Identificamos tareas manuales que se repiten todos los días y las resolvemos con herramientas que ya usás o que conviene sumar.",
-    desc: "Automatización de tareas repetitivas para empresas: pedidos, avisos, reportes y flujos de trabajo.",
+    desc: "Automatización de procesos para empresas en Uruguay: pedidos, avisos, reportes y tareas repetitivas que pasan a hacerse solas, sin cambiar cómo trabaja tu equipo.",
     problem: "Copiar datos de un email a una planilla, mandar el mismo aviso diez veces, armar un reporte a mano cada lunes: <em>son tareas necesarias, pero no deberían ocupar a una persona</em>.",
     includes: [
       ["Relevamiento de procesos", "Detectamos qué tareas se repiten, cuánto tiempo llevan y dónde aparecen errores."],
@@ -542,7 +558,7 @@ const SVC_PAGES = {
     seo: "Integración de sistemas y herramientas", tone: "black",
     title: ["Tus herramientas,", "hablando", "entre sí."],
     lead: "Conectamos los sistemas que ya usás para que la información viaje sola y no haya que cargarla dos veces.",
-    desc: "Integración de sistemas para empresas: tienda online, gestión, facturación, CRM y reportes conectados.",
+    desc: "Integración de sistemas para empresas en Uruguay: conectamos tienda online, gestión, facturación y CRM para que la información se cargue una sola vez.",
     problem: "Cuando cada sistema funciona por separado, <em>los mismos datos se cargan varias veces</em> y aparecen diferencias entre lo que dice la tienda, la planilla y la facturación.",
     includes: [
       ["Diagnóstico de sistemas", "Revisamos qué herramientas usás, qué datos maneja cada una y cómo se pueden conectar."],
@@ -568,7 +584,7 @@ const SVC_PAGES = {
     seo: "Identidad visual y diseño para redes", tone: "cobalt",
     title: ["Una marca", "que se reconoce", "en todos lados."],
     lead: "Creamos o actualizamos tu identidad visual y diseñamos las piezas que la llevan a redes, web y otros puntos de contacto.",
-    desc: "Identidad visual y diseño de material para redes y otros puntos de contacto, con un sistema coherente.",
+    desc: "Identidad digital para empresas en Uruguay: identidad visual, plantillas y piezas para redes y otros puntos de contacto, con un sistema coherente y fácil de usar.",
     problem: "Un logo distinto en cada lugar, colores que cambian según quién diseñe, publicaciones armadas a último momento: <em>la marca pierde fuerza cuando no hay un sistema</em>.",
     includes: [
       ["Identidad visual", "Logo, paleta de colores y tipografías pensadas para usarse en pantalla e impresión."],
@@ -916,7 +932,11 @@ write("/contacto", page({
       </div>
       <div class="contact__ch" data-rise>
         <p class="mono">También podés escribirnos</p>
-        <p>${EMAIL}<br><a href="${IG_URL}" target="_blank" rel="noopener">Instagram ${IG}<span class="sr"> (se abre en otra pestaña)</span></a></p>
+        <p><a href="${WA_URL}" target="_blank" rel="noopener">WhatsApp ${PHONE_TXT}<span class="sr"> (se abre en otra pestaña)</span></a><br><a href="mailto:${EMAIL}">${EMAIL}</a><br><a href="${IG_URL}" target="_blank" rel="noopener">Instagram ${IG}<span class="sr"> (se abre en otra pestaña)</span></a></p>
+      </div>
+      <div class="contact__next" data-rise>
+        <p class="mono">Qué pasa después</p>
+        <ol><li>Leemos tu mensaje y te respondemos para coordinar una primera conversación.</li><li>En esa conversación entendemos tu situación y lo que querés resolver.</li><li>Te enviamos una propuesta con alcance, etapas y costo, antes de empezar.</li></ol>
       </div>
     </div>
     <div class="contact__form" data-rise>
@@ -929,7 +949,7 @@ write("/contacto", page({
         <div class="field">
           <label for="f-contacto">Email o teléfono</label>
           <span class="field__hint" id="h-contacto">Usamos este dato solo para responderte.</span>
-          <input id="f-contacto" name="contacto" type="text" autocomplete="email" inputmode="email" required aria-describedby="h-contacto e-contacto">
+          <input id="f-contacto" name="contacto" type="text" autocomplete="email" required aria-describedby="h-contacto e-contacto">
           <p class="field__err" id="e-contacto" aria-live="polite"></p>
         </div>
         <div class="field">
