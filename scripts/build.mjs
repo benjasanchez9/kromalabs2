@@ -127,29 +127,46 @@ const sprite = `<svg class="sprite" width="0" height="0" aria-hidden="true" focu
 
 function header(active) {
   const cur = (k) => (active === k ? ' aria-current="page"' : "");
+  const inSvc = active.startsWith("servicios");
+  const CHEV = `<svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   return `
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="hd" id="hd">
   <div class="hd__in">
     <a class="hd__brand" href="/" aria-label="KROMA, inicio">${iso("hd__iso")}<span aria-hidden="true">KROMA<sup>®</sup></span></a>
-    <span class="hd__tag mono">Consultoría tecnológica</span>
-    <span class="hd__loc mono">Montevideo — Uruguay</span>
-    <a class="hd__pr" href="/proyectos"${cur("proyectos")}>Proyectos</a>
-    <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu">Menú <i aria-hidden="true"></i></button>
+    <nav class="hd__nav" aria-label="Principal">
+      <a href="/nosotros"${cur("nosotros")}>Nosotros</a>
+      <button class="hd__svc${inSvc ? " is-current" : ""}" type="button" aria-expanded="false" aria-controls="svc">Servicios ${CHEV}</button>
+      <div class="svc" id="svc" hidden>
+        <div class="svc__head"><p class="mono">Servicios</p>${linkAr("/servicios", "Ver todos")}</div>
+        ${SERVICES.map((s) => `<a class="svc__i" href="/servicios/${s.slug}"${active === "servicios/" + s.slug ? ' aria-current="page"' : ""}><span class="mono">${s.n}</span><strong>${s.name}</strong><span class="svc__d">${s.short}</span></a>`).join("\n    ")}
+      </div>
+      <a href="/proyectos"${cur("proyectos")}>Proyectos</a>
+    </nav>
+    ${btn("/contacto", "Hablemos", "btn--sm hd__cta")}
+    <button class="hd__burger" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Abrir menú"><i></i><i></i></button>
   </div>
+  <div class="hd__prog" aria-hidden="true"><i></i></div>
 </header>
-<div class="menu" id="menu" tabindex="-1" role="dialog" aria-modal="true" aria-label="Menú" hidden>
-  <div class="menu__top"><span class="mono">KROMA® / Menú</span><button class="menu__close" type="button">Cerrar <i aria-hidden="true"></i></button></div>
-  <nav aria-label="Principal">
-    <ul class="menu__main">
+<div class="scrim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Menú" tabindex="-1" hidden>
+  <span class="sheet__grip" aria-hidden="true"></span>
+  <div class="sheet__top"><span class="mono">Menú</span><button class="sheet__close" type="button">Cerrar</button></div>
+  <nav aria-label="Principal (celular)">
+    <ul class="sheet__main">
       <li><a href="/"${cur("inicio")}><span class="mono">01</span>Inicio</a></li>
       <li><a href="/nosotros"${cur("nosotros")}><span class="mono">02</span>Nosotros</a></li>
-      <li><a href="/servicios"${active.startsWith("servicios") ? ' aria-current="page"' : ""}><span class="mono">03</span>Servicios</a></li>
+      <li><a href="/servicios"${inSvc ? ' aria-current="page"' : ""}><span class="mono">03</span>Servicios</a></li>
       <li><a href="/proyectos"${cur("proyectos")}><span class="mono">04</span>Proyectos</a></li>
-      <li><a href="/contacto"${cur("contacto")}><span class="mono">05</span>Hablemos</a></li>
+    </ul>
+    <ul class="sheet__chips">
+      ${SERVICES.map((s) => `<li><a href="/servicios/${s.slug}"${active === "servicios/" + s.slug ? ' aria-current="page"' : ""}>${s.name}</a></li>`).join("\n      ")}
     </ul>
   </nav>
-  <div class="menu__foot mono"><span>${EMAIL}</span><a href="${IG_URL}" target="_blank" rel="noopener">${IG}<span class="sr"> (Instagram, se abre en otra pestaña)</span></a><span>Montevideo — Uruguay</span></div>
+  <div class="sheet__act">
+    ${btn("/contacto", "Hablemos")}
+    <a class="sheet__wa" href="${WA_URL}" target="_blank" rel="noopener">Escribir por WhatsApp<span class="sr"> (se abre en otra pestaña)</span></a>
+  </div>
 </div>`;
 }
 

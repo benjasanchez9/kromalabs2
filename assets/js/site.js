@@ -19,12 +19,14 @@
 
   const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
 
-  /* ---------- 1. Cabecera: tono según la sección debajo, se oculta al bajar ---------- */
+  /* ---------- 1. Cabecera (opción A): transparente arriba, sólida al bajar ---------- */
   const hd = $("#hd");
   const tones = $$(".t-black, .t-ivory, .t-cobalt, .matter, .mani");
+  const prog = $(".hd__prog i");
   let ticking = false;
   function headerUpdate() {
     ticking = false;
+    // arriba de todo el texto toma el tono de la portada; al bajar la barra es sólida (negra)
     const probe = 34;
     let tone = "t-black";
     for (const el of tones) {
@@ -35,10 +37,10 @@
         else tone = "t-black";
       }
     }
-    // en el inicio, la escena fijada pasa de negro a cobalto
-    if (document.body.classList.contains("is-home") && window.KROMA_HOME_TONE && scrollY < (window.KROMA_HOME_END || 0)) tone = window.KROMA_HOME_TONE;
     hd.classList.toggle("is-light", tone === "t-ivory");
-    hd.classList.toggle("is-cobalt", tone === "t-cobalt");
+    hd.classList.toggle("is-solid", scrollY > 40);
+    const max = document.documentElement.scrollHeight - innerHeight;
+    if (prog) prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`;
   }
   const reqHeader = () => { if (!ticking) { ticking = true; requestAnimationFrame(headerUpdate); } };
   addEventListener("scroll", reqHeader, { passive: true });
@@ -46,48 +48,71 @@
   window.KROMA_HEADER = reqHeader;
   headerUpdate();
 
-  /* Desplegable de Servicios: hover en escritorio, clic y teclado en todos */
-  const sub = $(".hd__sub"), tg = $(".hd__tg");
-  if (sub && tg) {
-    let t;
-    const set = (v) => { sub.classList.toggle("is-open", v); tg.setAttribute("aria-expanded", String(v)); };
-    tg.addEventListener("click", () => set(!sub.classList.contains("is-open")));
+  const scrim = $(".scrim");
+  const showScrim = (v) => {
+    if (!scrim) return;
+    if (v) { scrim.hidden = false; requestAnimationFrame(() => scrim.classList.add("is-on")); }
+    else { scrim.classList.remove("is-on"); setTimeout(() => { if (!scrim.classList.contains("is-on")) scrim.hidden = true; }, 350); }
+  };
+
+  /* Panel de Servicios (escritorio): clic, teclado y, con mouse, al pasar */
+  const svc = $("#svc"), svcBtn = $(".hd__svc");
+  let svcOpen = false, svcT;
+  const setSvc = (v, focusBtn) => {
+    if (!svc || v === svcOpen) return;
+    svcOpen = v;
+    svcBtn.setAttribute("aria-expanded", String(v));
+    hd.classList.toggle("is-open", v);
+    if (v) { svc.hidden = false; requestAnimationFrame(() => svc.classList.add("is-open")); }
+    else { svc.classList.remove("is-open"); setTimeout(() => { if (!svcOpen) svc.hidden = true; }, 450); if (focusBtn) svcBtn.focus(); }
+    showScrim(v);
+  };
+  if (svc && svcBtn) {
+    let by = null; // "hover" o "click": el clic fija el panel abierto aunque el mouse se vaya
+    svcBtn.addEventListener("click", () => {
+      clearTimeout(svcT);
+      if (!svcOpen || by === "hover") { by = "click"; setSvc(true); } else { by = null; setSvc(false); }
+    });
     if (FINE) {
-      sub.addEventListener("pointerenter", () => { clearTimeout(t); set(true); });
-      sub.addEventListener("pointerleave", () => { t = setTimeout(() => set(false), 160); });
+      const zone = [svcBtn, svc];
+      zone.forEach((el) => el.addEventListener("pointerenter", () => { clearTimeout(svcT); if (!svcOpen) svcT = setTimeout(() => { by = "hover"; setSvc(true); }, 120); }));
+      zone.forEach((el) => el.addEventListener("pointerleave", () => { clearTimeout(svcT); if (by === "hover") svcT = setTimeout(() => { by = null; setSvc(false); }, 240); }));
     }
-    sub.addEventListener("keydown", (e) => { if (e.key === "Escape" && sub.classList.contains("is-open")) { set(false); tg.focus(); } });
-    sub.addEventListener("focusout", (e) => { if (!sub.contains(e.relatedTarget)) set(false); });
-    document.addEventListener("click", (e) => { if (!sub.contains(e.target)) set(false); });
+    hd.addEventListener("keydown", (e) => { if (e.key === "Escape" && svcOpen) { by = null; setSvc(false, true); } });
+    hd.addEventListener("focusout", (e) => { if (svcOpen && e.relatedTarget && !hd.contains(e.relatedTarget)) { by = null; setSvc(false); } });
+    scrim && scrim.addEventListener("click", () => { by = null; setSvc(false); });
   }
 
-  /* Menú (panel cobalto del prototipo) con foco atrapado */
-  const menu = $("#menu"), menuBtn = $(".hd__menu"), menuClose = $(".menu__close");
-  if (menu && menuBtn) {
-    const links = $$(".menu__main a", menu);
-    const focusables = () => [menuClose, ...$$("a", menu)];
+  /* Menú del celular: sube desde abajo, con foco atrapado */
+  const sheet = $("#sheet"), burger = $(".hd__burger"), sheetClose = $(".sheet__close");
+  if (sheet && burger) {
+    let sheetOpen = false;
+    const focusables = () => $$("a, button", sheet);
     const open = (ev) => {
-      const byKey = !ev || ev.detail === 0; // abierto con teclado → foco visible en el primer enlace
-      menu.hidden = false;
-      menuBtn.setAttribute("aria-expanded", "true");
+      const byKey = !ev || ev.detail === 0;
+      sheetOpen = true;
+      sheet.hidden = false;
+      burger.setAttribute("aria-expanded", "true");
       document.body.style.overflow = "hidden";
-      if (MOTION) {
-        G.fromTo(menu, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.7, ease: "expo.inOut" });
-        G.fromTo(links, { yPercent: 105 }, { yPercent: 0, duration: 0.8, stagger: 0.05, ease: "expo.out", delay: 0.3 });
-      } else menu.style.clipPath = "inset(0 0 0% 0)";
-      setTimeout(() => (byKey ? links[0] : menu).focus({ preventScroll: true }), MOTION ? 450 : 0);
+      showScrim(true);
+      requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add("is-open")));
+      setTimeout(() => (byKey ? focusables()[1] : sheet).focus({ preventScroll: true }), RM ? 0 : 300);
     };
     const close = () => {
-      const done = () => { menu.hidden = true; menuBtn.focus({ preventScroll: true }); };
-      menuBtn.setAttribute("aria-expanded", "false");
+      if (!sheetOpen) return;
+      sheetOpen = false;
+      burger.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
-      if (MOTION) G.to(menu, { clipPath: "inset(0 0 100% 0)", duration: 0.55, ease: "expo.inOut", onComplete: done });
-      else { menu.style.clipPath = "inset(0 0 100% 0)"; done(); }
+      sheet.classList.remove("is-open");
+      showScrim(false);
+      setTimeout(() => { if (!sheetOpen) sheet.hidden = true; }, RM ? 0 : 500);
+      burger.focus({ preventScroll: true });
     };
-    menuBtn.addEventListener("click", open);
-    menuClose.addEventListener("click", close);
-    links.forEach((l) => l.addEventListener("click", () => { if (new URL(l.href).pathname === location.pathname) close(); }));
-    menu.addEventListener("keydown", (e) => {
+    burger.addEventListener("click", open);
+    sheetClose.addEventListener("click", close);
+    scrim && scrim.addEventListener("click", close);
+    $$("a", sheet).forEach((l) => l.addEventListener("click", () => { if (l.href && new URL(l.href).pathname === location.pathname) close(); }));
+    sheet.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
       if (e.key === "Tab") {
         const f = focusables(), i = f.indexOf(document.activeElement);
@@ -96,6 +121,8 @@
         else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
       }
     });
+    // si se agranda la ventana con el menú abierto, se cierra
+    matchMedia("(min-width: 921px)").addEventListener("change", (m) => { if (m.matches) close(); });
   }
 
   /* ---------- 2. Transición entre páginas: cortina curva cobalto (la de la versión publicada) ---------- */
@@ -133,7 +160,7 @@
   // En el inicio la cabecera aparece junto con la escena
   if (document.body.classList.contains("is-home")) {
     // si la escena del inicio no llega a cargar, todo aparece igual
-    setTimeout(() => { if (!window.KROMA_HOME_READY) { G.to(".hero__t, .hero__sub, .hero__cta, .hero__cue, .hd__tag, .hd__loc, .hd__pr, .hd__menu, .stage__poster", { autoAlpha: 1, duration: 0.6 }); G.to(".hd__brand", { clipPath: "inset(0 0% 0 0)", duration: 0.6 }); } }, 2500);
+    setTimeout(() => { if (!window.KROMA_HOME_READY) { G.to(".hero__t, .hero__sub, .hero__cta, .hero__cue, .hd__nav, .hd__cta, .hd__burger, .stage__poster", { autoAlpha: 1, duration: 0.6 }); G.to(".hd__brand", { clipPath: "inset(0 0% 0 0)", duration: 0.6 }); } }, 2500);
   }
 
   /* ---------- 4. Revelados ---------- */

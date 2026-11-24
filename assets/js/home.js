@@ -185,7 +185,7 @@ function boot() {
     tl.to('.hd__brand', { clipPath: 'inset(0 0% 0 0)', duration: 0.7 }, 0.1)
       .to(L, { a: 1, duration: 1.7, ease: 'power3.inOut' }, 0.2);
     if (split) tl.from(split.lines, { yPercent: 135, duration: 0.95, stagger: 0.1 }, 0.75);
-    tl.to(['.hd__tag', '.hd__loc', '.hd__pr', '.hd__menu'], { opacity: 1, duration: 0.6, stagger: 0.05, ease: 'power2.out' }, 0.5)
+    tl.to(['.hd__nav', '.hd__cta', '.hd__burger'], { opacity: 1, duration: 0.6, stagger: 0.06, ease: 'power2.out' }, 0.5)
       .fromTo('.hero__sub', { opacity: 0, y: 14 }, { opacity: 0.88, y: 0, duration: 0.8 }, 1.45)
       .fromTo('.hero__cta', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8 }, 1.55)
       .to('.hero__cue', { opacity: 0.66, duration: 0.6, ease: 'power2.out' }, 1.8);

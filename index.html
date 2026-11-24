@@ -41,24 +41,47 @@
 <header class="hd" id="hd">
   <div class="hd__in">
     <a class="hd__brand" href="/" aria-label="KROMA, inicio"><svg class="hd__iso" viewBox="0 0 100.00 78.48" aria-hidden="true"><use href="#iso"/></svg><span aria-hidden="true">KROMA<sup>®</sup></span></a>
-    <span class="hd__tag mono">Consultoría tecnológica</span>
-    <span class="hd__loc mono">Montevideo — Uruguay</span>
-    <a class="hd__pr" href="/proyectos">Proyectos</a>
-    <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu">Menú <i aria-hidden="true"></i></button>
+    <nav class="hd__nav" aria-label="Principal">
+      <a href="/nosotros">Nosotros</a>
+      <button class="hd__svc" type="button" aria-expanded="false" aria-controls="svc">Servicios <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="svc" id="svc" hidden>
+        <div class="svc__head"><p class="mono">Servicios</p><a class="lk" href="/servicios">Ver todos <svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        <a class="svc__i" href="/servicios/webs"><span class="mono">01</span><strong>Webs</strong><span class="svc__d">Sitios a medida, rápidos y pensados para convertir.</span></a>
+    <a class="svc__i" href="/servicios/automatizaciones"><span class="mono">02</span><strong>Automatizaciones</strong><span class="svc__d">Menos trabajo manual. Más tiempo para lo importante.</span></a>
+    <a class="svc__i" href="/servicios/integraciones"><span class="mono">03</span><strong>Integraciones</strong><span class="svc__d">Conectamos tus herramientas para que todo fluya.</span></a>
+    <a class="svc__i" href="/servicios/identidad-digital"><span class="mono">04</span><strong>Identidad digital</strong><span class="svc__d">Una presencia digital sólida y coherente con tu negocio.</span></a>
+    <a class="svc__i" href="/servicios/consultoria-tecnologica"><span class="mono">05</span><strong>Consultoría tecnológica</strong><span class="svc__d">Primero entendemos tu negocio. Después elegimos la tecnología.</span></a>
+      </div>
+      <a href="/proyectos">Proyectos</a>
+    </nav>
+    <a class="btn btn--sm hd__cta" href="/contacto"><span>Hablemos</span><span class="btn__ar" aria-hidden="true"><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <button class="hd__burger" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Abrir menú"><i></i><i></i></button>
   </div>
+  <div class="hd__prog" aria-hidden="true"><i></i></div>
 </header>
-<div class="menu" id="menu" tabindex="-1" role="dialog" aria-modal="true" aria-label="Menú" hidden>
-  <div class="menu__top"><span class="mono">KROMA® / Menú</span><button class="menu__close" type="button">Cerrar <i aria-hidden="true"></i></button></div>
-  <nav aria-label="Principal">
-    <ul class="menu__main">
+<div class="scrim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Menú" tabindex="-1" hidden>
+  <span class="sheet__grip" aria-hidden="true"></span>
+  <div class="sheet__top"><span class="mono">Menú</span><button class="sheet__close" type="button">Cerrar</button></div>
+  <nav aria-label="Principal (celular)">
+    <ul class="sheet__main">
       <li><a href="/" aria-current="page"><span class="mono">01</span>Inicio</a></li>
       <li><a href="/nosotros"><span class="mono">02</span>Nosotros</a></li>
       <li><a href="/servicios"><span class="mono">03</span>Servicios</a></li>
       <li><a href="/proyectos"><span class="mono">04</span>Proyectos</a></li>
-      <li><a href="/contacto"><span class="mono">05</span>Hablemos</a></li>
+    </ul>
+    <ul class="sheet__chips">
+      <li><a href="/servicios/webs">Webs</a></li>
+      <li><a href="/servicios/automatizaciones">Automatizaciones</a></li>
+      <li><a href="/servicios/integraciones">Integraciones</a></li>
+      <li><a href="/servicios/identidad-digital">Identidad digital</a></li>
+      <li><a href="/servicios/consultoria-tecnologica">Consultoría tecnológica</a></li>
     </ul>
   </nav>
-  <div class="menu__foot mono"><span>somoskromauy@gmail.com</span><a href="https://www.instagram.com/_kromalabs/" target="_blank" rel="noopener">@_kromalabs<span class="sr"> (Instagram, se abre en otra pestaña)</span></a><span>Montevideo — Uruguay</span></div>
+  <div class="sheet__act">
+    <a class="btn " href="/contacto"><span>Hablemos</span><span class="btn__ar" aria-hidden="true"><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <a class="sheet__wa" href="https://wa.me/59898012704" target="_blank" rel="noopener">Escribir por WhatsApp<span class="sr"> (se abre en otra pestaña)</span></a>
+  </div>
 </div>
 <main id="contenido" tabindex="-1">
 
