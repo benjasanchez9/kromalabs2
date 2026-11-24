@@ -203,7 +203,7 @@
     G.from(items.map((i) => i.children), { opacity: 0, y: 18, duration: 0.8, stagger: 0.05, ease: "expo.out", delay: 0.2, scrollTrigger: { trigger: el, ...enter } });
   });
   // Capacidades (inicio) y filas de servicios: como el prototipo
-  G.from(".cap .shead > *", { y: 30, opacity: 0, duration: 0.9, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: ".cap", start: "top 75%", once: true } });
+  if ($(".cap")) G.from(".cap .shead > *", { y: 30, opacity: 0, duration: 0.9, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: ".cap", start: "top 75%", once: true } });
   $$(".rows").forEach((el) => G.from($$(".row", el), { clipPath: "inset(0 0 100% 0)", y: 20, duration: 0.9, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 80%", once: true } }));
   // Tarjetas de proyecto: recorte que se abre
   $$(".pc__media, .pl__media").forEach((el) => {
@@ -249,17 +249,21 @@
   /* ---------- 7. Nosotros: banda que avanza y proceso con columna fija ---------- */
   const sweep = $(".sweep__c");
   if (sweep) G.fromTo(sweep, { scaleX: 0.35 }, { scaleX: 1.25, ease: "none", scrollTrigger: { trigger: ".sweep", start: "top bottom", end: "bottom top", scrub: 0.6 } });
-  const flowItems = $$(".flow__it");
-  if (flowItems.length) {
-    const num = $("[data-flow-num]"), name = $("[data-flow-name]"), bar = $("[data-flow-bar]");
-    const setStep = (i) => {
-      flowItems.forEach((it, k) => it.classList.toggle("is-on", k === i));
-      if (num) num.textContent = String(i + 1).padStart(2, "0");
-      if (name) name.textContent = $("h3", flowItems[i]).textContent.replace(/\.$/, "");
-      if (bar) bar.style.transform = `scaleX(${(i + 1) / flowItems.length})`;
+  // Nosotros: del ruido al criterio (las herramientas se apagan y queda "Criterio.")
+  const wall = $(".wall");
+  if (wall) {
+    const items = $$(".wall__grid span", wall).map((el) => ({ el, at: +el.dataset.at }));
+    const q = $(".wall__q", wall), end = $(".wall__end", wall);
+    const ss = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
+    const paint = (p) => {
+      items.forEach((it) => { const o = 1 - ss(it.at, it.at + 0.06, p); it.el.style.opacity = (0.75 * o).toFixed(3); it.el.style.transform = `translateY(${(-8 * (1 - o)).toFixed(1)}px)`; });
+      const k = 1 - ss(0.38, 0.5, p); q.style.opacity = k.toFixed(3); q.style.transform = `scale(${(0.96 + 0.04 * k).toFixed(3)})`;
+      const e = ss(0.6, 0.8, p); end.style.opacity = e.toFixed(3); end.style.transform = `scale(${(0.88 + 0.12 * e).toFixed(3)})`;
     };
-    flowItems.forEach((it, i) => ST.create({ trigger: it, start: "top 55%", end: "bottom 55%", onToggle: (s) => s.isActive && setStep(i) }));
+    ST.create({ trigger: wall, start: "top top", end: "bottom bottom", onUpdate: (s) => paint(s.progress), onRefresh: (s) => paint(s.progress) });
+    paint(0);
   }
+
 
   /* ---------- 8. Demos que dependen del scroll ---------- */
   initWebs();

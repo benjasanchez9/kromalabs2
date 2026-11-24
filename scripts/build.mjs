@@ -87,7 +87,7 @@ const crumbsLd = (items) => ({
 });
 
 /* ---------------- layout ---------------- */
-function head({ title, seo, desc, path: p, ld = [], home = false }) {
+function head({ title, seo, desc, path: p, ld = [], home = false, mod = null }) {
   const full = p === "/" ? "KROMA — Consultoría tecnológica para empresas en Uruguay" : `${seo || title} — KROMA`;
   const url = SITE_URL + (p === "/" ? "/" : p);
   const is404 = p === "/404";
@@ -118,7 +118,7 @@ function head({ title, seo, desc, path: p, ld = [], home = false }) {
 <script src="/assets/js/vendor/gsap.min.js" defer></script>
 <script src="/assets/js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="/assets/js/vendor/SplitText.min.js" defer></script>
-<script src="/assets/js/site.js" defer></script>${home ? `\n<script type="importmap">{"imports":{"three":"/assets/js/vendor/three.module.min.js"}}</script>\n<link rel="modulepreload" href="/assets/js/vendor/three.module.min.js">\n<link rel="modulepreload" href="/assets/js/kform.js">\n<script type="module" src="/assets/js/home.js"></script>` : ""}
+<script src="/assets/js/site.js" defer></script>${mod ? `\n<script type="importmap">{"imports":{"three":"/assets/js/vendor/three.module.min.js"}}</script>\n<script type="module" src="/assets/js/${mod}.js"></script>` : ""}${home ? `\n<script type="importmap">{"imports":{"three":"/assets/js/vendor/three.module.min.js"}}</script>\n<link rel="modulepreload" href="/assets/js/vendor/three.module.min.js">\n<link rel="modulepreload" href="/assets/js/kform.js">\n<script type="module" src="/assets/js/home.js"></script>` : ""}
 <script type="speculationrules">{"prefetch":[{"source":"document","where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>`;
 }
@@ -203,9 +203,9 @@ const footer = `
 <div class="ring" id="ring" aria-hidden="true"></div>
 <div class="curtain" aria-hidden="true"><div class="curtain__body"></div>${iso("curtain__mark")}</div>`;
 
-function page({ path: p, title, seo, desc, active, body, ld, home = false }) {
+function page({ path: p, title, seo, desc, active, body, ld, home = false, mod = null }) {
   PAGES.push(p);
-  return `${head({ title, seo, desc, path: p, ld, home })}
+  return `${head({ title, seo, desc, path: p, ld, home, mod })}
 <body${home ? ' class="is-home"' : ""}>
 ${sprite}
 ${header(active)}
@@ -372,6 +372,10 @@ ${closing({ label: "006 — Contacto", title: ["¿Por dónde", "empezamos?"], te
 /* =========================================================
    NOSOTROS
    ========================================================= */
+// Muro de "Del ruido al criterio": tipos de herramientas que hoy se le ofrecen a una empresa (genéricos, sin marcas)
+const WALL_BASE = ["Planillas", "CRM", "ERP", "Facturación electrónica", "Agenda online", "Tienda online", "Chatbot", "Formularios", "Pasarela de pago", "Email marketing", "Control de stock", "Reportes", "Nube", "Firma digital", "Mesa de ayuda", "Reservas", "Punto de venta", "Inteligencia artificial", "Automatizaciones", "Integraciones", "App propia", "Landing page", "Redes sociales", "Analítica", "Gestión de proyectos", "Videollamadas", "Contabilidad", "Sueldos", "Logística", "Encuestas", "Catálogo", "Newsletter", "Calendario compartido", "Base de datos", "Portal de clientes", "Cotizador", "Inventario", "Tableros", "Mensajería", "Documentos compartidos", "Seguimiento de pedidos", "Turnos", "Cobros recurrentes", "Marketplace", "Atención al cliente", "Presupuestos", "Firma de contratos", "Respaldos"];
+const WALL = WALL_BASE.concat(WALL_BASE, WALL_BASE.slice(0, 12));
+
 const PRINCIPLES = [
   ["Claridad", "Explicamos cada decisión sin jerga, para que puedas evaluarla."],
   ["Escala", "Proponemos soluciones acordes al tamaño y al momento de tu empresa."],
@@ -379,7 +383,7 @@ const PRINCIPLES = [
 ];
 
 write("/nosotros", page({
-  path: "/nosotros", title: "Nosotros", seo: "Nosotros: consultora tecnológica en Uruguay", active: "nosotros",
+  path: "/nosotros", title: "Nosotros", seo: "Nosotros: consultora tecnológica en Uruguay", active: "nosotros", mod: "nos",
   desc: "KROMA nace para democratizar la digitalización de las empresas uruguayas: elegir bien las herramientas e implementarlas con criterio.",
   body: `
 <section class="ph t-ivory ph--art" aria-labelledby="t">
@@ -394,9 +398,15 @@ write("/nosotros", page({
   </div>
 </section>
 <div class="sweep" aria-hidden="true"><svg viewBox="0 0 1440 220" preserveAspectRatio="none"><path class="sweep__b" d="M0 120C240 40 420 30 640 90S1060 210 1440 110V220H0Z"/><path class="sweep__c" d="M0 220V170C200 120 380 110 560 150S900 220 1100 220Z"/></svg></div>
-<section class="sec t-black about" aria-labelledby="proposito">
+<section class="t-black wall" aria-labelledby="proposito">
+  <div class="wall__stick">
+    <div class="wall__grid" aria-hidden="true">${WALL.map((t, i) => `<span data-at="${(0.08 + (Math.sin(i * 91.7) * 0.5 + 0.5) * 0.42).toFixed(3)}">${t}</span>`).join("")}</div>
+    <h2 id="proposito" class="wall__q">Nunca hubo tantas herramientas disponibles. Pero más opciones no siempre significan mejores decisiones.</h2>
+    <div class="wall__end"><span class="wall__w" aria-hidden="true">Criterio.</span><p>Digitalizar también es elegir bien.</p></div>
+  </div>
+</section>
+<section class="sec t-black about about--rest" aria-label="Nuestro propósito">
   <div class="wrap">
-    <h2 id="proposito" class="d2 about__big" data-split>Nunca hubo tantas herramientas disponibles. Pero más opciones no siempre significan mejores decisiones.</h2>
     <div class="about__grid">
       <p>Para muchas empresas, digitalizarse se volvió una lista de suscripciones que nadie termina de usar. El valor no está en sumar tecnología, sino en elegirla bien e implementarla con criterio.</p>
       <p>Democratizar la digitalización es eso: que una empresa chica o mediana pueda acceder al mismo criterio que una grande, con soluciones a su escala.</p>
@@ -404,29 +414,25 @@ write("/nosotros", page({
     </div>
   </div>
 </section>
-<section class="sec t-ivory flow" id="proceso" aria-labelledby="proceso-t">
+<section class="sec t-ivory obj" id="proceso" aria-labelledby="proceso-t">
   <div class="wrap">
     <div class="shead shead--plain">
       <h2 class="d2" id="proceso-t" data-split>Cómo trabajamos.</h2>
       <p class="shead__note">Cuatro etapas claras. En cada momento sabés en qué punto estamos y qué viene después.</p>
     </div>
-    <div class="flow__grid">
-      <div class="flow__side" aria-hidden="true">
-        <div class="flow__stick">
-          <span class="flow__num"><span data-flow-num>01</span><small>/ 0${PROCESS.length}</small></span>
-          <span class="flow__name" data-flow-name>${PROCESS[0].t}</span>
-          <span class="flow__bar"><i data-flow-bar></i></span>
-        </div>
-      </div>
-      <ol class="flow__list">
-        ${PROCESS.map((s, i) => `<li class="flow__it${i === 0 ? " is-on" : ""}" data-i="${i}">
-          <p class="mono">Etapa ${pad(i + 1)} de ${pad(PROCESS.length)}</p>
+  </div>
+  <div class="obj__track">
+    <div class="obj__stage">
+      <canvas class="obj__c" aria-hidden="true"></canvas>
+      <ol class="obj__caps">
+        ${PROCESS.map((s, i) => `<li${i === 0 ? ' class="is-on"' : ""}>
+          <span class="mono">Etapa ${pad(i + 1)} de ${pad(PROCESS.length)}</span>
           <h3>${s.t}.</h3>
-          <p class="lead">${s.d}</p>
-          <ul>${s.a.map((x) => `<li>${x}</li>`).join("")}</ul>
-          <p class="flow__out"><span class="mono">Te llevás</span><strong>${s.out}</strong></p>
+          <p>${s.d}</p>
+          <p class="obj__take"><span class="mono">Te llevás</span><strong>${s.out}</strong></p>
         </li>`).join("\n        ")}
       </ol>
+      <div class="obj__bar" aria-hidden="true">${PROCESS.map(() => "<i><b></b></i>").join("")}</div>
     </div>
   </div>
 </section>
