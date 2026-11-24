@@ -183,9 +183,18 @@
     G.from(el, { clipPath: "inset(12% 8% 12% 8% round 6px)", duration: T.clip, ease: T.ease, scrollTrigger: { trigger: el, start: "top 88%", once: true } });
   });
 
+  /* ---------- Loops de los heros: solo se reproducen visibles y con movimiento permitido ---------- */
+  const vids = $$(".ph__vid");
+  if (vids.length && !RM && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); }), { threshold: 0.15 });
+    vids.forEach((v) => io.observe(v));
+    document.addEventListener("visibilitychange", () => vids.forEach((v) => (document.hidden ? v.pause() : v.getBoundingClientRect().bottom > 0 && v.play().catch(() => {}))));
+  }
+
   /* ---------- 5. Parallax de baja amplitud ---------- */
   $$("[data-float]").forEach((el) => {
-    G.fromTo(el, { yPercent: -4, rotate: -2 }, { yPercent: 8, rotate: 2, ease: "none", scrollTrigger: { trigger: el.closest("section"), start: "top top", end: "bottom top", scrub: 0.6 } });
+    const r = el.classList.contains("ph__art--mg") ? 0 : 2;
+    G.fromTo(el, { yPercent: -4, rotate: -r }, { yPercent: 8, rotate: r, ease: "none", scrollTrigger: { trigger: el.closest("section"), start: "top top", end: "bottom top", scrub: 0.6 } });
     G.from(el, { opacity: 0, scale: 0.92, duration: 1.4, ease: "expo.out", delay: 0.2 });
   });
   $$(".pc__para, .pl__media .pc__para, [data-para]").forEach((el) => {

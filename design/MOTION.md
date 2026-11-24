@@ -39,6 +39,11 @@ La salida siempre es más corta que la entrada.
 - Parallax de baja amplitud (±3–8 %) solo en imágenes dentro de contenedores fijos.
 - La forma reacciona al puntero con un máximo de 4°, con retardo.
 
+## 4b. Loops de los heros
+- Cada subpágina de servicio y Nosotros tiene un loop de 8 s propio (`design/hero-loops/`), no una imagen reutilizada.
+- Explica el servicio con objetos: ventana que se desplaza, tarea que avanza, señal que conecta, piezas que forman un sistema, opción que se elige.
+- Se reproduce solo cuando está visible; con movimiento reducido queda el póster (primer cuadro, que es la imagen completa).
+
 ## 5. Terminación
 Cromo pulido con reflejos fríos y luz cobalto localizada. Sin desenfoques decorativos, sin sombras grises genéricas, sin degradados azul-violeta.
 

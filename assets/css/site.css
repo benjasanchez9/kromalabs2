@@ -323,6 +323,13 @@ html.is-entering .curtain__mark{opacity:1;animation:fade-out 160ms var(--e-out) 
 .ph__art{grid-column:8/13;grid-row:2/4;align-self:center;justify-self:end;width:100%;max-width:520px;pointer-events:none}
 .ph__art img{width:100%;height:auto}
 .ph--svc .ph__art{max-width:480px}
+/* loops de motion graphics de los heros */
+.ph__art--mg{max-width:600px;aspect-ratio:1;position:relative;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(transparent,#000 9%,#000 91%,transparent);
+  -webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(transparent,#000 9%,#000 91%,transparent);mask-composite:intersect}
+.ph--art .ph__art--mg{grid-column:7/13;max-width:680px;margin-block:-40px}
+.ph__vid{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.ph__art--black{mix-blend-mode:screen}
 
 /* =========================================================
    NOSOTROS
@@ -657,6 +664,7 @@ html.is-entering .curtain__mark{opacity:1;animation:fade-out 160ms var(--e-out) 
   .ph__t,.ph--art .ph__t{grid-column:1/13}
   .ph__aside,.ph--art .ph__aside{grid-column:1/13;grid-row:auto}
   .ph__art{grid-column:1/13;grid-row:auto;justify-self:end;max-width:min(78vw,420px);margin-top:12px}
+  .ph__art--mg,.ph--art .ph__art--mg{grid-column:1/13;justify-self:center;width:min(92vw,460px);max-width:none;margin:0}
   .about__grid p,.about__grid p:first-child,.about__q{grid-column:1/13}
   .flow__side{display:none}
   .flow__list{grid-column:1/13}

@@ -153,6 +153,8 @@ function header(active) {
 </div>`;
 }
 
+// Loop animado del hero (motion graphics propio de cada página). Sin JS o con movimiento reducido queda el póster.
+const heroLoop = (slug, tone) => `<div class="ph__art ph__art--mg ph__art--${tone}" aria-hidden="true" data-float><video class="ph__vid" src="/assets/video/hero/${slug}.mp4" poster="/assets/video/hero/${slug}.webp" width="900" height="900" muted loop playsinline preload="auto" disablepictureinpicture tabindex="-1"></video></div>`;
 const MAIL_ICO = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4 7.5l8 5.6 8-5.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const IG_ICO = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.25" fill="currentColor"/></svg>`;
 const WA_URL = "https://wa.me/59898012704";
@@ -371,7 +373,7 @@ write("/nosotros", page({
       <p class="lead">Somos una consultora tecnológica uruguaya. Nuestro propósito es democratizar la digitalización de las empresas.</p>
       ${linkAr("#proceso", "Ver cómo trabajamos")}
     </div>
-    <div class="ph__art" aria-hidden="true"><img src="/assets/img/form/nosotros.webp" alt="" width="924" height="886" decoding="async" data-float></div>
+    ${heroLoop("nosotros", "ivory")}
   </div>
 </section>
 <div class="sweep" aria-hidden="true"><svg viewBox="0 0 1440 220" preserveAspectRatio="none"><path class="sweep__b" d="M0 120C240 40 420 30 640 90S1060 210 1440 110V220H0Z"/><path class="sweep__c" d="M0 220V170C200 120 380 110 560 150S900 220 1100 220Z"/></svg></div>
@@ -722,7 +724,6 @@ function svcDemo(slug) {
   return "";
 }
 
-const ART_DIM = { webs: [536, 385], automatizaciones: [616, 432], integraciones: [716, 630], "identidad-digital": [836, 728], "consultoria-tecnologica": [773, 706] };
 const TONE_NEXT = { black: "ivory", cobalt: "ivory", ivory: "cobalt" };
 for (const s of SERVICES) {
   const d = SVC_PAGES[s.slug];
@@ -738,7 +739,7 @@ for (const s of SERVICES) {
       <p class="lead">${d.lead}</p>
       ${btn(`/contacto?servicio=${s.slug}`, d.cta || "Consultar por " + s.name.toLowerCase(), d.tone === "cobalt" ? "btn--ivory" : "")}
     </div>
-    <div class="ph__art" aria-hidden="true"><img src="/assets/img/form/${s.slug}.webp" alt="" width="${ART_DIM[s.slug][0]}" height="${ART_DIM[s.slug][1]}" decoding="async" data-float></div>
+    ${heroLoop(s.slug, d.tone)}
   </div>
 </section>
 <section class="sec t-${TONE_NEXT[d.tone]} prob" aria-labelledby="problema">
