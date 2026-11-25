@@ -84,14 +84,15 @@ function scene3d(THREE) {
     };
   });
 
-  let base = 0.86;
+  let base = 0.86, narrow = false;
   const resize = () => {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
     renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
     renderer.setSize(w, h, false);
     cam.aspect = w / h; cam.updateProjectionMatrix();
-    base = w / h < 1 ? 0.8 : 0.86;
+    narrow = w / h < 1;
+    base = narrow ? 0.8 : 0.86;
   };
   new ResizeObserver(resize).observe(canvas); resize();
 
@@ -106,13 +107,14 @@ function scene3d(THREE) {
     const P = progress() * 3;
     const k1 = eio(P), k2 = eio(P - 1), k3 = eio(P - 2);
     pieces.forEach((pc, i) => {
-      let p = L(pc.s0.p, pc.s1.p, k1), r = L(pc.s0.r, pc.s1.r, k1);
+      const s0 = narrow ? [pc.s0.p[0] * 0.5, pc.s0.p[1] * 0.75, pc.s0.p[2]] : pc.s0.p;
+      let p = L(s0, pc.s1.p, k1), r = L(pc.s0.r, pc.s1.r, k1);
       p = L(p, pc.s2.p, k2); r = L(r, pc.s2.r, k2);
       const loose = 1 - k1;
       p[1] += loose * 0.08 * Math.sin(t * 0.7 + i);
       r[2] += loose * 0.05 * Math.sin(t * 0.5 + i * 2);
       if (i === CH) {
-        p = L(p, [1.9, -0.3, 1.6], k3); r = L(r, [-0.15, -0.5, 0.06], k3);
+        p = L(p, narrow ? [0.9, -0.9, 1.6] : [1.9, -0.3, 1.6], k3); r = L(r, [-0.15, -0.5, 0.06], k3);
         pc.mat.color.copy(cChrome).lerp(cCobalt, k3); pc.mat.metalness = mix(1, 0.1, k3); pc.mat.roughness = mix(0.035, 0.45, k3);
         pc.mat.emissive.copy(cCobalt).multiplyScalar(0.55 * k3);
       }
@@ -121,7 +123,7 @@ function scene3d(THREE) {
     root.scale.setScalar(base);
     root.rotation.y = -0.35 + 0.35 * k2 + 0.06 * Math.sin(t * 0.3);
     root.rotation.x = 0.12 * k2;
-    root.position.x = mix(-0.25, -0.95, k3);
+    root.position.x = narrow ? 0 : mix(-0.25, -0.95, k3);
     scene.environmentRotation.set(0, t * 0.15, 0);
     renderer.render(scene, cam);
   })();

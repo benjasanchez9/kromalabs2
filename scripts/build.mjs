@@ -689,7 +689,7 @@ function svcDemo(slug) {
     };
     return `<section class="sec t-black demo" aria-labelledby="demo-t">
   <div class="wrap ig" data-route="p1,p2,p3,p4">
-    ${head("Flujo de datos", ["Un dato,", "un solo viaje."], "Ejemplo ilustrativo. Pasá el cursor o navegá con el teclado por cada herramienta para ver qué hace.")}
+    ${head("Flujo de datos", ["Un dato,", "un solo viaje."], "Ejemplo ilustrativo. <span class=\"if-fine\">Pasá el cursor o navegá con el teclado por cada herramienta para ver qué hace.</span><span class=\"if-touch\">Seguí el recorrido del dato, de la entrada a cada salida.</span>")}
     <section class="ig__scroll" tabindex="0" aria-label="Diagrama de integración, desplazable horizontalmente">
       <svg class="ig__svg" viewBox="0 0 1000 520" role="group" aria-label="Diagrama: un pedido viaja del formulario web al sistema de gestión, y de ahí a facturación, reportes y email al cliente">
         <path class="ig__path" id="p1" data-from="form" data-to="hub" d="M250 260C310 260 320 260 380 260"/>

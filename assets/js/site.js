@@ -38,6 +38,7 @@
       }
     }
     hd.classList.toggle("is-light", tone === "t-ivory");
+    hd.classList.toggle("is-cobalt", tone === "t-cobalt");
     hd.classList.toggle("is-solid", scrollY > 40);
     const max = document.documentElement.scrollHeight - innerHeight;
     if (prog) prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`;
